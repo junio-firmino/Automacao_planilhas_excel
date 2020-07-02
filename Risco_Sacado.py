@@ -4,6 +4,8 @@ from dateutil.relativedelta import relativedelta
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
 class Risco():
     def __init__(self):
@@ -13,10 +15,10 @@ class Risco():
         self.banco = True
 
     def interface(self):
-        self.cliente = input('Qual cliente você irá cadastrar? ')
+        self.cliente = input('Qual cliente você irá cadastrar? ').title()
         self.taxas = input('Qual a taxa? ')
-        self.cpgt = input('Qual condições de pagamento? ')
-        self.banco = input('Qual banco escolhido? ')
+        self.cpgt = input('Qual condições de pagamento? ').upper()
+        self.banco = input('Qual banco escolhido? ').title()
         self.lista_distr()
         self.abrir_arq()
         self.abrir_arq_cpgt()
@@ -163,40 +165,56 @@ class Risco():
             return data_mes_email.strftime('%B')
 
     def enviar_email(self):
-        data_visivel = self.data_email()
+        pergunta_envio = input('Você deseja enviar o email agora?  \n(Pressione "s" para enviar o email ou "enter" para prosseguir no sistema.)')
+        #print('pressione "s" para enviar o email ou "enter" para prosseguir no sistema.')
+        if pergunta_envio == 'S':
+            data_visivel = self.data_email()
 
-        mes = {'January': 'janeiro',
-               'February': 'fevereiro',
-               'March': 'março',
-               'April': 'abril',
-               'May': 'maio',
-               'Juno': 'junho',
-               'July': 'julho',
-               'August': 'agosto',
-               'Septemper': 'setembro',
-               'October': 'outubro',
-               'November': 'novembro',
-               'December': 'dezembro', }
-        data_trad = mes[data_visivel].title()
+            mes = {'January': 'janeiro',
+                   'February': 'fevereiro',
+                   'March': 'março',
+                   'April': 'abril',
+                   'May': 'maio',
+                   'Juno': 'junho',
+                   'July': 'julho',
+                   'August': 'agosto',
+                   'Septemper': 'setembro',
+                   'October': 'outubro',
+                   'November': 'novembro',
+                   'December': 'dezembro',}
+            data_trad = mes[data_visivel].title()
 
-        smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
-        smtpobj.starttls()
-        fro = 'jrf.petro@gmail.com'
-        to = 'junio_firmino@petrobras.com.br, jrf.petro@gmail.com'
+            smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
+            smtpobj.starttls()
+            fro = 'jrf.petro@gmail.com'
+            to = 'junio_firmino@petrobras.com.br, jrf.petro@gmail.com'
 
-        smtpobj.login(fro, 'yevq kufu ejsx awpz')
-        msg = MIMEMultipart()
-        msg['From'] = fro
-        msg['To'] = to
-        msg['Subject'] = f'Teste de email mais elaborado mês {data_trad}.'
+            smtpobj.login(fro, 'yevq kufu ejsx awpz')
+            msg = MIMEMultipart()
+            msg['From'] = fro
+            msg['To'] = to
+            msg['Subject'] = f'Teste de email mais elaborado mês {data_trad}.'
 
-        corpo = "Este email de teste visa testarmos para que possamos automatizar os envios de email no processo do risco, entretanto, o objetivo é expandir a solução para tudo"
+            corpo = "Este email de teste visa testarmos para que possamos automatizar os envios de email no processo do risco, entretanto, o objetivo é expandir a solução para tudo"
 
-        msg.attach(MIMEText(corpo, 'plain'))
-        text = msg.as_string()
-        smtpobj.sendmail(fro, to, text)
+            msg.attach(MIMEText(corpo, 'plain'))
 
-        smtpobj.quit()
+            arquivo = 'Cadastro_CPGT_RS(01_07_20).xlsx'
+            caminho = open('Cadastro_CPGT_RS(01_07_20).xlsx','rb')
+
+            part = MIMEBase('aplication','octet-stream')
+            part.set_payload((caminho).read())
+            encoders.encode_base64(part)
+            part.add_header('content-disposition',"caminho; filename = %s" %arquivo)
+            msg.attach(part)
+            caminho.close()
+
+            text = msg.as_string()
+            smtpobj.sendmail(fro, to, text)
+
+            smtpobj.quit()
+        else:
+            pass
 
 x=Risco()
 x.interface()
