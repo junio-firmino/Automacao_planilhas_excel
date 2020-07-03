@@ -2,17 +2,15 @@ from openpyxl import load_workbook
 import datetime as dt
 from dateutil.relativedelta import relativedelta
 import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
+from email.message import EmailMessage
 
-class Risco():
+
+class Risco:
     def __init__(self):
-        self.cliente = True
+        self.cliente = 'utf-8'
         self.taxas = 0
-        self.cpgt = True
-        self.banco = True
+        self.cpgt = 'utf-8'
+        self.banco = 'utf-8'
 
     def interface(self):
         self.cliente = input('Qual cliente você irá cadastrar? ').title()
@@ -36,15 +34,15 @@ class Risco():
         wb = load_workbook(filename='template_risco_sacado.xlsx')
         sheet_act = wb.active
         self.lista_distr()
-        for linha_plan in range(2,sheet_act.max_row + 1):       # Tratamento na planilha das linhas
+        for linha_plan in range(2,sheet_act.max_row+1):       # Tratamento na planilha das linhas
             empresa = sheet_act.cell(row= linha_plan, column= 2).value
             if empresa in self.lista_distr():
-                sheet_act.cell(row = linha_plan, column=8).value = self.lista_distr()[2]   # Preenche CPGT
-                sheet_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1]     # Preenche taxa
-                sheet_act.cell(row=linha_plan, column=10).value = self.data_inicio()       # Preenche data inicio
-                sheet_act.cell(row=linha_plan, column=11).value = self.data_last_day()     # Preenche data final
-                sheet_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]   # Preenche Banco
-                sheet_act.cell(row=linha_plan, column=13).value = self.data_cadastro()     # Preenche data cadastro
+                sheet_act.cell(row = linha_plan,column=8).value = self.lista_distr()[2]   # Preenche CPGT
+                sheet_act.cell(row=linha_plan,column=9).value = self.lista_distr()[1]     # Preenche taxa
+                sheet_act.cell(row=linha_plan,column=10).value = self.data_inicio()       # Preenche data inicio
+                sheet_act.cell(row=linha_plan,column=11).value = self.data_last_day()     # Preenche data final
+                sheet_act.cell(row=linha_plan,column=12).value = self.lista_distr()[-1]   # Preenche Banco
+                sheet_act.cell(row=linha_plan,column=13).value = self.data_cadastro()     # Preenche data cadastro
 
         wb.save('risco_sacado('+self.data_save()+').xlsx')
 
@@ -64,7 +62,7 @@ class Risco():
 
     def carencia_cpgt(self):
         condicoes_cpgt = self.lista_distr()[2]
-        list_separador = condicoes_cpgt.split('d')
+        list_separador = condicoes_cpgt.split('D')
         valor_separado = list_separador[1]
         resultado = int(valor_separado)-1
         return resultado
@@ -166,8 +164,7 @@ class Risco():
 
     def enviar_email(self):
         pergunta_envio = input('Você deseja enviar o email agora?  \n(Pressione "s" para enviar o email ou "enter" para prosseguir no sistema.)')
-        #print('pressione "s" para enviar o email ou "enter" para prosseguir no sistema.')
-        if pergunta_envio == 'S':
+        if pergunta_envio == 's':
             data_visivel = self.data_email()
 
             mes = {'January': 'janeiro',
@@ -182,6 +179,7 @@ class Risco():
                    'October': 'outubro',
                    'November': 'novembro',
                    'December': 'dezembro',}
+
             data_trad = mes[data_visivel].title()
 
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
@@ -190,31 +188,22 @@ class Risco():
             to = 'junio_firmino@petrobras.com.br, jrf.petro@gmail.com'
 
             smtpobj.login(fro, 'yevq kufu ejsx awpz')
-            msg = MIMEMultipart()
+            msg = EmailMessage()
             msg['From'] = fro
             msg['To'] = to
-            msg['Subject'] = f'Teste de email mais elaborado mês {data_trad}.'
+            msg['Subject']= f'Taxas Risco Sacado {data_trad}.'
 
-            corpo = "Este email de teste visa testarmos para que possamos automatizar os envios de email no processo do risco, entretanto, o objetivo é expandir a solução para tudo"
+            msg.set_content(f'Prezado Fajardo\nSegue as taxas das empresas que vigorará em {data_trad}. Peço proceder '
+                            'com o cadastro. ')
+            caminho = open('Cadastro_CPGT_RS(02_07_20).xlsx', 'rb')
+            arq_data = caminho.read()
+            arq_name = caminho.name
+            msg.add_attachment(arq_data,maintype='application',subtype='octet-stream', filename=arq_name)
 
-            msg.attach(MIMEText(corpo, 'plain'))
-
-            arquivo = 'Cadastro_CPGT_RS(01_07_20).xlsx'
-            caminho = open('Cadastro_CPGT_RS(01_07_20).xlsx','rb')
-
-            part = MIMEBase('aplication','octet-stream')
-            part.set_payload((caminho).read())
-            encoders.encode_base64(part)
-            part.add_header('content-disposition',"caminho; filename = %s" %arquivo)
-            msg.attach(part)
-            caminho.close()
-
-            text = msg.as_string()
-            smtpobj.sendmail(fro, to, text)
+            smtpobj.send_message(msg)
 
             smtpobj.quit()
-        else:
-            pass
+            print('Email enviado!!!!')
 
 x=Risco()
 x.interface()
