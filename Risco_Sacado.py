@@ -3,13 +3,13 @@ import datetime as dt
 from dateutil.relativedelta import relativedelta
 import smtplib
 from email.message import EmailMessage
+from locale import setlocale,LC_ALL
 
 
 class Risco:
     def __init__(self):
         self.cliente = 'utf-8'
         self.taxas = 0
-        self.cpgt = 'utf-8'
 
     def interface(self):
         self.abrir_arq()
@@ -17,19 +17,23 @@ class Risco:
         while active:
             self.cliente = input('Qual cliente você irá cadastrar? ').title()
             self.taxas = input('Qual a taxa? ')
-            self.cpgt = input('Qual condições de pagamento? ').upper()
+            self.cpgt = self.cpgt_1()
             self.banco = self.banco_1()
             self.lista_distr()
             self.abrir_plan()
             self.abrir_plan_cpgt()
-            alerta = input('Prosseguir o cadastro ?')
+            alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para prosseguir com mais cadastros ou "n" para finalizar.)')
             if alerta == 'n':
                 active = False
         self.enviar_email()
 
     def abrir_arq(self):
-        self.wb = load_workbook(filename='template_risco_sacado.xlsx')
-        self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado.xlsx')
+        self.wb = load_workbook(filename='risco_sacado(04_07_20).xlsx')
+        self.wb_cpgt = load_workbook(filename='Cadastro_CPGT_RS(04_07_20).xlsx')
+
+    def cpgt_1(self):
+        cpgt = input('Qual o prazo da condição de pagamento? ')
+        return 'ZD'+cpgt
 
     def banco_1(self):
         banco_marca = input('Qual banco escolhido? ')
@@ -54,7 +58,6 @@ class Risco:
                 sheet_act.cell(row=linha_plan, column=11).value = self.data_last_day()  # Preenche data final
                 sheet_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]  # Preenche Banco
                 sheet_act.cell(row=linha_plan, column=13).value = self.data_cadastro()  # Preenche data cadastro
-
         self.wb.save('risco_sacado(' + self.data_save() + ').xlsx')
 
     def abrir_plan_cpgt(self):
@@ -67,7 +70,6 @@ class Risco:
                 aba_act.cell(row=linha_cpgt, column=16).value = self.data_inicio()
                 aba_act.cell(row=linha_cpgt, column=17).value = self.data_last_day_cpgt()
                 aba_act.cell(row=linha_cpgt, column=7).value = self.carencia_cpgt()
-
         self.wb_cpgt.save('Cadastro_CPGT_RS(' + self.data_save() + ').xlsx')
 
     def carencia_cpgt(self):
@@ -152,25 +154,12 @@ class Risco:
             return data_mes_email.strftime('%B')
 
     def enviar_email(self):
-        pergunta_envio = input(
-            'Você deseja enviar o email agora?  \n(Pressione "y" para enviar o email ou "enter" para prosseguir no sistema.)')
+        setlocale(LC_ALL,'pt_BR.utf-8')
+        pergunta_envio = input('Você deseja enviar o email agora?  \n'
+                               '(Pressione "y" para enviar o email ou "enter" para finalizar a operação.)')
         if pergunta_envio == 'y':
-            data_visivel = self.data_email()
+            data_visivel = (self.data_email()).title()
 
-            mes = {'January': 'janeiro',
-                   'February': 'fevereiro',
-                   'March': 'março',
-                   'April': 'abril',
-                   'May': 'maio',
-                   'Juno': 'junho',
-                   'July': 'julho',
-                   'August': 'agosto',
-                   'Septemper': 'setembro',
-                   'October': 'outubro',
-                   'November': 'novembro',
-                   'December': 'dezembro', }
-
-            data_trad = mes[data_visivel].title()
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
             fro = 'jrf.petro@gmail.com'
@@ -180,11 +169,11 @@ class Risco:
             msg = EmailMessage()
             msg['From'] = fro
             msg['To'] = to
-            msg['Subject'] = f'Taxas Risco Sacado {data_trad}.'
+            msg['Subject'] = f'Taxas Risco Sacado {data_visivel}.'
 
             msg.set_content(
-                f'Prezado Fajardo\n\nSegue as taxas do risco sacado que vigorará em {data_trad}. Peço proceder '
-                'com o cadastro. ')
+                f'Prezado Fajardo\n\nSegue abaixo a planilha com as taxas dos clientes que utilizarão'
+                f' as condições de pagamento do risco sacado para o mês de {data_visivel}. Peço proceder com o cadastro.')
             caminho = open('Cadastro_CPGT_RS(02_07_20).xlsx', 'rb')
             arq_data = caminho.read()
             arq_name = caminho.name
@@ -192,7 +181,6 @@ class Risco:
             smtpobj.send_message(msg)
             smtpobj.quit()
             print('Email enviado!!!!')
-
 
 x = Risco()
 x.interface()
