@@ -22,14 +22,14 @@ class Risco:
             self.lista_distr()
             self.abrir_plan()
             self.abrir_plan_cpgt()
-            alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para prosseguir com mais cadastros ou "n" para finalizar.)')
-            if alerta == 'n':
+            alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros ou "f" para finalizar.)')
+            if alerta == 'f':
                 active = False
         self.enviar_email()
 
     def abrir_arq(self):
-        self.wb = load_workbook(filename='risco_sacado(04_07_20).xlsx')
-        self.wb_cpgt = load_workbook(filename='Cadastro_CPGT_RS(04_07_20).xlsx')
+        self.wb = load_workbook(filename='template_risco_sacado.xlsx')
+        self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado.xlsx')
 
     def cpgt_1(self):
         cpgt = input('Qual o prazo da condição de pagamento? ')
@@ -156,8 +156,8 @@ class Risco:
     def enviar_email(self):
         setlocale(LC_ALL,'pt_BR.utf-8')
         pergunta_envio = input('Você deseja enviar o email agora?  \n'
-                               '(Pressione "y" para enviar o email ou "enter" para finalizar a operação.)')
-        if pergunta_envio == 'y':
+                               '(Pressione "e" para enviar o email ou "enter" para finalizar a operação.)')
+        if pergunta_envio == 'e':
             data_visivel = (self.data_email()).title()
 
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
@@ -172,12 +172,16 @@ class Risco:
             msg['Subject'] = f'Taxas Risco Sacado {data_visivel}.'
 
             msg.set_content(
-                f'Prezado Fajardo\n\nSegue abaixo a planilha com as taxas dos clientes que utilizarão'
-                f' as condições de pagamento do risco sacado para o mês de {data_visivel}. Peço proceder com o cadastro.')
-            caminho = open('Cadastro_CPGT_RS(02_07_20).xlsx', 'rb')
-            arq_data = caminho.read()
-            arq_name = caminho.name
-            msg.add_attachment(arq_data, maintype='application', subtype='octet-stream', filename=arq_name)
+                f'Prezada Elaine\n\nSegue abaixo a planilha com as taxas dos clientes que utilizarão'
+                f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.'
+                f' Peço avaliar a solução.')
+            paths = ['risco_sacado(' + self.data_save() + ').xlsx','Cadastro_CPGT_RS(' + self.data_save() + ').xlsx']
+            for path in paths:
+                caminho = open(path,'rb')
+                arq_data = caminho.read()
+                arq_name = caminho.name
+                msg.add_attachment(arq_data, maintype='application', subtype='octet-stream', filename=arq_name)
+
             smtpobj.send_message(msg)
             smtpobj.quit()
             print('Email enviado!!!!')
