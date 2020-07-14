@@ -20,9 +20,11 @@ class Risco:
             self.cpgt = self.cpgt_1()
             self.banco = self.banco_1()
             self.lista_distr()
-            self.abrir_plan()
+            self.abrir_plan_risco_sacado()
             self.abrir_plan_cpgt()
-            alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros ou "f" para finalizar.)')
+            alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros.\n'
+                           'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
+
             if alerta == 'f':
                 active = False
         self.enviar_email()
@@ -38,7 +40,7 @@ class Risco:
 
     @staticmethod
     def banco_1():
-        banco_marca = input('Qual banco escolhido? ')
+        banco_marca = input('Escolha o banco?\n("s" para Santander ou "b" para Bradesco) + "enter" -->')
         if banco_marca == 's':
             return 'Santander'
         if banco_marca == 'b':
@@ -48,31 +50,31 @@ class Risco:
         distri = [self.cliente, self.taxas, self.cpgt, self.banco]
         return distri
 
-    def abrir_plan(self):
-        sheet_act = self.wb.active
+    def abrir_plan_risco_sacado(self):
+        aba_act = self.wb.active
         self.lista_distr()
-        for linha_plan in range(2, sheet_act.max_row + 1):  # Tratamento na planilha das linhas
-            empresa = sheet_act.cell(row=linha_plan, column=2).value
+        for linha_plan in range(2, aba_act.max_row + 1):  # Tratamento na planilha das linhas
+            empresa = aba_act.cell(row=linha_plan, column=2).value
             if empresa in self.lista_distr():
-                sheet_act.cell(row=linha_plan, column=8).value = self.lista_distr()[2]         # Preenche CPGT
-                sheet_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1]+" a.m"  # Preenche taxa
-                sheet_act.cell(row=linha_plan, column=10).value = self.data_inicio()           # Preenche data inicio
-                sheet_act.cell(row=linha_plan, column=11).value = self.data_last_day()         # Preenche data final
-                sheet_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]       # Preenche Banco
-                sheet_act.cell(row=linha_plan, column=13).value = self.data_cadastro()         # Preenche data cadastro
-        self.wb.save('risco_sacado(' + self.data_save() + ').xlsx')
+                aba_act.cell(row=linha_plan, column=8).value = self.lista_distr()[2]         # Preenche CPGT
+                aba_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1]+" a.m"  # Preenche taxa
+                aba_act.cell(row=linha_plan, column=10).value = self.data_inicio()           # Preenche data inicio
+                aba_act.cell(row=linha_plan, column=11).value = self.data_last_day_risco_sacado()  # Preenche data final
+                aba_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]       # Preenche Banco
+                aba_act.cell(row=linha_plan, column=13).value = self.data_cadastro()         # Preenche data cadastro
+        self.wb.save('risco_sacado(' + self.data_save_arquivo() + ').xlsx')
 
     def abrir_plan_cpgt(self):
-        aba_act = self.wb_cpgt.active
+        aba_act_cpgt = self.wb_cpgt.active
         self.lista_distr()
-        for linha_cpgt in range(2, aba_act.max_row + 1):
-            distribuidora = aba_act.cell(row=linha_cpgt, column=19).value
+        for linha_cpgt in range(2, aba_act_cpgt.max_row + 1):
+            distribuidora = aba_act_cpgt.cell(row=linha_cpgt, column=19).value
             if distribuidora in self.lista_distr():
-                aba_act.cell(row=linha_cpgt, column=3).value = self.lista_distr()[2]
-                aba_act.cell(row=linha_cpgt, column=16).value = self.data_inicio()
-                aba_act.cell(row=linha_cpgt, column=17).value = self.data_last_day_cpgt()
-                aba_act.cell(row=linha_cpgt, column=7).value = self.carencia_cpgt()
-        self.wb_cpgt.save('Cadastro_CPGT_RS(' + self.data_save() + ').xlsx')
+                aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.lista_distr()[2]
+                aba_act_cpgt.cell(row=linha_cpgt, column=16).value = self.data_inicio()
+                aba_act_cpgt.cell(row=linha_cpgt, column=17).value = self.data_last_day_cpgt()
+                aba_act_cpgt.cell(row=linha_cpgt, column=7).value = self.carencia_cpgt()
+        self.wb_cpgt.save('Cadastro_CPGT_RS(' + self.data_save_arquivo() + ').xlsx')
 
     def carencia_cpgt(self):
         condicoes_cpgt = self.lista_distr()[2]
@@ -82,45 +84,44 @@ class Risco:
         return resultado
 
     @staticmethod
-    def data_save():
-        data_save_1 = dt.datetime.now()
-        return data_save_1.strftime('%d_%m_%y')
+    def data_save_arquivo():
+        data_save = dt.datetime.now()
+        return data_save.strftime('%d_%m_%y')
 
     @staticmethod
     def data_cadastro():
         data_cad = dt.datetime.now()
         return data_cad.strftime('%d.%m.%Y')
 
-
     def data_inicio(self):
         data_ini = dt.datetime.now() + relativedelta(months=1)
         data_1 = dt.datetime.now().strftime('01.%m.%Y')
-        data_1_transf_date = dt.datetime.strptime(data_1, '%d.%m.%Y')
+        data_1_transforma_date = dt.datetime.strptime(data_1, '%d.%m.%Y')
         data_2 = dt.datetime.now().strftime('21.%m.%Y')
-        data_2_transf_date = dt.datetime.strptime(data_2, '%d.%m.%Y')
+        data_2_transforma_date = dt.datetime.strptime(data_2, '%d.%m.%Y')
         data_3 = dt.datetime.now().strftime('%d.%m.%Y')
-        data_3_transf_date = dt.datetime.strptime(data_3, '%d.%m.%Y')
-        data_1_day = data_1_transf_date.day
-        data_2_day = data_2_transf_date.day
-        data_3_day = data_3_transf_date.day
+        data_3_transforma_date = dt.datetime.strptime(data_3, '%d.%m.%Y')
+        data_1_day = data_1_transforma_date.day
+        data_2_day = data_2_transforma_date.day
+        data_3_day = data_3_transforma_date.day
         if data_3_day in range(0, (data_2_day - data_1_day)):
             return self.data_cadastro()
         else:
             return data_ini.strftime('01.%m.%Y')
 
     @staticmethod
-    def data_last_day():
+    def data_last_day_risco_sacado():
         data_last = dt.datetime.now() + relativedelta(day=31, months=1)
         data_last_1 = dt.datetime.now() + relativedelta(day=31)
         data_last_1_1 = dt.datetime.now().strftime('01.%m.%Y')
-        data_last_1_1_transf_date = dt.datetime.strptime(data_last_1_1, '%d.%m.%Y')
+        data_last_1_1_transforma_date = dt.datetime.strptime(data_last_1_1, '%d.%m.%Y')
         data_last_2 = dt.datetime.now().strftime('21.%m.%Y')
-        data_last_2_transf_date = dt.datetime.strptime(data_last_2, '%d.%m.%Y')
+        data_last_2_transforma_date = dt.datetime.strptime(data_last_2, '%d.%m.%Y')
         data_last_3 = dt.datetime.now().strftime('%d.%m.%Y')
-        data_last_3_transf_date = dt.datetime.strptime(data_last_3, '%d.%m.%Y')
-        data_last_1_day = data_last_1_1_transf_date.day
-        data_last_2_day = data_last_2_transf_date.day
-        data_last_3_day = data_last_3_transf_date.day
+        data_last_3_transforma_date = dt.datetime.strptime(data_last_3, '%d.%m.%Y')
+        data_last_1_day = data_last_1_1_transforma_date.day
+        data_last_2_day = data_last_2_transforma_date.day
+        data_last_3_day = data_last_3_transforma_date.day
         if data_last_3_day in range(0, (data_last_2_day - data_last_1_day)):
             return data_last_1.strftime('%d.%m.%Y')
         else:
@@ -131,14 +132,14 @@ class Risco:
         data_last_cpgt = dt.datetime.now() + relativedelta(day=1, months=3)
         data_last_1_cpgt = dt.datetime.now() + relativedelta(day=1, months=2)
         data_last_1_1_cpgt = dt.datetime.now().strftime('01.%m.%Y')
-        data_last_1_1_cpgt_transf_date = dt.datetime.strptime(data_last_1_1_cpgt, '%d.%m.%Y')
+        data_last_1_1_cpgt_transforma_date = dt.datetime.strptime(data_last_1_1_cpgt, '%d.%m.%Y')
         data_last_2_cpgt = dt.datetime.now().strftime('21.%m.%Y')
-        data_last_2_cpgt_transf_date = dt.datetime.strptime(data_last_2_cpgt, '%d.%m.%Y')
+        data_last_2_cpgt_transforma_date = dt.datetime.strptime(data_last_2_cpgt, '%d.%m.%Y')
         data_last_3_cpgt = dt.datetime.now().strftime('%d.%m.%Y')
-        data_last_3_cpgt_transf_date = dt.datetime.strptime(data_last_3_cpgt, '%d.%m.%Y')
-        data_last_1_cpgt_day = data_last_1_1_cpgt_transf_date.day
-        data_last_2_cpgt_day = data_last_2_cpgt_transf_date.day
-        data_last_3_cpgt_day = data_last_3_cpgt_transf_date.day
+        data_last_3_cpgt_transforma_date = dt.datetime.strptime(data_last_3_cpgt, '%d.%m.%Y')
+        data_last_1_cpgt_day = data_last_1_1_cpgt_transforma_date.day
+        data_last_2_cpgt_day = data_last_2_cpgt_transforma_date.day
+        data_last_3_cpgt_day = data_last_3_cpgt_transforma_date.day
         if data_last_3_cpgt_day in range(0, (data_last_2_cpgt_day - data_last_1_cpgt_day)):
             return data_last_1_cpgt.strftime('%d.%m.%Y')
         else:
@@ -148,26 +149,27 @@ class Risco:
     def data_email():
         data_mes_email = dt.datetime.now() + relativedelta(months=1)
         data_email_1 = dt.datetime.now().strftime('01.%m.%Y')
-        data_email_1_transf_date = dt.datetime.strptime(data_email_1, '%d.%m.%Y')
+        data_email_1_transforma_date = dt.datetime.strptime(data_email_1, '%d.%m.%Y')
         data_email_2 = dt.datetime.now().strftime('21.%m.%Y')
-        data_email_2_transf_date = dt.datetime.strptime(data_email_2, '%d.%m.%Y')
+        data_email_2_transforma_date = dt.datetime.strptime(data_email_2, '%d.%m.%Y')
         data_email_3 = dt.datetime.now().strftime('%d.%m.%Y')
-        data_email_3_transf_date = dt.datetime.strptime(data_email_3, '%d.%m.%Y')
-        data_email_1_day = data_email_1_transf_date.day
-        data_email_2_day = data_email_2_transf_date.day
-        data_email_3_day = data_email_3_transf_date.day
+        data_email_3_transforma_date = dt.datetime.strptime(data_email_3, '%d.%m.%Y')
+        data_email_1_day = data_email_1_transforma_date.day
+        data_email_2_day = data_email_2_transforma_date.day
+        data_email_3_day = data_email_3_transforma_date.day
         if data_email_3_day in range(0, (data_email_2_day - data_email_1_day)):
             return dt.datetime.now().strftime('%B')
         else:
             return data_mes_email.strftime('%B')
 
-
     def enviar_email(self):
         setlocale(LC_ALL, 'pt_BR.utf-8')
         pergunta_envio = input('Você deseja enviar o email agora?\n'
-                               '(Pressione "e" para enviar o email ou "enter" para finalizar a operação.)')
-        if pergunta_envio == 'e':
-            data_visivel=(self.data_email()).title()
+                               '(Pressione "enter" para enviar o email.\n'
+                               'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
+
+        if pergunta_envio == '':
+            data_visivel = (self.data_email()).title()
 
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
@@ -181,10 +183,11 @@ class Risco:
             msg['Subject'] = f'Taxas Risco Sacado {data_visivel}.'
 
             msg.set_content(
-                f'Prezada Elaine\n\nSegue abaixo aa planilhas com as taxas dos clientes que utilizarão'
+                f'Prezada Elaine\n\nSegue abaixo as planilhas com as taxas dos clientes que utilizarão'
                 f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.'
                 f' Peço avaliar a solução.')
-            paths = ['risco_sacado(' + self.data_save() + ').xlsx','Cadastro_CPGT_RS(' + self.data_save() + ').xlsx']
+            paths = ['risco_sacado(' + self.data_save_arquivo() + ').xlsx',
+                     'Cadastro_CPGT_RS(' + self.data_save_arquivo() + ').xlsx']
             for path in paths:
                 caminho = open(path, 'rb')
                 arq_data = caminho.read()
@@ -194,6 +197,9 @@ class Risco:
             smtpobj.send_message(msg)
             smtpobj.quit()
             print('Email enviado!!!!')
+        elif pergunta_envio == "f":
+            pass
 
-x=  Risco()
+
+x = Risco()
 x.interface()
