@@ -3,7 +3,7 @@ import datetime as dt
 from dateutil.relativedelta import relativedelta
 import smtplib
 from email.message import EmailMessage
-from locale import setlocale,LC_ALL
+from locale import setlocale, LC_ALL
 
 
 class Risco:
@@ -31,11 +31,13 @@ class Risco:
         self.wb = load_workbook(filename='template_risco_sacado.xlsx')
         self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado.xlsx')
 
-    def cpgt_1(self):
+    @staticmethod
+    def cpgt_1():
         cpgt = input('Qual o prazo da condição de pagamento? ')
         return 'ZD'+cpgt
 
-    def banco_1(self):
+    @staticmethod
+    def banco_1():
         banco_marca = input('Qual banco escolhido? ')
         if banco_marca == 's':
             return 'Santander'
@@ -52,12 +54,12 @@ class Risco:
         for linha_plan in range(2, sheet_act.max_row + 1):  # Tratamento na planilha das linhas
             empresa = sheet_act.cell(row=linha_plan, column=2).value
             if empresa in self.lista_distr():
-                sheet_act.cell(row=linha_plan, column=8).value = self.lista_distr()[2]  # Preenche CPGT
-                sheet_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1]  # Preenche taxa
-                sheet_act.cell(row=linha_plan, column=10).value = self.data_inicio()  # Preenche data inicio
-                sheet_act.cell(row=linha_plan, column=11).value = self.data_last_day()  # Preenche data final
-                sheet_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]  # Preenche Banco
-                sheet_act.cell(row=linha_plan, column=13).value = self.data_cadastro()  # Preenche data cadastro
+                sheet_act.cell(row=linha_plan, column=8).value = self.lista_distr()[2]         # Preenche CPGT
+                sheet_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1]+" a.m"  # Preenche taxa
+                sheet_act.cell(row=linha_plan, column=10).value = self.data_inicio()           # Preenche data inicio
+                sheet_act.cell(row=linha_plan, column=11).value = self.data_last_day()         # Preenche data final
+                sheet_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]       # Preenche Banco
+                sheet_act.cell(row=linha_plan, column=13).value = self.data_cadastro()         # Preenche data cadastro
         self.wb.save('risco_sacado(' + self.data_save() + ').xlsx')
 
     def abrir_plan_cpgt(self):
@@ -79,13 +81,16 @@ class Risco:
         resultado = int(valor_separado) - 1
         return resultado
 
-    def data_save(self):
+    @staticmethod
+    def data_save():
         data_save_1 = dt.datetime.now()
         return data_save_1.strftime('%d_%m_%y')
 
-    def data_cadastro(self):
+    @staticmethod
+    def data_cadastro():
         data_cad = dt.datetime.now()
         return data_cad.strftime('%d.%m.%Y')
+
 
     def data_inicio(self):
         data_ini = dt.datetime.now() + relativedelta(months=1)
@@ -103,7 +108,8 @@ class Risco:
         else:
             return data_ini.strftime('01.%m.%Y')
 
-    def data_last_day(self):
+    @staticmethod
+    def data_last_day():
         data_last = dt.datetime.now() + relativedelta(day=31, months=1)
         data_last_1 = dt.datetime.now() + relativedelta(day=31)
         data_last_1_1 = dt.datetime.now().strftime('01.%m.%Y')
@@ -120,7 +126,8 @@ class Risco:
         else:
             return data_last.strftime('%d.%m.%Y')
 
-    def data_last_day_cpgt(self):
+    @staticmethod
+    def data_last_day_cpgt():
         data_last_cpgt = dt.datetime.now() + relativedelta(day=1, months=3)
         data_last_1_cpgt = dt.datetime.now() + relativedelta(day=1, months=2)
         data_last_1_1_cpgt = dt.datetime.now().strftime('01.%m.%Y')
@@ -137,7 +144,8 @@ class Risco:
         else:
             return data_last_cpgt.strftime('%d.%m.%Y')
 
-    def data_email(self):
+    @staticmethod
+    def data_email():
         data_mes_email = dt.datetime.now() + relativedelta(months=1)
         data_email_1 = dt.datetime.now().strftime('01.%m.%Y')
         data_email_1_transf_date = dt.datetime.strptime(data_email_1, '%d.%m.%Y')
@@ -153,17 +161,18 @@ class Risco:
         else:
             return data_mes_email.strftime('%B')
 
+
     def enviar_email(self):
-        setlocale(LC_ALL,'pt_BR.utf-8')
-        pergunta_envio = input('Você deseja enviar o email agora?  \n'
+        setlocale(LC_ALL, 'pt_BR.utf-8')
+        pergunta_envio = input('Você deseja enviar o email agora?\n'
                                '(Pressione "e" para enviar o email ou "enter" para finalizar a operação.)')
         if pergunta_envio == 'e':
-            data_visivel = (self.data_email()).title()
+            data_visivel=(self.data_email()).title()
 
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
             fro = 'jrf.petro@gmail.com'
-            to = 'junio_firmino@petrobras.com.br, jrf.petro@gmail.com'
+            to = 'junio_firmino@petrobras.com.br'
 
             smtpobj.login(fro, 'yevq kufu ejsx awpz')
             msg = EmailMessage()
@@ -172,12 +181,12 @@ class Risco:
             msg['Subject'] = f'Taxas Risco Sacado {data_visivel}.'
 
             msg.set_content(
-                f'Prezada Elaine\n\nSegue abaixo a planilha com as taxas dos clientes que utilizarão'
+                f'Prezada Elaine\n\nSegue abaixo aa planilhas com as taxas dos clientes que utilizarão'
                 f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.'
                 f' Peço avaliar a solução.')
             paths = ['risco_sacado(' + self.data_save() + ').xlsx','Cadastro_CPGT_RS(' + self.data_save() + ').xlsx']
             for path in paths:
-                caminho = open(path,'rb')
+                caminho = open(path, 'rb')
                 arq_data = caminho.read()
                 arq_name = caminho.name
                 msg.add_attachment(arq_data, maintype='application', subtype='octet-stream', filename=arq_name)
@@ -186,5 +195,5 @@ class Risco:
             smtpobj.quit()
             print('Email enviado!!!!')
 
-x = Risco()
+x=  Risco()
 x.interface()
