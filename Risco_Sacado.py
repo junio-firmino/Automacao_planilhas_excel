@@ -33,10 +33,13 @@ class Risco:
         self.wb = load_workbook(filename='template_risco_sacado.xlsx')
         self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado.xlsx')
 
-    @staticmethod
-    def cpgt_1():
-        cpgt = input('Qual o prazo da condição de pagamento? ')
-        return 'ZD'+cpgt
+
+    def cpgt_1(self):
+        self.cpgt_principal = input('Qual o prazo da condição de pagamento? ')
+        return 'ZD'+self.cpgt_principal
+
+    def cpgt_2(self):
+        return 'ZC'+self.cpgt_principal
 
     @staticmethod
     def banco_1():
@@ -47,21 +50,40 @@ class Risco:
             return 'Bradesco'
 
     def lista_distr(self):
-        distri = [self.cliente, self.taxas, self.cpgt, self.banco]
+        distri = [self.cliente, self.taxas, self.cpgt, self.cpgt_2(), self.banco]
         return distri
+
+    @staticmethod
+    def centro_terrestre():
+        terrestre = [1700,1400,1200,1210]
+        return terrestre
+
+    @staticmethod
+    def centro_cabotagem():
+        cabotagem = [1410,1100,1360,1950]
+        return cabotagem
 
     def abrir_plan_risco_sacado(self):
         aba_act = self.wb.active
         self.lista_distr()
         for linha_plan in range(2, aba_act.max_row + 1):  # Tratamento na planilha das linhas
             empresa = aba_act.cell(row=linha_plan, column=2).value
-            if empresa in self.lista_distr():
+            centro_1 = aba_act.cell(row=linha_plan, column=6).value
+            if empresa in self.lista_distr() and centro_1 in self.centro_terrestre():
                 aba_act.cell(row=linha_plan, column=8).value = self.lista_distr()[2]         # Preenche CPGT
                 aba_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1]+" a.m"  # Preenche taxa
                 aba_act.cell(row=linha_plan, column=10).value = self.data_inicio()           # Preenche data inicio
                 aba_act.cell(row=linha_plan, column=11).value = self.data_last_day_risco_sacado()  # Preenche data final
                 aba_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]       # Preenche Banco
-                aba_act.cell(row=linha_plan, column=13).value = self.data_cadastro()         # Preenche data cadastro
+                aba_act.cell(row=linha_plan, column=13).value = self.data_cadastro()
+            elif empresa in self.lista_distr() and centro_1 in self.centro_cabotagem():
+                aba_act.cell(row=linha_plan, column=8).value = self.lista_distr()[3]
+                aba_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1]+" a.m"
+                aba_act.cell(row=linha_plan, column=10).value = self.data_inicio()
+                aba_act.cell(row=linha_plan, column=11).value = self.data_last_day_risco_sacado()
+                aba_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]
+                aba_act.cell(row=linha_plan, column=13).value = self.data_cadastro()
+
         self.wb.save('risco_sacado(' + self.data_save_arquivo() + ').xlsx')
 
     def abrir_plan_cpgt(self):
@@ -69,19 +91,32 @@ class Risco:
         self.lista_distr()
         for linha_cpgt in range(2, aba_act_cpgt.max_row + 1):
             distribuidora = aba_act_cpgt.cell(row=linha_cpgt, column=19).value
-            if distribuidora in self.lista_distr():
+            centro_cpgt = aba_act_cpgt.cell(row=linha_cpgt, column=8).value
+            if distribuidora in self.lista_distr() and centro_cpgt in self.centro_terrestre():
                 aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.lista_distr()[2]
                 aba_act_cpgt.cell(row=linha_cpgt, column=16).value = self.data_inicio()
                 aba_act_cpgt.cell(row=linha_cpgt, column=17).value = self.data_last_day_cpgt()
-                aba_act_cpgt.cell(row=linha_cpgt, column=7).value = self.carencia_cpgt()
+                aba_act_cpgt.cell(row=linha_cpgt, column=7).value = self.carencia_cpgt_terrestre()
+            elif distribuidora in self.lista_distr() and centro_cpgt in self.centro_cabotagem():
+                aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.lista_distr()[3]
+                aba_act_cpgt.cell(row=linha_cpgt, column=16).value = self.data_inicio()
+                aba_act_cpgt.cell(row=linha_cpgt, column=17).value = self.data_last_day_cpgt()
+                aba_act_cpgt.cell(row=linha_cpgt, column=7).value = self.carencia_cpgt_cabotagem()
         self.wb_cpgt.save('Cadastro_CPGT_RS(' + self.data_save_arquivo() + ').xlsx')
 
-    def carencia_cpgt(self):
+    def carencia_cpgt_terrestre(self):
         condicoes_cpgt = self.lista_distr()[2]
         list_separador = condicoes_cpgt.split('D')
         valor_separado = list_separador[1]
         resultado = int(valor_separado) - 1
         return resultado
+
+    def carencia_cpgt_cabotagem(self):
+        condicoes_cpgt_cabotagem = self.lista_distr()[3]
+        list_separador_cabotagem = condicoes_cpgt_cabotagem.split('C')
+        valor_separado_cabotagem = list_separador_cabotagem[1]
+        resultado_cabotagem = int(valor_separado_cabotagem) - 4
+        return resultado_cabotagem
 
     @staticmethod
     def data_save_arquivo():
