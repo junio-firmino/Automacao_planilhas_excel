@@ -17,7 +17,7 @@ class Risco:
         while active:
             self.cliente = input('Qual cliente você irá cadastrar? ').title()
             self.taxas = input('Qual a taxa? ')
-            self.cpgt = self.cpgt_1()
+            self.cpgt = self.cpgt_terrestre()
             self.banco = self.banco_1()
             self.lista_distr()
             self.abrir_plan_risco_sacado()
@@ -38,11 +38,11 @@ class Risco:
         self.wb.save('risco_sacado(' + self.data_save_arquivo() + ').xlsx')
         self.wb_cpgt.save('Cadastro_CPGT_RS(' + self.data_save_arquivo() + ').xlsx')
 
-    def cpgt_1(self):
+    def cpgt_terrestre(self):
         self.cpgt_principal = input('Qual o prazo da condição de pagamento? ')
         return 'ZD'+self.cpgt_principal
 
-    def cpgt_2(self):
+    def cpgt_cabotagem(self):
         return 'ZC'+self.cpgt_principal
 
     @staticmethod
@@ -54,7 +54,7 @@ class Risco:
             return 'Bradesco'
 
     def lista_distr(self):
-        distri = [self.cliente, self.taxas, self.cpgt, self.cpgt_2(), self.banco]
+        distri = [self.cliente, self.taxas, self.cpgt, self.cpgt_cabotagem(), self.banco]
         return distri
 
     @staticmethod
