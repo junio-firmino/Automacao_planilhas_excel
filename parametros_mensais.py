@@ -5,12 +5,7 @@ import smtplib
 from email.message import EmailMessage
 from locale import setlocale, LC_ALL
 import assists
-from enum import Enum
 
-class LimiteAnswerPergunta(Enum):
-    Cgv = 0
-    N4 = 1
-    Avulso = 2
 
 class Parametros:
     def __init__(self):
@@ -21,11 +16,15 @@ class Parametros:
         self.montante = input('Qual o valor do parâmetro? ')
 
     def pergunta (self):
-        self.ask = input("Escolha o tipo de contrato? ").title()
-        if not isinstance(self.ask, LimiteAnswerPergunta):
-            raise ValueError('Contrato não cadastrado.')
+        active = True
+        while active:
+            self.ask = input("Escolha o tipo de contrato? ").title()
+            tipo_contrato = ['Cgv', 'N4', 'Avulso']
+            if self.ask in tipo_contrato:
+                return self.ask
+            else:
+                print('Não é possível trabalhar com este contrato')
 
-        return self.ask
 
     def cliente_centro_produto(self):
         self.filiais()[0] = {'PB.620': [1100, 1101, 1150, 1160]}        #15640
@@ -61,10 +60,10 @@ class Parametros:
         return client
 
     def abrir_arq(self):
-        pass
+        self.wb = load_workbook(filename='template_PVA_PVS.xlsx')
 
     def save_arq(self):
-        pass
+        self.wb.save('Carga'+self.pergunta()+'.xlsx')
 
     @staticmethod
     def marca():
@@ -79,7 +78,10 @@ class Parametros:
         return "1001"
 
     def tipo_contrato(self):
-        pass
+        if self.pergunta() == 'Cgv':
+            return 'P'
+        if self.pergunta() == 'Avulso' or self.pergunta() == 'N4':
+            return 'N4'
 
     @staticmethod
     def centro():
@@ -114,3 +116,7 @@ class Parametros:
 
     def data_fim(self):
         pass
+
+
+x = Parametros()
+x.interface_client()
