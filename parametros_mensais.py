@@ -70,14 +70,14 @@ class Parametros:
         return "x"
 
     @staticmethod
-    def claros():
+    def clear():
         return "02"
 
     @staticmethod
     def orgv():
         return "1001"
 
-    def tipo_contrato(self):
+    def ty_contracty(self):
         if self.pergunta() == 'Cg':
             return 'P'
         if self.pergunta() == 'Avul' or self.pergunta() == 'N':
