@@ -19,7 +19,7 @@ class Parametros:
         active = True
         while active:
             self.ask = input("Escolha o tipo de contrato? ").title()
-            tipo_contrato = ['Cgv', 'N4', 'Avulso']
+            tipo_contrato = ['Cg', 'N', 'Avul']
             if self.ask in tipo_contrato:
                 return self.ask
             else:
@@ -78,9 +78,9 @@ class Parametros:
         return "1001"
 
     def tipo_contrato(self):
-        if self.pergunta() == 'Cgv':
+        if self.pergunta() == 'Cg':
             return 'P'
-        if self.pergunta() == 'Avulso' or self.pergunta() == 'N4':
+        if self.pergunta() == 'Avul' or self.pergunta() == 'N':
             return 'N4'
 
     @staticmethod
@@ -106,7 +106,7 @@ class Parametros:
         return "M20"
 
     def tab(self):
-        tabela = {'Cgv':689, 'Avulsos':525}
+        tabela = {'Cg':689, 'Avul':525}
         if self.pergunta() in tabela.keys():
             return tabela.values()
 
