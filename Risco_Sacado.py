@@ -210,7 +210,7 @@ class Risco:
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
             fro = 'jrf.petro@gmail.com'
-            to = 'junio_firmino@petrobras.com.br'
+            to = 'junio_firmino@.com.br'
 
             smtpobj.login(fro, 'yevq kufu ejsx awpz')
             msg = EmailMessage()
