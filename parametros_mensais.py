@@ -12,26 +12,32 @@ class Parametros:
         self.montante = int
 
     def interface_client(self):
-        #self.abrir_arq()
-        self.pergunta()
+        self.abrir_arq()
+        self.pergunta_1 = self.pergunta()
         self.montante = input('Qual o valor do parâmetro? ')
+        self.list_trabalho()
         self.planilha_avulso()
+        self.save_arq()
 
-    def pergunta (self):
+    def pergunta(self):
+        contrato = ['Cgv', 'N4', 'Avulso']
         active = True
         while active:
             self.ask = input("Escolha o tipo de contrato? ").title()
-            tipo_contrato = ['Cgv', 'N4', 'Avulso']
-            if self.ask in tipo_contrato:
+            if self.ask in contrato:
                 return self.ask
             else:
-                print('Não é possível trabalhar com este contrato')
+                print("não tem contrato")
+
+    def list_trabalho(self):
+        work = [self.pergunta_1,self.montante]
+        return work
 
     def cliente_centro_produto(self):
-        self.client = [15640, 725, 20347, 17644, 4168, 21254, 16906, 724, 8425, 15630, 766, 21933, 8944, 17984,
-                       16350, 1123, 1125, 1124, 10174, 7169, 6697, 4432, 156, 157, 155]
+        # self.client = [15640, 725, 20347, 17644, 4168, 21254, 16906, 724, 8425, 15630, 766, 21933, 8944, 17984,
+        #                16350, 1123, 1125, 1124, 10174, 7169, 6697, 4432, 156, 157, 155]
 
-        self.client[0] = {'PB.620': [1100, 1101, 1150, 1160]}        #15640
+        self.client = {15640: {'PB.620': [1100, 1101, 1150, 1160]}}        #15640
         self.client[1] = {'PB.620': [1100, 1101], 'PB.658': [1100, 1101, 1160], 'PB.6DH': [1160]}      #725
         self.client[2] = {'PB.620': [1100], 'PB.658': [1100]}        #20347
         self.client[3] = {'PB.620': [1101], 'PB.658': [1101]}        #17644
@@ -62,9 +68,10 @@ class Parametros:
 
     def abrir_arq(self):
         self.wb = load_workbook(filename='template_PVA_PVS.xlsx')
+        return self.wb
 
     def save_arq(self):
-        self.wb.save('Carga'+self.pergunta()+'.xlsx')
+        self.wb.save('Carga'+self.list_trabalho()[0]+ '.xlsx')
 
     @staticmethod
     def marca():
@@ -79,15 +86,15 @@ class Parametros:
         return "1001"
 
     def tipo_contrato(self):
-        if self.pergunta() == 'Cgv':
+        if self.list_trabalho()[0] == 'Cgv':
             return 'P'
-        if self.pergunta() == 'Avulso' or self.pergunta() == 'N4':
+        if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
             return 'N4'
 
-    @staticmethod
-    def centro():
-        centre = []
-        return centre
+    def grc4(self):
+        self.condicoes_parametro = ['A', 'SP']
+        #for condi in self.condicoes_parametro:
+        return self.condicoes_parametro
 
     @staticmethod
     def material():
@@ -108,25 +115,53 @@ class Parametros:
 
     def tab(self):
         tabela = {'Cgv': 689, 'Avulsos': 525}
-        if self.pergunta() in tabela.keys():
-            return tabela.values()
+        for self.list_trabalho()[0], numero_tabela in tabela.items():
+            return numero_tabela
 
     @staticmethod
-    def data_inicio():
-        return assists.data_inicio()
+    def data_inicial():
+        data_inicio = dt.datetime.now() + relativedelta(day=1, months=1)
+        data_inicio_return = data_inicio.strftime('%d.%m.%Y')
+        return data_inicio_return
 
-    def data_fim(self):
-        pass
+    @staticmethod
+    def data_fim():
+        data_last = dt.datetime.now() + relativedelta(day=31, months=1)
+        data_return = data_last.strftime('%d.%m.%Y')
+        return data_return
 
     def planilha_avulso(self):
-        #aba_avulso = self.wb.active
-            for filiais in self.cliente_centro_produto():
-                for product, centre in filiais.items():
-                    print(product)  #
-                    for filial in centre:
-                        print(filial)   #
+        aba_avulso = self.wb.active
+        self.list_trabalho()
+        self.cliente_centro_produto()
+        for linha_plan in range(3,len(self.grc4())+2):
+            for condi in self.grc4():
+                for filiais, carac in self.client.items():
+                    for product, centre in carac.items():
+                        for filial in centre:  # cada centro no dicionario
+                            aba_avulso.cell(row=linha_plan, column=1).value = self.marca()
+                            aba_avulso.cell(row=linha_plan, column=2).value = self.claros()
+                            aba_avulso.cell(row=linha_plan, column=3).value = self.orgv()
+                            aba_avulso.cell(row=linha_plan, column=6).value = self.tipo_contrato()
+                            aba_avulso.cell(row=linha_plan, column=12).value = self.montante
+                            aba_avulso.cell(row=linha_plan, column=13).value = self.moeda()
+                            aba_avulso.cell(row=linha_plan, column=14).value = self.por()
+                            aba_avulso.cell(row=linha_plan, column=15).value = self.unidade()
+                            aba_avulso.cell(row=linha_plan, column=16).value = self.data_inicial()
+                            aba_avulso.cell(row=linha_plan, column=17).value = self.data_fim()
+                            aba_avulso.cell(row=linha_plan, column=18).value = self.tab()
+                            aba_avulso.cell(row=linha_plan, column=4).value = condi
+                            aba_avulso.cell(row=linha_plan, column=8).value = filiais
+                            aba_avulso.cell(row=linha_plan, column=9).value = product
+                            aba_avulso.cell(row=linha_plan, column=7).value = filial
+                            linha_plan +=1
+
 
 
 
 x = Parametros()
 x.interface_client()
+
+
+
+
