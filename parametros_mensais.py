@@ -4,7 +4,6 @@ from dateutil.relativedelta import relativedelta
 import smtplib
 from email.message import EmailMessage
 from locale import setlocale, LC_ALL
-import assists
 
 
 class Parametros:
@@ -30,40 +29,37 @@ class Parametros:
                 print("não tem contrato")
 
     def list_trabalho(self):
-        work = [self.pergunta_1,self.montante]
+        work = [self.pergunta_1, self.montante]
         return work
 
     def cliente_centro_produto(self):
-        # self.client = [15640, 725, 20347, 17644, 4168, 21254, 16906, 724, 8425, 15630, 766, 21933, 8944, 17984,
-        #                16350, 1123, 1125, 1124, 10174, 7169, 6697, 4432, 156, 157, 155]
-
-        self.client = {15640: {'PB.620': [1100, 1101, 1150, 1160]}}        #15640
-        self.client[1] = {'PB.620': [1100, 1101], 'PB.658': [1100, 1101, 1160], 'PB.6DH': [1160]}      #725
-        self.client[2] = {'PB.620': [1100], 'PB.658': [1100]}        #20347
-        self.client[3] = {'PB.620': [1101], 'PB.658': [1101]}        #17644
-        self.client[4] = {'PB.620': [1111], 'PB.658': [1111]}        #4168
-        self.client[5] = {'PB.620': [1120]}                        #21254
-        self.client[6] = {'PB.620': [1120], 'PB.658': [1120], 'PB.6DH': [1120]}        #16906
-        self.client[7] = {'PB.620': [1120], 'PB.658': [1120], 'PB.6DH': [1120]}        #724
-        self.client[8] = {'PB.620': [1150]}                                        #8425
-        self.client[9] = {'PB.620': [1150], 'PB.658': [1150], 'PB.6DH': [1150]}        #15630
-        self.client[10] = {'PB.620': [1160], 'PB.658': [1160], 'PB.6DH': [1160]}       #766
-        self.client[11] = {'PB.620': [1160]}                                       #21933
-        self.client[12] = {'PB.620': [1160], 'PB.658': [1160], 'PB.6DH': [1160]}       #8944
-        self.client[13] = {'PB.620': [1250], 'PB.658': [1250], 'PB.6DH': [1250]}       #17984
-        self.client[14] = {'PB.620': [1360, 9044], 'PB.658': [1360, 9044], 'PB.6DH': [1360]}       #16350
-        self.client[15] = {'PB.620': [1500, 1507], 'PB.658': [1500, 1507], 'PB.6DH': [1500, 1507], 'PB.650': [1500]}   #1123
-        self.client[16] = {'PB.620': [1502, 9102], 'PB.658': [1502, 9102], 'PB.6DH': [1502, 9102], 'PB.650': [1502]}   #1125
-        self.client[17] = {'PB.620': [1560, 9842, 9846, 9848], 'PB.658': [1560, 9842, 9846, 9848],
-                           'PB.6DH': [1560, 9842, 9846, 9848]}       #1124
-        self.client[18] = {'PB.620': [1560, 9848], 'PB.658': [1560, 9848], 'PB.6DH': [1560, 9848]}       #10174
-        self.client[19] = {'PB.658': [1506]}       #7169
-        self.client[20] = {'PB.658': [9842], 'PB.6DH': [9842]}       #6697
-        self.client[21] = {'PB.650': [1050]}   #4432
-        self.client[22] = {'PB.650': [1400]}   #156
-        self.client[23] = {'PB.650': [1400]}   #157
-        self.client[24] = {'PB.650': [1423]}   #155
-
+        self.client = {
+            15640: {'PB.620': [1100, 1101, 1150, 1160]},
+            725: {'PB.620': [1100, 1101], 'PB.658': [1100, 1101, 1160], 'PB.6DH': [1160]},
+            20347: {'PB.620': [1100], 'PB.658': [1100]},
+            17644: {'PB.620': [1101], 'PB.658': [1101]},
+            4168: {'PB.620': [1111], 'PB.658': [1111]},
+            21254: {'PB.620': [1120]},
+            16906: {'PB.620': [1120], 'PB.658': [1120], 'PB.6DH': [1120]},
+            724: {'PB.620': [1120], 'PB.658': [1120], 'PB.6DH': [1120]},
+            8425: {'PB.620': [1150]},
+            15630: {'PB.620': [1150], 'PB.658': [1150], 'PB.6DH': [1150]},
+            766: {'PB.620': [1160], 'PB.658': [1160], 'PB.6DH': [1160]},
+            21933: {'PB.620': [1160]},
+            8944: {'PB.620': [1160], 'PB.658': [1160], 'PB.6DH': [1160]},
+            17984: {'PB.620': [1250], 'PB.658': [1250], 'PB.6DH': [1250]},
+            16350: {'PB.620': [1360, 9044], 'PB.658': [1360, 9044], 'PB.6DH': [1360]},
+            1123: {'PB.620': [1500, 1507], 'PB.658': [1500, 1507], 'PB.6DH': [1500, 1507], 'PB.650': [1500]},
+            1125: {'PB.620': [1502, 9102], 'PB.658': [1502, 9102], 'PB.6DH': [1502, 9102], 'PB.650': [1502]},
+            1124: {'PB.620': [1560, 9842, 9846, 9848], 'PB.658': [1560, 9842, 9846, 9848],
+                   'PB.6DH': [1560, 9842, 9848]},
+            10174: {'PB.620': [1560, 9848], 'PB.658': [1560, 9848], 'PB.6DH': [1560, 9848]},
+            7169: {'PB.658': [1506]},
+            6697: {'PB.658': [9842], 'PB.6DH': [9842]},
+            4432: {'PB.650': [1050]},
+            156: {'PB.650': [1400]},
+            157: {'PB.650': [1400]},
+            155: {'PB.650': [1423]}}
         return self.client
 
     def abrir_arq(self):
@@ -71,7 +67,7 @@ class Parametros:
         return self.wb
 
     def save_arq(self):
-        self.wb.save('Carga'+self.list_trabalho()[0]+ '.xlsx')
+        self.wb.save('Carga' + self.list_trabalho()[0] + '.xlsx')
 
     @staticmethod
     def marca():
@@ -93,7 +89,6 @@ class Parametros:
 
     def grc4(self):
         self.condicoes_parametro = ['A', 'SP']
-        #for condi in self.condicoes_parametro:
         return self.condicoes_parametro
 
     @staticmethod
@@ -134,7 +129,7 @@ class Parametros:
         aba_avulso = self.wb.active
         self.list_trabalho()
         self.cliente_centro_produto()
-        for linha_plan in range(3,len(self.grc4())+2):
+        for linha_plan in range(3, len(self.grc4())+2):
             for condi in self.grc4():
                 for filiais, carac in self.client.items():
                     for product, centre in carac.items():
@@ -154,9 +149,7 @@ class Parametros:
                             aba_avulso.cell(row=linha_plan, column=8).value = filiais
                             aba_avulso.cell(row=linha_plan, column=9).value = product
                             aba_avulso.cell(row=linha_plan, column=7).value = filial
-                            linha_plan +=1
-
-
+                            linha_plan += 1
 
 
 x = Parametros()
