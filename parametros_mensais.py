@@ -1,19 +1,22 @@
 from openpyxl import load_workbook
 import datetime as dt
 from dateutil.relativedelta import relativedelta
-import smtplib
-from email.message import EmailMessage
-from locale import setlocale, LC_ALL
 
 
 class Parametros:
     def __init__(self):
-        self.montante = int
+        self.montante_cgv = 0
+        self.montante_a = 0
+        self.montante_sp = 0
+        self.ask = str
+        self.client = dict
+        self.condicoes_parametro = list
+        self.wb = load_workbook(filename='template_PVA_PVS.xlsx')
 
     def interface_client(self):
         self.abrir_arq()
         self.pergunta_1 = self.pergunta()
-        self.montante = input('Qual o valor do parâmetro? ')
+        self.montante()
         self.list_trabalho()
         self.planilha_avulso()
         self.save_arq()
@@ -28,8 +31,21 @@ class Parametros:
             else:
                 print("não tem contrato")
 
+    def montante(self):
+        if self.pergunta_1 == 'Cgv':
+            self.montante_cgv = input('Qual o valor do parâmetro? ')
+        else:
+            self.montante_cgv = 0
+
+        if self.pergunta_1 == 'Avulso':
+            self.montante_a = input('Qual o montante para o Adicional (A)?')
+            self.montante_sp = input('Qual o montante para o Suplementar (SP)?')
+        else:
+            self.montante_a = 0
+            self.montante_sp = 0
+
     def list_trabalho(self):
-        work = [self.pergunta_1, self.montante]
+        work = [self.pergunta_1, self.montante_cgv, self.montante_a, self.montante_sp]
         return work
 
     def cliente_centro_produto(self):
@@ -59,11 +75,11 @@ class Parametros:
             4432: {'PB.650': [1050]},
             156: {'PB.650': [1400]},
             157: {'PB.650': [1400]},
-            155: {'PB.650': [1423]}}
+            155: {'PB.650': [1423]}
+        }
         return self.client
 
     def abrir_arq(self):
-        self.wb = load_workbook(filename='template_PVA_PVS.xlsx')
         return self.wb
 
     def save_arq(self):
@@ -88,8 +104,9 @@ class Parametros:
             return 'N4'
 
     def grc4(self):
-        self.condicoes_parametro = ['A', 'SP']
-        return self.condicoes_parametro
+        if self.pergunta_1 == 'Avulso':
+            self.condicoes_parametro = {'A': self.list_trabalho()[2], 'SP': self.list_trabalho()[3]}
+            return self.condicoes_parametro
 
     @staticmethod
     def material():
@@ -109,9 +126,8 @@ class Parametros:
         return "M20"
 
     def tab(self):
-        tabela = {'Cgv': 689, 'Avulsos': 525}
-        for self.list_trabalho()[0], numero_tabela in tabela.items():
-            return numero_tabela
+        tabela = {'Cgv': 689, 'Avulso': 525}
+        return tabela[self.list_trabalho()[0]]
 
     @staticmethod
     def data_inicial():
@@ -128,17 +144,16 @@ class Parametros:
     def planilha_avulso(self):
         aba_avulso = self.wb.active
         self.list_trabalho()
-        self.cliente_centro_produto()
         for linha_plan in range(3, len(self.grc4())+2):
-            for condi in self.grc4():
-                for filiais, carac in self.client.items():
+            for condi, valor in self.grc4().items():
+                for filiais, carac in self.cliente_centro_produto().items():
                     for product, centre in carac.items():
                         for filial in centre:  # cada centro no dicionario
                             aba_avulso.cell(row=linha_plan, column=1).value = self.marca()
                             aba_avulso.cell(row=linha_plan, column=2).value = self.claros()
                             aba_avulso.cell(row=linha_plan, column=3).value = self.orgv()
                             aba_avulso.cell(row=linha_plan, column=6).value = self.tipo_contrato()
-                            aba_avulso.cell(row=linha_plan, column=12).value = self.montante
+                            aba_avulso.cell(row=linha_plan, column=12).value = valor
                             aba_avulso.cell(row=linha_plan, column=13).value = self.moeda()
                             aba_avulso.cell(row=linha_plan, column=14).value = self.por()
                             aba_avulso.cell(row=linha_plan, column=15).value = self.unidade()
@@ -154,7 +169,3 @@ class Parametros:
 
 x = Parametros()
 x.interface_client()
-
-
-
-
