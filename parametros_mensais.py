@@ -1,6 +1,7 @@
 from openpyxl import load_workbook
 import datetime as dt
 from dateutil.relativedelta import relativedelta
+import assists
 
 
 class Parametros:
@@ -32,12 +33,12 @@ class Parametros:
                 print("não tem contrato")
 
     def montante(self):
-        if self.pergunta_1 == 'Cgv':
+        if self.list_trabalho()[0] == 'Cgv':
             self.montante_cgv = input('Qual o valor do parâmetro? ')
         else:
             self.montante_cgv = 0
 
-        if self.pergunta_1 == 'Avulso':
+        if self.list_trabalho()[0] == 'Avulso':
             self.montante_a = input('Qual o montante para o Adicional (A)?')
             self.montante_sp = input('Qual o montante para o Suplementar (SP)?')
         else:
@@ -83,7 +84,7 @@ class Parametros:
         return self.wb
 
     def save_arq(self):
-        self.wb.save('Carga' + self.list_trabalho()[0] + '.xlsx')
+        self.wb.save('Carga_' + self.list_trabalho()[0] + '_' + (assists.data_cadastro()) + '.xlsx')
 
     @staticmethod
     def marca():
@@ -104,7 +105,7 @@ class Parametros:
             return 'N4'
 
     def grc4(self):
-        if self.pergunta_1 == 'Avulso':
+        if self.list_trabalho()[0] == 'Avulso':
             self.condicoes_parametro = {'A': self.list_trabalho()[2], 'SP': self.list_trabalho()[3]}
             return self.condicoes_parametro
 
@@ -148,7 +149,7 @@ class Parametros:
             for condi, valor in self.grc4().items():
                 for filiais, carac in self.cliente_centro_produto().items():
                     for product, centre in carac.items():
-                        for filial in centre:  # cada centro no dicionario
+                        for numero_centre in centre:  # cada centro no dicionario
                             aba_avulso.cell(row=linha_plan, column=1).value = self.marca()
                             aba_avulso.cell(row=linha_plan, column=2).value = self.claros()
                             aba_avulso.cell(row=linha_plan, column=3).value = self.orgv()
@@ -163,7 +164,7 @@ class Parametros:
                             aba_avulso.cell(row=linha_plan, column=4).value = condi
                             aba_avulso.cell(row=linha_plan, column=8).value = filiais
                             aba_avulso.cell(row=linha_plan, column=9).value = product
-                            aba_avulso.cell(row=linha_plan, column=7).value = filial
+                            aba_avulso.cell(row=linha_plan, column=7).value = numero_centre
                             linha_plan += 1
 
 
