@@ -10,6 +10,8 @@ class Risco:
     def __init__(self):
         self.cliente = 'utf-8'
         self.taxas = 0
+        self.wb = load_workbook(filename='template_risco_sacado.xlsx')
+        self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado.xlsx')
 
     def interface(self):
         self.abrir_arq()
@@ -17,7 +19,7 @@ class Risco:
         while active:
             self.cliente = input('Qual cliente você irá cadastrar? ').title()
             self.taxas = input('Qual a taxa? ')
-            self.cpgt = self.cpgt_terrestre()
+            self.cpgt = input('Qual o prazo da condição de pagamento? ')
             self.banco = self.banco_1()
             self.lista_distr()
             self.abrir_plan_risco_sacado()
@@ -31,35 +33,37 @@ class Risco:
         self.enviar_email()
 
     def abrir_arq(self):
-        self.wb = load_workbook(filename='template_risco_sacado.xlsx')
-        self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado.xlsx')
+        return self.wb and self.wb_cpgt
 
     def salvar_arq(self):
         self.wb.save('risco_sacado(' + self.data_save_arquivo() + ').xlsx')
         self.wb_cpgt.save('Cadastro_CPGT_RS(' + self.data_save_arquivo() + ').xlsx')
 
     def cpgt_terrestre(self):
-        self.cpgt_principal = input('Qual o prazo da condição de pagamento? ')
-        return 'ZD'+self.cpgt_principal
+        return 'ZD'+self.cpgt
 
     def cpgt_cabotagem(self):
-        return 'ZC'+self.cpgt_principal
+        return 'ZC'+self.cpgt
 
     @staticmethod
     def banco_1():
-        banco_marca = input('Escolha o banco?\n("s" para Santander ou "b" para Bradesco) + "enter" -->')
-        if banco_marca == 's':
-            return 'Santander'
-        if banco_marca == 'b':
-            return 'Bradesco'
+        flag = True
+        while flag:
+            bancos = {'s': 'Santander', 'b': 'Bradesco', 'c': 'Citibank'}
+            banco_marca = input('Escolha o banco?\n("s" para Santander, "b" para Bradesco e "c" para Citibank)'
+                                ' + "enter" -->')
+            if banco_marca in bancos:
+                return bancos[banco_marca]
+            else:
+                print('Essa escolha não é possível, tente novamente!.')
 
     def lista_distr(self):
-        distri = [self.cliente, self.taxas, self.cpgt, self.cpgt_cabotagem(), self.banco]
+        distri = [self.cliente, self.taxas, self.cpgt_terrestre(), self.cpgt_cabotagem(), self.banco]
         return distri
 
     @staticmethod
     def centro_terrestre():
-        terrestre = [1700, 1400, 1200, 1210, 1100, 1360, 1950]
+        terrestre = [1700, 1400, 1200, 1210, 1100, 1360, 1950, 1101, 1110, 1111, 1120, 1130]
         return terrestre
 
     @staticmethod
@@ -209,10 +213,10 @@ class Risco:
 
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
-            fro = 'jrf.petro@gmail.com'
-            to = 'junio_firmino@.com.br'
+            fro = 'jrf.@gmail.com'
+            to = 'junio_@.com.br'
 
-            smtpobj.login(fro, 'yevq kufu ejsx awpz')
+            smtpobj.login(fro, )
             msg = EmailMessage()
             msg['From'] = fro
             msg['To'] = to
@@ -239,3 +243,4 @@ class Risco:
 
 x = Risco()
 x.interface()
+
