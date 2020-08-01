@@ -30,20 +30,20 @@ class Parametros:
             if self.ask in contrato:
                 return self.ask
             else:
-                print("não tem contrato")
+                print("Essa escolha não é possível, tente novamente!.")
 
     def montante(self):
-        if self.list_trabalho()[0] == 'Cgv':
-            self.montante_cgv = input('Qual o valor do parâmetro? ')
-        else:
-            self.montante_cgv = 0
-
-        if self.list_trabalho()[0] == 'Avulso':
+        if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
             self.montante_a = input('Qual o montante para o Adicional (A)?')
             self.montante_sp = input('Qual o montante para o Suplementar (SP)?')
         else:
             self.montante_a = 0
             self.montante_sp = 0
+
+        if self.list_trabalho()[0] == 'Cgv':
+            self.montante_cgv = input('Qual o valor do parâmetro? ')
+        else:
+            self.montante_cgv = 0
 
     def list_trabalho(self):
         work = [self.pergunta_1, self.montante_cgv, self.montante_a, self.montante_sp]
@@ -166,6 +166,12 @@ class Parametros:
                             aba_avulso.cell(row=linha_plan, column=9).value = product
                             aba_avulso.cell(row=linha_plan, column=7).value = numero_centre
                             linha_plan += 1
+
+    def planilha_n4(self):
+        pass
+
+    def planilha_cgv(self):
+        pass
 
 
 x = Parametros()
