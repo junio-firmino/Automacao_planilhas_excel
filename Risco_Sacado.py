@@ -37,7 +37,7 @@ class Risco:
 
     def salvar_arq(self):
         self.wb.save('risco_sacado(' + self.data_save_arquivo() + ').xlsx')
-        self.wb_cpgt.save('Cadastro_CPGT_RS(' + self.data_save_arquivo() + ').xlsx')
+        self.wb_cpgt.save('Cadastro_em_lote(' + self.data_save_arquivo() + ').xlsx')
 
     def cpgt_terrestre(self):
         return 'ZD'+self.cpgt
@@ -68,7 +68,7 @@ class Risco:
 
     @staticmethod
     def centro_cabotagem():
-        cabotagem = [1410]
+        cabotagem = [1401, 1211]
         return cabotagem
 
     def abrir_plan_risco_sacado(self):
@@ -91,6 +91,7 @@ class Risco:
                 aba_act.cell(row=linha_plan, column=11).value = self.data_last_day_risco_sacado()
                 aba_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]
                 aba_act.cell(row=linha_plan, column=13).value = self.data_cadastro()
+        self.informacao_encargos()
 
     def abrir_plan_cpgt(self):
         aba_act_cpgt = self.wb_cpgt.active
@@ -122,6 +123,25 @@ class Risco:
         valor_separado_cabotagem = list_separador_cabotagem[1]
         resultado_cabotagem = int(valor_separado_cabotagem) - 4
         return resultado_cabotagem
+
+    def informacao_encargos(self):
+        aba_act = self.wb.active
+        self.lista_distr()
+        for linha_plan in range(2, aba_act.max_row + 1):  # Tratamento na planilha das linhas
+            empresa = aba_act.cell(row=linha_plan, column=15).value
+            centro_1 = aba_act.cell(row=linha_plan, column=19).value
+            if empresa in self.lista_distr() and centro_1 in self.centro_terrestre():
+                aba_act.cell(row=linha_plan, column=21).value = self.encargos()
+                aba_act.cell(row=linha_plan, column=22).value = self.data_inicio()  # Preenche data inicio
+                aba_act.cell(row=linha_plan, column=23).value = self.data_last_day_risco_sacado()  # Preenche data final
+            elif empresa in self.lista_distr() and centro_1 in self.centro_cabotagem():
+                aba_act.cell(row=linha_plan, column=21).value = self.encargos()
+                aba_act.cell(row=linha_plan, column=22).value = self.data_inicio()
+                aba_act.cell(row=linha_plan, column=23).value = self.data_last_day_risco_sacado()
+
+    @staticmethod
+    def encargos():
+        return '1,51% a.m'
 
     @staticmethod
     def data_save_arquivo():
@@ -216,7 +236,7 @@ class Risco:
             fro = 'jrf.@gmail.com'
             to = 'junio_@.com.br'
 
-            smtpobj.login(fro, )
+            smtpobj.login(fro, 'yevq kufu ejsx awpz')
             msg = EmailMessage()
             msg['From'] = fro
             msg['To'] = to
