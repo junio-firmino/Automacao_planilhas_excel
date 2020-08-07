@@ -19,29 +19,33 @@ class Parametros:
         self.pergunta_1 = self.pergunta()
         self.montante()
         self.list_trabalho()
-        self.planilha_avulso()
+        self.planilha_referente_contrato()
         self.save_arq()
 
     def pergunta(self):
-        contrato = ['Cgv', 'N4', 'Avulso']
+        contrato_escolhido = ['Cgv', 'N4', 'Avulso']
         active = True
         while active:
-            self.ask = input("Escolha o tipo de contrato? ").title()
-            if self.ask in contrato:
+            self.ask = input("Escolha o tipo de contrato -->  ").title()
+            if self.ask in contrato_escolhido:
                 return self.ask
             else:
                 print("Essa escolha não é possível, tente novamente!.")
 
+    def planilha_referente_contrato(self):
+        self.contrato = {'Cgv': self.planilha_cgv(), 'N4': self.planilha_n4(), 'Avulso': self.planilha_avulso()}
+        return self.contrato[self.list_trabalho()[0]]
+
     def montante(self):
         if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
-            self.montante_a = input('Qual o montante para o Adicional (A)?')
-            self.montante_sp = input('Qual o montante para o Suplementar (SP)?')
+            self.montante_a = input('Qual o parâmetro para o Adicional (PVA)?')
+            self.montante_sp = input('Qual o parâmetro para o Suplementar (PVS)?')
         else:
             self.montante_a = 0
             self.montante_sp = 0
 
         if self.list_trabalho()[0] == 'Cgv':
-            self.montante_cgv = input('Qual o valor do parâmetro? ')
+            self.montante_cgv = input('Qual o parâmetro CGV para o Adicional (PVA)? ')
         else:
             self.montante_cgv = 0
 
@@ -84,7 +88,7 @@ class Parametros:
         return self.wb
 
     def save_arq(self):
-        self.wb.save('Carga_' + self.list_trabalho()[0] + '_' + (assists.data_cadastro()) + '.xlsx')
+        self.wb.save('PVA_PVS_' + self.list_trabalho()[0] + '_' + '(' + assists.data_cadastro() + ')' + '.xlsx')
 
     @staticmethod
     def marca():
