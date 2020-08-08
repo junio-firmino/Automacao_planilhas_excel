@@ -13,6 +13,7 @@ class Parametros:
         self.client = dict
         self.condicoes_parametro = list
         self.wb = load_workbook(filename='template_PVA_PVS.xlsx')
+        self.wb_1 = load_workbook(filename='template_PVA_PVS.xlsx')
 
     def interface_client(self):
         self.abrir_arq()
@@ -20,7 +21,6 @@ class Parametros:
         self.montante()
         self.list_trabalho()
         self.planilha_referente_contrato()
-        self.save_arq()
 
     def pergunta(self):
         contrato_escolhido = ['Cgv', 'N4', 'Avulso']
@@ -33,8 +33,12 @@ class Parametros:
                 print("Essa escolha não é possível, tente novamente!.")
 
     def planilha_referente_contrato(self):
-        self.contrato = {'Cgv': self.planilha_cgv(), 'N4': self.planilha_n4(), 'Avulso': self.planilha_avulso()}
-        return self.contrato[self.list_trabalho()[0]]
+        if self.list_trabalho()[0] == 'Avulso':
+            return self.planilha_avulso()
+        if self.list_trabalho()[0] == 'Cgv':
+            return self.planilha_cgv()
+        # self.contrato = {'Cgv': self.planilha_cgv(), 'N4': self.planilha_n4(), 'Avulso': self.planilha_avulso()}
+        # return self.contrato[self.list_trabalho()[0]]
 
     def montante(self):
         if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
@@ -95,14 +99,14 @@ class Parametros:
                                           1312, 1130, 9060, 1353, 1200, 1500, 1354, 1507, 1311, 1062, 1710],
                                'PB.6DH': [1160, 1423, 1362, 1350, 1422, 1400, 1110, 1352, 1550, 1150, 1111, 1502,
                                           1365, 1560, 2540, 1100, 1050, 1360, 1101, 1421, 1700, 1250, 1120, 1070,
-                                          1312, 1130, 9060, 1353, 1200, 1500, 1354, 1507, 1311, 1062, 1710],
-        }
+                                          1312, 1130, 9060, 1353, 1200, 1500, 1354, 1507, 1311, 1062, 1710], }
+        return self.produto_centro
 
     def abrir_arq(self):
         return self.wb
 
     def save_arq(self):
-        self.wb.save('PVA_PVS_' + self.list_trabalho()[0] + '_' + '(' + assists.data_cadastro() + ')' + '.xlsx')
+        self.wb.save('PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
 
     @staticmethod
     def marca():
@@ -119,13 +123,20 @@ class Parametros:
     def tipo_contrato(self):
         if self.list_trabalho()[0] == 'Cgv':
             return 'P'
-        if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
+
+        if self.list_trabalho()[0] == 'Avulso':
+            return 'N4'
+
+        if self.list_trabalho()[0] == 'N4':
             return 'N4'
 
     def grc4(self):
         if self.list_trabalho()[0] == 'Avulso':
             self.condicoes_parametro = {'A': self.list_trabalho()[2], 'SP': self.list_trabalho()[3]}
             return self.condicoes_parametro
+        if self.list_trabalho()[0] == 'Cgv':
+            self.condicoes_parametro_cgv = {'A': self.list_trabalho()[1]}
+            return self.condicoes_parametro_cgv
 
     @staticmethod
     def material():
@@ -163,7 +174,7 @@ class Parametros:
     def planilha_avulso(self):
         aba_avulso = self.wb.active
         self.list_trabalho()
-        for linha_plan in range(3, len(self.grc4())+2):
+        for linha_plan in range(3, len(self.cliente_centro_produto().values())-21):
             for condi, valor in self.grc4().items():
                 for filiais, carac in self.cliente_centro_produto().items():
                     for product, centre in carac.items():
@@ -184,13 +195,38 @@ class Parametros:
                             aba_avulso.cell(row=linha_plan, column=9).value = product
                             aba_avulso.cell(row=linha_plan, column=7).value = numero_centre
                             linha_plan += 1
+        self.save_arq()
+
+
 
     def planilha_n4(self):
         pass
 
     def planilha_cgv(self):
-        pass
+        aba_cgv = self.wb.active
+        self.list_trabalho()
+        for linha_plan in range(3, len(self.produto_centro_cgv().values())):
+            for condicao, valorr in self.grc4().items():
+                for producto, centro in self.produto_centro_cgv().items():
+                    for numero_centro in centro:
+                        aba_cgv.cell(row=linha_plan, column=1).value = self.marca()
+                        aba_cgv.cell(row=linha_plan, column=2).value = self.claros()
+                        aba_cgv.cell(row=linha_plan, column=3).value = self.orgv()
+                        aba_cgv.cell(row=linha_plan, column=6).value = self.tipo_contrato()
+                        aba_cgv.cell(row=linha_plan, column=12).value = valorr
+                        aba_cgv.cell(row=linha_plan, column=13).value = self.moeda()
+                        aba_cgv.cell(row=linha_plan, column=14).value = self.por()
+                        aba_cgv.cell(row=linha_plan, column=15).value = self.unidade()
+                        aba_cgv.cell(row=linha_plan, column=16).value = self.data_inicial()
+                        aba_cgv.cell(row=linha_plan, column=17).value = self.data_fim()
+                        aba_cgv.cell(row=linha_plan, column=18).value = self.tab()
+                        aba_cgv.cell(row=linha_plan, column=4).value = condicao
+                        aba_cgv.cell(row=linha_plan, column=9).value = producto
+                        aba_cgv.cell(row=linha_plan, column=7).value = numero_centro
+                        linha_plan += 1
+        self.save_arq()
 
 
 x = Parametros()
 x.interface_client()
+
