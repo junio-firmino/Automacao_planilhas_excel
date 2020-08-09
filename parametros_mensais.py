@@ -19,7 +19,6 @@ class Parametros:
         self.abrir_arq()
         self.pergunta_1 = self.pergunta()
         self.montante()
-        self.list_trabalho()
         self.planilha_referente_contrato()
 
     def pergunta(self):
@@ -38,7 +37,9 @@ class Parametros:
         if self.list_trabalho()[0] == 'Cgv':
             return self.planilha_cgv()
         # self.contrato = {'Cgv': self.planilha_cgv(), 'N4': self.planilha_n4(), 'Avulso': self.planilha_avulso()}
-        # return self.contrato[self.list_trabalho()[0]]
+        # for self.list_trabalho()[0], plani in self.contrato.items():
+        # if self.pergunta_1 == self.contrato.items():
+        #     return self.contrato[self.pergunta_1]
 
     def montante(self):
         if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
