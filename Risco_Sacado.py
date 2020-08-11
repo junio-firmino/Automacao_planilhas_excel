@@ -27,10 +27,10 @@ class Risco:
             self.salvar_arq()
             alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros.\n'
                            'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
-            self.wb.close()
-            self.wb_cpgt.close()
             if alerta == 'f':
                 active = False
+        self.wb.close()
+        self.wb_cpgt.close()
         self.enviar_email()
 
     def abrir_arq(self):
