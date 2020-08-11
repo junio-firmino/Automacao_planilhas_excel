@@ -15,13 +15,16 @@ class Parametros:
         self.client = dict
         self.condicoes_parametro = list
         self.wb = load_workbook(filename='template_PVA_PVS.xlsx')
-        self.wb_1 = load_workbook(filename='template_PVA_PVS.xlsx')
 
     def interface_client(self):
         self.abrir_arq()
         self.pergunta_1 = self.pergunta()
         self.montante()
         self.planilha_referente_contrato()
+        self.save_arq()
+        self.wb.close()
+
+        print('Processo finalizado!.')
 
     def pergunta(self):
         contrato_escolhido = ['Cgv', 'N4', 'Avulso']
@@ -40,13 +43,9 @@ class Parametros:
             return self.planilha_cgv()
         if self.list_trabalho()[0] == 'N4':
             return self.planilha_n4()
-        # self.contrato = {'Cgv': self.planilha_cgv(), 'N4': self.planilha_n4(), 'Avulso': self.planilha_avulso()}
-        # for self.list_trabalho()[0], plani in self.contrato.items():
-        # if self.pergunta_1 == self.contrato.items():
-        #     return self.contrato[self.pergunta_1]
 
     def montante(self):
-        if self.list_trabalho()[0] == 'Avulso':
+        if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
             self.montante_a = input('Qual o parâmetro para o Adicional (PVA)?')
             self.montante_sp = input('Qual o parâmetro para o Suplementar (PVS)?')
         else:
@@ -58,16 +57,8 @@ class Parametros:
         else:
             self.montante_cgv = 0
 
-        if self.list_trabalho()[0] == 'N4':
-            self.montante_a_n4 = input('Qual o parâmetro para o Adicional (PVA)?')
-            self.montante_sp_n4 = input('Qual o parâmetro para o Suplementar (PVS)?')
-        else:
-            self.montante_a_n4 = 0
-            self.montante_sp_n4 = 0
-
     def list_trabalho(self):
-        work = [self.pergunta_1, self.montante_cgv, self.montante_a,
-                self.montante_sp, self.montante_a_n4, self.montante_sp_n4]
+        work = [self.pergunta_1, self.montante_cgv, self.montante_a, self.montante_sp,]
         return work
 
     def cliente_centro_produto(self):
@@ -134,27 +125,20 @@ class Parametros:
         return "1001"
 
     def tipo_contrato(self):
+        if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
+            return 'N4'
+
         if self.list_trabalho()[0] == 'Cgv':
             return 'P'
 
-        if self.list_trabalho()[0] == 'Avulso':
-            return 'N4'
-
-        if self.list_trabalho()[0] == 'N4':
-            return 'N4'
-
     def grc4(self):
-        if self.list_trabalho()[0] == 'Avulso':
+        if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
             self.condicoes_parametro = {'A': self.list_trabalho()[2], 'SP': self.list_trabalho()[3]}
             return self.condicoes_parametro
 
         if self.list_trabalho()[0] == 'Cgv':
             self.condicoes_parametro_cgv = {'A': self.list_trabalho()[1]}
             return self.condicoes_parametro_cgv
-
-        if self.list_trabalho()[0] == 'N4':
-            self.condicoes_parametro_n4 = {'A': self.list_trabalho()[4], 'SP': self.list_trabalho()[5]}
-            return self.condicoes_parametro_n4
 
     @staticmethod
     def material():
@@ -213,7 +197,6 @@ class Parametros:
                             aba_avulso.cell(row=linha_plan, column=9).value = product
                             aba_avulso.cell(row=linha_plan, column=7).value = numero_centre
                             linha_plan += 1
-        self.save_arq()
 
     def planilha_n4(self):
         aba_cgv_n4 = self.wb.active
@@ -231,7 +214,6 @@ class Parametros:
                     aba_cgv_n4.cell(row=linha_plan, column=17).value = self.data_fim()
                     aba_cgv_n4.cell(row=linha_plan, column=18).value = self.tab()
                     linha_plan += 1
-        self.save_arq()
 
     def planilha_cgv(self):
         aba_cgv = self.wb.active
@@ -255,7 +237,6 @@ class Parametros:
                         aba_cgv.cell(row=linha_plan, column=9).value = producto
                         aba_cgv.cell(row=linha_plan, column=7).value = numero_centro
                         linha_plan += 1
-        self.save_arq()
 
 
 x = Parametros()
