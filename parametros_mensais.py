@@ -23,7 +23,6 @@ class Parametros:
         self.planilha_referente_contrato()
         self.save_arq()
         self.wb.close()
-
         print('Processo finalizado!.')
 
     def pergunta(self):
@@ -176,7 +175,7 @@ class Parametros:
     def planilha_avulso(self):
         aba_avulso = self.wb.active
         self.list_trabalho()
-        for linha_plan in range(3, len(self.cliente_centro_produto().values())-21):
+        for linha_plan in range(3, 4):  #len(self.cliente_centro_produto().values())-(len(self.cliente_centro_produto().values())-4)):
             for condi, valor in self.grc4().items():
                 for filiais, carac in self.cliente_centro_produto().items():
                     for product, centre in carac.items():
@@ -201,7 +200,7 @@ class Parametros:
     def planilha_n4(self):
         aba_cgv_n4 = self.wb.active
         self.list_trabalho()
-        for linha_plan in range(3, len(self.material())):
+        for linha_plan in range(3, 4):  # len(self.material())):
             for condi_n4, valor_n4 in self.grc4().items():
                 for gas in self.material():
                     aba_cgv_n4.cell(row=linha_plan, column=1).value = self.marca()
@@ -210,6 +209,9 @@ class Parametros:
                     aba_cgv_n4.cell(row=linha_plan, column=4).value = condi_n4
                     aba_cgv_n4.cell(row=linha_plan, column=9).value = gas
                     aba_cgv_n4.cell(row=linha_plan, column=12).value = valor_n4
+                    aba_cgv_n4.cell(row=linha_plan, column=13).value = self.moeda()
+                    aba_cgv_n4.cell(row=linha_plan, column=14).value = self.por()
+                    aba_cgv_n4.cell(row=linha_plan, column=15).value = self.unidade()
                     aba_cgv_n4.cell(row=linha_plan, column=16).value = self.data_inicial()
                     aba_cgv_n4.cell(row=linha_plan, column=17).value = self.data_fim()
                     aba_cgv_n4.cell(row=linha_plan, column=18).value = self.tab()
@@ -218,7 +220,7 @@ class Parametros:
     def planilha_cgv(self):
         aba_cgv = self.wb.active
         self.list_trabalho()
-        for linha_plan in range(3, len(self.produto_centro_cgv().values())):
+        for linha_plan in range(3, 4):  # len(self.produto_centro_cgv().values())):
             for condicao, valorr in self.grc4().items():
                 for producto, centro in self.produto_centro_cgv().items():
                     for numero_centro in centro:
