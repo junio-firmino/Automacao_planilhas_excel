@@ -11,22 +11,26 @@ class Parametros:
         self.montante_sp = 0
         self.montante_a_n4 = 0
         self.montante_sp_n4 = 0
+        self.montante_f1 = 0
+        self.montante_f2 = 0
+        self.montante_f3 = 0
         self.ask = str
         self.client = dict
         self.condicoes_parametro = list
         self.wb = load_workbook(filename='template_PVA_PVS.xlsx')
+        self.wb_1 = load_workbook(filename='template_ZMUE.xlsx')
 
     def interface_client(self):
-        self.abrir_arq()
         self.pergunta_1 = self.pergunta()
+        self.abrir_arq()
         self.montante()
         self.planilha_referente_contrato()
         self.save_arq()
-        self.wb.close()
+        self.fechar_arq()
         print('Processo finalizado!.')
 
     def pergunta(self):
-        contrato_escolhido = ['Cgv', 'N4', 'Avulso']
+        contrato_escolhido = ['Cgv', 'N4', 'Avulso', 'Zavulso', 'Zn4']
         active = True
         while active:
             self.ask = input("Escolha o tipo de contrato -->  ").title()
@@ -42,6 +46,8 @@ class Parametros:
             return self.planilha_cgv()
         if self.list_trabalho()[0] == 'N4':
             return self.planilha_n4()
+        if self.list_trabalho()[0] == 'Zavulso':
+            return self.planilha_zavulso()
 
     def montante(self):
         if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
@@ -56,8 +62,18 @@ class Parametros:
         else:
             self.montante_cgv = 0
 
+        if self.list_trabalho()[0] == 'Zavulso':
+            self.montante_f1 = input('Qual o parâmetro ZMUE para a faixa até 5%? ')
+            self.montante_f2 = input('Qual o parâmetro ZMUE para a faixa até 10%? ')
+            self.montante_f3 = input('Qual o parâmetro ZMUE para a faixa até 100%? ')
+        else:
+            self.montante_f1 = 0
+            self.montante_f2 = 0
+            self.montante_f3 = 0
+
     def list_trabalho(self):
-        work = [self.pergunta_1, self.montante_cgv, self.montante_a, self.montante_sp,]
+        work = [self.pergunta_1, self.montante_cgv, self.montante_a, self.montante_sp, self.montante_f1,
+                self.montante_f2, self.montante_f3]
         return work
 
     def cliente_centro_produto(self):
@@ -106,10 +122,23 @@ class Parametros:
         return self.produto_centro
 
     def abrir_arq(self):
-        return self.wb
+        if self.list_trabalho()[0] == 'Zavulso':
+            return self.wb_1
+        else:
+            return self.wb
 
     def save_arq(self):
-        self.wb.save('PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
+        if self.list_trabalho()[0] == 'Zavulso':
+            return self.wb_1.save('ZMUE_Avulso_('+assists.data_cadastro()+').xlsx')
+        else:
+            return self.wb.save(
+                'PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
+
+    def fechar_arq(self):
+        if self.list_trabalho()[0] == 'Zavulso':
+            return self.wb_1
+        else:
+            return self.wb.close()
 
     @staticmethod
     def marca():
@@ -139,6 +168,11 @@ class Parametros:
             self.condicoes_parametro_cgv = {'A': self.list_trabalho()[1]}
             return self.condicoes_parametro_cgv
 
+        if self.list_trabalho()[0] == 'Zavulso':
+            self.condicoes_parametro_zavulso = {5: self.list_trabalho()[4], 10: self.list_trabalho()[5],
+                                                100: self.list_trabalho()[6]}
+            return self.condicoes_parametro_zavulso
+
     @staticmethod
     def material():
         produto = ['PB.620', 'PB.6DH', 'PB.658', 'PB.650']
@@ -157,7 +191,7 @@ class Parametros:
         return "M20"
 
     def tab(self):
-        tabela = {'Cgv': 689, 'Avulso': 525, 'N4': 556}
+        tabela = {'Cgv': 689, 'Avulso': 525, 'N4': 556, 'Zavulso': 559}
         return tabela[self.list_trabalho()[0]]
 
     @staticmethod
@@ -172,10 +206,15 @@ class Parametros:
         data_return = data_last.strftime('%d.%m.%Y')
         return data_return
 
+    @staticmethod
+    def valor_escala():
+        escala = [5, 10, 100]
+        return escala
+
     def planilha_avulso(self):
         aba_avulso = self.wb.active
         self.list_trabalho()
-        for linha_plan in range(3, 4):  #len(self.cliente_centro_produto().values())-(len(self.cliente_centro_produto().values())-4)):
+        for linha_plan in range(3, 4):
             for condi, valor in self.grc4().items():
                 for filiais, carac in self.cliente_centro_produto().items():
                     for product, centre in carac.items():
@@ -200,7 +239,7 @@ class Parametros:
     def planilha_n4(self):
         aba_cgv_n4 = self.wb.active
         self.list_trabalho()
-        for linha_plan in range(3, 4):  # len(self.material())):
+        for linha_plan in range(3, 4):
             for condi_n4, valor_n4 in self.grc4().items():
                 for gas in self.material():
                     aba_cgv_n4.cell(row=linha_plan, column=1).value = self.marca()
@@ -220,7 +259,7 @@ class Parametros:
     def planilha_cgv(self):
         aba_cgv = self.wb.active
         self.list_trabalho()
-        for linha_plan in range(3, 4):  # len(self.produto_centro_cgv().values())):
+        for linha_plan in range(3, 4):
             for condicao, valorr in self.grc4().items():
                 for producto, centro in self.produto_centro_cgv().items():
                     for numero_centro in centro:
@@ -239,6 +278,31 @@ class Parametros:
                         aba_cgv.cell(row=linha_plan, column=9).value = producto
                         aba_cgv.cell(row=linha_plan, column=7).value = numero_centro
                         linha_plan += 1
+
+    def planilha_zavulso(self):
+        aba_zavulso = self.wb_1.active
+        self.list_trabalho()
+        for linha_plan in range(3, 4):
+            for filiais, carac in self.cliente_centro_produto().items():
+                for product, centre in carac.items():
+                    for numero_centre in centre:
+                        for escala, valor in self.grc4().items():
+                            aba_zavulso.cell(row=linha_plan, column=1).value = self.marca()
+                            aba_zavulso.cell(row=linha_plan, column=2).value = self.claros()
+                            aba_zavulso.cell(row=linha_plan, column=3).value = self.orgv()
+                            aba_zavulso.cell(row=linha_plan, column=8).value = numero_centre
+                            aba_zavulso.cell(row=linha_plan, column=9).value = filiais
+                            aba_zavulso.cell(row=linha_plan, column=10).value = product
+                            aba_zavulso.cell(row=linha_plan, column=11).value = valor       # montante
+                            aba_zavulso.cell(row=linha_plan, column=12).value = self.moeda()
+                            aba_zavulso.cell(row=linha_plan, column=13).value = self.por()
+                            aba_zavulso.cell(row=linha_plan, column=14).value = self.unidade()
+                            aba_zavulso.cell(row=linha_plan, column=15).value = self.data_inicial()
+                            aba_zavulso.cell(row=linha_plan, column=16).value = self.data_fim()
+                            aba_zavulso.cell(row=linha_plan, column=17).value = escala      # escala de porcentagem
+                            aba_zavulso.cell(row=linha_plan, column=18).value = self.moeda()
+                            aba_zavulso.cell(row=linha_plan, column=19).value = self.tab()
+                            linha_plan += 1
 
 
 x = Parametros()
