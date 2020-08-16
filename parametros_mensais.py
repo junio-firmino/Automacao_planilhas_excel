@@ -48,6 +48,8 @@ class Parametros:
             return self.planilha_n4()
         if self.list_trabalho()[0] == 'Zavulso':
             return self.planilha_zavulso()
+        # list_ref = {'Avulso': self.planilha_avulso,'Cgv': self.planilha_cgv,'N4': self.planilha_n4,}
+        # return list_ref[self.list_trabalho()[0]]
 
     def montante(self):
         if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
@@ -303,6 +305,9 @@ class Parametros:
                             aba_zavulso.cell(row=linha_plan, column=18).value = self.moeda()
                             aba_zavulso.cell(row=linha_plan, column=19).value = self.tab()
                             linha_plan += 1
+
+    def planilha_zn4(self):
+        pass
 
 
 x = Parametros()
