@@ -48,8 +48,8 @@ class Parametros:
             return self.planilha_n4()
         if self.list_trabalho()[0] == 'Zavulso':
             return self.planilha_zavulso()
-        # list_ref = {'Avulso': self.planilha_avulso,'Cgv': self.planilha_cgv,'N4': self.planilha_n4,}
-        # return list_ref[self.list_trabalho()[0]]
+        if self.list_trabalho()[0] == 'Zn4':
+            return self.planilha_zn4()
 
     def montante(self):
         if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
@@ -138,7 +138,7 @@ class Parametros:
 
     def fechar_arq(self):
         if self.list_trabalho()[0] == 'Zavulso':
-            return self.wb_1
+            return self.wb_1.close()
         else:
             return self.wb.close()
 
@@ -239,23 +239,23 @@ class Parametros:
                             linha_plan += 1
 
     def planilha_n4(self):
-        aba_cgv_n4 = self.wb.active
+        aba_n4 = self.wb.active
         self.list_trabalho()
         for linha_plan in range(3, 4):
             for condi_n4, valor_n4 in self.grc4().items():
                 for gas in self.material():
-                    aba_cgv_n4.cell(row=linha_plan, column=1).value = self.marca()
-                    aba_cgv_n4.cell(row=linha_plan, column=2).value = self.claros()
-                    aba_cgv_n4.cell(row=linha_plan, column=3).value = self.orgv()
-                    aba_cgv_n4.cell(row=linha_plan, column=4).value = condi_n4
-                    aba_cgv_n4.cell(row=linha_plan, column=9).value = gas
-                    aba_cgv_n4.cell(row=linha_plan, column=12).value = valor_n4
-                    aba_cgv_n4.cell(row=linha_plan, column=13).value = self.moeda()
-                    aba_cgv_n4.cell(row=linha_plan, column=14).value = self.por()
-                    aba_cgv_n4.cell(row=linha_plan, column=15).value = self.unidade()
-                    aba_cgv_n4.cell(row=linha_plan, column=16).value = self.data_inicial()
-                    aba_cgv_n4.cell(row=linha_plan, column=17).value = self.data_fim()
-                    aba_cgv_n4.cell(row=linha_plan, column=18).value = self.tab()
+                    aba_n4.cell(row=linha_plan, column=1).value = self.marca()
+                    aba_n4.cell(row=linha_plan, column=2).value = self.claros()
+                    aba_n4.cell(row=linha_plan, column=3).value = self.orgv()
+                    aba_n4.cell(row=linha_plan, column=4).value = condi_n4
+                    aba_n4.cell(row=linha_plan, column=9).value = gas
+                    aba_n4.cell(row=linha_plan, column=12).value = valor_n4
+                    aba_n4.cell(row=linha_plan, column=13).value = self.moeda()
+                    aba_n4.cell(row=linha_plan, column=14).value = self.por()
+                    aba_n4.cell(row=linha_plan, column=15).value = self.unidade()
+                    aba_n4.cell(row=linha_plan, column=16).value = self.data_inicial()
+                    aba_n4.cell(row=linha_plan, column=17).value = self.data_fim()
+                    aba_n4.cell(row=linha_plan, column=18).value = self.tab()
                     linha_plan += 1
 
     def planilha_cgv(self):
@@ -295,13 +295,13 @@ class Parametros:
                             aba_zavulso.cell(row=linha_plan, column=8).value = numero_centre
                             aba_zavulso.cell(row=linha_plan, column=9).value = filiais
                             aba_zavulso.cell(row=linha_plan, column=10).value = product
-                            aba_zavulso.cell(row=linha_plan, column=11).value = valor       # montante
+                            aba_zavulso.cell(row=linha_plan, column=11).value = valor
                             aba_zavulso.cell(row=linha_plan, column=12).value = self.moeda()
                             aba_zavulso.cell(row=linha_plan, column=13).value = self.por()
                             aba_zavulso.cell(row=linha_plan, column=14).value = self.unidade()
                             aba_zavulso.cell(row=linha_plan, column=15).value = self.data_inicial()
                             aba_zavulso.cell(row=linha_plan, column=16).value = self.data_fim()
-                            aba_zavulso.cell(row=linha_plan, column=17).value = escala      # escala de porcentagem
+                            aba_zavulso.cell(row=linha_plan, column=17).value = escala
                             aba_zavulso.cell(row=linha_plan, column=18).value = self.moeda()
                             aba_zavulso.cell(row=linha_plan, column=19).value = self.tab()
                             linha_plan += 1
