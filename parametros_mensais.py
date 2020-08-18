@@ -133,27 +133,29 @@ class Parametros:
         return self.produto_centro
 
     def abrir_arq(self):
-        open = {'Avulso': self.wb,'N4': self.wb_n4,'Cgv': self.wb_cgv,'Zavulso': self.wb_zav,'Zn4': self.wb_zn4}
-        return open[self.list_trabalho()[0]]
-        # if self.list_trabalho()[0] == 'Avulso':
-        #     return self.wb
-        # elif self.list_trabalho()[0] == 'N4':
-        #     return self.wb_n4
-        # elif self.list_trabalho()[0] == 'Cgv':
-        #     return self.wb_cgv
-        # elif self.list_trabalho()[0] == 'Zavulso':
-        #     return self.wb_zav
-        # elif self.list_trabalho()[0] == 'Zn4':
-        #     return self.wb_zn4
+        open_arq = {'Avulso': self.wb, 'N4': self.wb_n4, 'Cgv': self.wb_cgv, 'Zavulso': self.wb_zav, 'Zn4': self.wb_zn4}
+        return open_arq[self.list_trabalho()[0]]
 
     def save_arq(self):
+        # salvar = {'Avulso':
+        #               self.wb.save('PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx'),
+        #           'N4':
+        #               self.wb_n4.save('PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx'),
+        #           'Cgv':
+        #               self.wb_cgv.save('PVA_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx'),
+        #           'Zavulso':
+        #               self.wb_zav.save('ZMUE_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+').xlsx'),
+        #           'Zn4':
+        #               self.wb_zn4.save('ZMUE_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+').xlsx'),
+        # }
+        # return salvar[self.list_trabalho()[0]]
         if self.list_trabalho()[0] == 'Avulso':
             return self.wb.save(
                 'PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
         elif self.list_trabalho()[0] == 'N4':
             return self.wb_n4.save(
                 'PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
-        elif self.list_trabalho()[0] == 'N4':
+        elif self.list_trabalho()[0] == 'Cgv':
             return self.wb_cgv.save(
                 'PVA_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
         elif self.list_trabalho()[0] == 'Zavulso':
@@ -164,19 +166,8 @@ class Parametros:
                 'ZMUE_'+(self.list_trabalho()[0]).upper()+'_'+'(' + assists.data_cadastro() + ').xlsx')
 
     def fechar_arq(self):
-        close = {'Avulso': self.wb.close(),'N4': self.wb_n4.close(),'Cgv': self.wb_cgv.close(),
-                 'Zavulso': self.wb_zav.close(),'Zn4': self.wb_zn4.close()}
-        return close[self.list_trabalho()[0]]
-        # if self.list_trabalho()[0] == 'Avulso':
-        #     return self.wb.close()
-        # elif self.list_trabalho()[0] == 'N4':
-        #     return self.wb_n4.close()
-        # elif self.list_trabalho()[0] == 'Cgv':
-        #     return self.wb_cgv.close()
-        # elif self.list_trabalho()[0] == 'Zavulso':
-        #     return self.wb_zav.close()
-        # elif self.list_trabalho()[0] == 'Zn4':
-        #     return self.wb_zn4.close()
+        close = {'Avulso': self.wb, 'N4': self.wb_n4, 'Cgv': self.wb_cgv, 'Zavulso': self.wb_zav, 'Zn4': self.wb_zn4}
+        return close[self.list_trabalho()[0]].close()
 
     @staticmethod
     def marca():
@@ -191,11 +182,8 @@ class Parametros:
         return "1001"
 
     def tipo_contrato(self):
-        if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
-            return 'N4'
-
-        if self.list_trabalho()[0] == 'Cgv':
-            return 'P'
+        contract = {'Avulso': 'N4', 'N4': 'N4', 'Cgv': 'P'}
+        return contract[self.list_trabalho()[0]]
 
     def grc4(self):
         if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
@@ -342,7 +330,7 @@ class Parametros:
                             aba_zavulso.cell(row=linha_plan, column=19).value = self.tab()
                             linha_plan += 1
 
-    def planilha_zn4(self): #trabalhar nesta parte
+    def planilha_zn4(self):  #trabalhar nesta parte
         aba_zn4 = self.wb_zn4.active
         self.list_trabalho()
         for linha_plan in range(3, 4):
