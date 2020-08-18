@@ -18,15 +18,24 @@ class Parametros:
         self.client = dict
         self.condicoes_parametro = list
         self.wb = load_workbook(filename='template_PVA_PVS.xlsx')
-        self.wb_1 = load_workbook(filename='template_ZMUE.xlsx')
+        self.wb_n4 = load_workbook(filename='template_PVA_PVS.xlsx')
+        self.wb_cgv = load_workbook(filename='template_PVA_PVS.xlsx')
+        self.wb_zav = load_workbook(filename='template_ZMUE.xlsx')
+        self.wb_zn4 = load_workbook(filename='template_ZMUE.xlsx')
 
     def interface_client(self):
-        self.pergunta_1 = self.pergunta()
-        self.abrir_arq()
-        self.montante()
-        self.planilha_referente_contrato()
-        self.save_arq()
-        self.fechar_arq()
+        flag = True
+        while flag:
+            self.pergunta_1 = self.pergunta()
+            self.abrir_arq()
+            self.montante()
+            self.planilha_referente_contrato()
+            self.save_arq()
+            self.fechar_arq()
+            alert = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros.\n'
+                           'Caso deseje finalizar selecione "f" em seguida "enter".)-->')
+            if alert == 'f':
+                flag = False
         print('Processo finalizado!.')
 
     def pergunta(self):
@@ -124,23 +133,45 @@ class Parametros:
         return self.produto_centro
 
     def abrir_arq(self):
-        if self.list_trabalho()[0] == 'Zavulso':
-            return self.wb_1
-        else:
+        if self.list_trabalho()[0] == 'Avulso':
             return self.wb
+        elif self.list_trabalho()[0] == 'N4':
+            return self.wb_n4
+        elif self.list_trabalho()[0] == 'Cgv':
+            return self.wb_cgv
+        elif self.list_trabalho()[0] == 'Zavulso':
+            return self.wb_zav
+        elif self.list_trabalho()[0] == 'Zn4':
+            return self.wb_zn4
 
     def save_arq(self):
-        if self.list_trabalho()[0] == 'Zavulso':
-            return self.wb_1.save('ZMUE_Avulso_('+assists.data_cadastro()+').xlsx')
-        else:
+        if self.list_trabalho()[0] == 'Avulso':
             return self.wb.save(
                 'PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
+        elif self.list_trabalho()[0] == 'N4':
+            return self.wb_n4.save(
+                'PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
+        elif self.list_trabalho()[0] == 'N4':
+            return self.wb_cgv.save(
+                'PVA_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
+        elif self.list_trabalho()[0] == 'Zavulso':
+            return self.wb_zav.save(
+                'ZMUE_'+(self.list_trabalho()[0]).upper()+'_'+'(' + assists.data_cadastro() + ').xlsx')
+        elif self.list_trabalho()[0] == 'Zn4':
+            return self.wb_zn4.save(
+                'ZMUE_'+(self.list_trabalho()[0]).upper()+'_'+'(' + assists.data_cadastro() + ').xlsx')
 
     def fechar_arq(self):
-        if self.list_trabalho()[0] == 'Zavulso':
-            return self.wb_1.close()
-        else:
+        if self.list_trabalho()[0] == 'Avulso':
             return self.wb.close()
+        elif self.list_trabalho()[0] == 'N4':
+            return self.wb_n4.close()
+        elif self.list_trabalho()[0] == 'Cgv':
+            return self.wb_cgv.close()
+        elif self.list_trabalho()[0] == 'Zavulso':
+            return self.wb_zav.close()
+        elif self.list_trabalho()[0] == 'Zn4':
+            return self.wb_zn4.close()
 
     @staticmethod
     def marca():
@@ -220,7 +251,7 @@ class Parametros:
             for condi, valor in self.grc4().items():
                 for filiais, carac in self.cliente_centro_produto().items():
                     for product, centre in carac.items():
-                        for numero_centre in centre:  # cada centro no dicionario
+                        for numero_centre in centre:
                             aba_avulso.cell(row=linha_plan, column=1).value = self.marca()
                             aba_avulso.cell(row=linha_plan, column=2).value = self.claros()
                             aba_avulso.cell(row=linha_plan, column=3).value = self.orgv()
@@ -239,7 +270,7 @@ class Parametros:
                             linha_plan += 1
 
     def planilha_n4(self):
-        aba_n4 = self.wb.active
+        aba_n4 = self.wb_n4.active
         self.list_trabalho()
         for linha_plan in range(3, 4):
             for condi_n4, valor_n4 in self.grc4().items():
@@ -259,7 +290,7 @@ class Parametros:
                     linha_plan += 1
 
     def planilha_cgv(self):
-        aba_cgv = self.wb.active
+        aba_cgv = self.wb_cgv.active
         self.list_trabalho()
         for linha_plan in range(3, 4):
             for condicao, valorr in self.grc4().items():
@@ -282,7 +313,7 @@ class Parametros:
                         linha_plan += 1
 
     def planilha_zavulso(self):
-        aba_zavulso = self.wb_1.active
+        aba_zavulso = self.wb_zav.active
         self.list_trabalho()
         for linha_plan in range(3, 4):
             for filiais, carac in self.cliente_centro_produto().items():
@@ -306,8 +337,25 @@ class Parametros:
                             aba_zavulso.cell(row=linha_plan, column=19).value = self.tab()
                             linha_plan += 1
 
-    def planilha_zn4(self):
-        pass
+    def planilha_zn4(self): #trabalhar nesta parte
+        aba_zn4 = self.wb_zn4.active
+        self.list_trabalho()
+        for linha_plan in range(3, 4):
+            for condi_n4, valor_n4 in self.grc4().items():
+                for gas in self.material():
+                    aba_zn4.cell(row=linha_plan, column=1).value = self.marca()
+                    aba_zn4.cell(row=linha_plan, column=2).value = self.claros()
+                    aba_zn4.cell(row=linha_plan, column=3).value = self.orgv()
+                    aba_zn4.cell(row=linha_plan, column=4).value = condi_n4
+                    aba_zn4.cell(row=linha_plan, column=9).value = gas
+                    aba_zn4.cell(row=linha_plan, column=12).value = valor_n4
+                    aba_zn4.cell(row=linha_plan, column=13).value = self.moeda()
+                    aba_zn4.cell(row=linha_plan, column=14).value = self.por()
+                    aba_zn4.cell(row=linha_plan, column=15).value = self.unidade()
+                    aba_zn4.cell(row=linha_plan, column=16).value = self.data_inicial()
+                    aba_zn4.cell(row=linha_plan, column=17).value = self.data_fim()
+                    aba_zn4.cell(row=linha_plan, column=18).value = self.tab()
+                    linha_plan += 1
 
 
 x = Parametros()
