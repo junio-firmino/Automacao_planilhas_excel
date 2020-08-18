@@ -133,16 +133,18 @@ class Parametros:
         return self.produto_centro
 
     def abrir_arq(self):
-        if self.list_trabalho()[0] == 'Avulso':
-            return self.wb
-        elif self.list_trabalho()[0] == 'N4':
-            return self.wb_n4
-        elif self.list_trabalho()[0] == 'Cgv':
-            return self.wb_cgv
-        elif self.list_trabalho()[0] == 'Zavulso':
-            return self.wb_zav
-        elif self.list_trabalho()[0] == 'Zn4':
-            return self.wb_zn4
+        open = {'Avulso': self.wb,'N4': self.wb_n4,'Cgv': self.wb_cgv,'Zavulso': self.wb_zav,'Zn4': self.wb_zn4}
+        return open[self.list_trabalho()[0]]
+        # if self.list_trabalho()[0] == 'Avulso':
+        #     return self.wb
+        # elif self.list_trabalho()[0] == 'N4':
+        #     return self.wb_n4
+        # elif self.list_trabalho()[0] == 'Cgv':
+        #     return self.wb_cgv
+        # elif self.list_trabalho()[0] == 'Zavulso':
+        #     return self.wb_zav
+        # elif self.list_trabalho()[0] == 'Zn4':
+        #     return self.wb_zn4
 
     def save_arq(self):
         if self.list_trabalho()[0] == 'Avulso':
@@ -162,16 +164,19 @@ class Parametros:
                 'ZMUE_'+(self.list_trabalho()[0]).upper()+'_'+'(' + assists.data_cadastro() + ').xlsx')
 
     def fechar_arq(self):
-        if self.list_trabalho()[0] == 'Avulso':
-            return self.wb.close()
-        elif self.list_trabalho()[0] == 'N4':
-            return self.wb_n4.close()
-        elif self.list_trabalho()[0] == 'Cgv':
-            return self.wb_cgv.close()
-        elif self.list_trabalho()[0] == 'Zavulso':
-            return self.wb_zav.close()
-        elif self.list_trabalho()[0] == 'Zn4':
-            return self.wb_zn4.close()
+        close = {'Avulso': self.wb.close(),'N4': self.wb_n4.close(),'Cgv': self.wb_cgv.close(),
+                 'Zavulso': self.wb_zav.close(),'Zn4': self.wb_zn4.close()}
+        return close[self.list_trabalho()[0]]
+        # if self.list_trabalho()[0] == 'Avulso':
+        #     return self.wb.close()
+        # elif self.list_trabalho()[0] == 'N4':
+        #     return self.wb_n4.close()
+        # elif self.list_trabalho()[0] == 'Cgv':
+        #     return self.wb_cgv.close()
+        # elif self.list_trabalho()[0] == 'Zavulso':
+        #     return self.wb_zav.close()
+        # elif self.list_trabalho()[0] == 'Zn4':
+        #     return self.wb_zn4.close()
 
     @staticmethod
     def marca():
