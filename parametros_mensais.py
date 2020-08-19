@@ -133,40 +133,24 @@ class Parametros:
         return self.produto_centro
 
     def abrir_arq(self):
-        open_arq = {'Avulso': self.wb, 'N4': self.wb_n4, 'Cgv': self.wb_cgv, 'Zavulso': self.wb_zav, 'Zn4': self.wb_zn4}
-        return open_arq[self.list_trabalho()[0]]
+        self.open_arq = {'Avulso': self.wb, 'N4': self.wb_n4, 'Cgv': self.wb_cgv,
+                         'Zavulso': self.wb_zav, 'Zn4': self.wb_zn4}
+        return self.open_arq[self.list_trabalho()[0]]
 
     def save_arq(self):
-        # salvar = {'Avulso':
-        #               self.wb.save('PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx'),
-        #           'N4':
-        #               self.wb_n4.save('PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx'),
-        #           'Cgv':
-        #               self.wb_cgv.save('PVA_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx'),
-        #           'Zavulso':
-        #               self.wb_zav.save('ZMUE_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+').xlsx'),
-        #           'Zn4':
-        #               self.wb_zn4.save('ZMUE_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+').xlsx'),
-        # }
-        # return salvar[self.list_trabalho()[0]]
-        if self.list_trabalho()[0] == 'Avulso':
-            return self.wb.save(
-                'PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
-        elif self.list_trabalho()[0] == 'N4':
-            return self.wb_n4.save(
-                'PVA_PVS_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
+        salvar = self.open_arq
+        if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
+            return salvar[self.list_trabalho()[0]].save(
+                'PVA_PVS_'+(self.list_trabalho()[0]).upper()+'('+assists.data_cadastro()+')'+'.xlsx')
         elif self.list_trabalho()[0] == 'Cgv':
-            return self.wb_cgv.save(
-                'PVA_'+(self.list_trabalho()[0]).upper()+'_'+'('+assists.data_cadastro()+')'+'.xlsx')
-        elif self.list_trabalho()[0] == 'Zavulso':
-            return self.wb_zav.save(
-                'ZMUE_'+(self.list_trabalho()[0]).upper()+'_'+'(' + assists.data_cadastro() + ').xlsx')
-        elif self.list_trabalho()[0] == 'Zn4':
-            return self.wb_zn4.save(
-                'ZMUE_'+(self.list_trabalho()[0]).upper()+'_'+'(' + assists.data_cadastro() + ').xlsx')
+            return salvar[self.list_trabalho()[0]].save(
+                'PVA_' + (self.list_trabalho()[0]).upper()+'(' + assists.data_cadastro() + ')' + '.xlsx')
+        elif self.list_trabalho()[0] == 'Zavulso' or self.list_trabalho()[0] == 'Zn4':
+            return salvar[self.list_trabalho()[0]].save(
+                (self.list_trabalho()[0]).upper()+'_'+'(' + assists.data_cadastro() + ').xlsx')
 
     def fechar_arq(self):
-        close = {'Avulso': self.wb, 'N4': self.wb_n4, 'Cgv': self.wb_cgv, 'Zavulso': self.wb_zav, 'Zn4': self.wb_zn4}
+        close = self.open_arq
         return close[self.list_trabalho()[0]].close()
 
     @staticmethod
@@ -194,7 +178,7 @@ class Parametros:
             self.condicoes_parametro_cgv = {'A': self.list_trabalho()[1]}
             return self.condicoes_parametro_cgv
 
-        if self.list_trabalho()[0] == 'Zavulso':
+        if self.list_trabalho()[0] == 'Zavulso' or self.list_trabalho()[0] == 'Zn4':
             self.condicoes_parametro_zavulso = {5: self.list_trabalho()[4], 10: self.list_trabalho()[5],
                                                 100: self.list_trabalho()[6]}
             return self.condicoes_parametro_zavulso
