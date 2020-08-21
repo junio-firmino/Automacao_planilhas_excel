@@ -65,7 +65,7 @@ class Risco:
     @staticmethod
     def centro_terrestre():
         terrestre = [1700, 1400, 1200, 1210, 1100, 1360, 1950, 1101, 1110, 1111, 1120, 1130]
-        return terrestre
+        return terrestre   # OSBRA - 1101, 1110, 1111, 1120, 1130
 
     @staticmethod
     def centro_cabotagem():
@@ -128,7 +128,7 @@ class Risco:
     def informacao_encargos(self):
         aba_act = self.wb.active
         self.lista_distr()
-        for linha_plan in range(2, aba_act.max_row + 1):  # Tratamento na planilha das linhas
+        for linha_plan in range(2, aba_act.max_row + 1):
             empresa = aba_act.cell(row=linha_plan, column=15).value
             centro_1 = aba_act.cell(row=linha_plan, column=19).value
             if empresa in self.lista_distr() and centro_1 in self.centro_terrestre():
@@ -234,8 +234,8 @@ class Risco:
 
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
-            fro = 'jrf.@gmail.com'
-            to = 'junio_@.com.br'
+            fro = 'jr@gmail.com'
+            to = 'ju@as.com.br'
 
             smtpobj.login(fro, 'yevq kufu ejsx awpz')
             msg = EmailMessage()
