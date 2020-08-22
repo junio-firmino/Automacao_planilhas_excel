@@ -63,19 +63,37 @@ class Risco:
         return distri
 
     def distri_cliente_polo_produto(self):
-        self.distribuioras = [Alesat,]
-        Alesat = {8187:{1700:['PB.620','PB.6DH','PB.658']}
-                  1740:{1400:['PB.620','PB.6DH','PB.658']}
-                  }
+        Al = {8187: {1700: ['PB.620','PB.6DH','PB.658']},
+                  1740: {1400: ['PB.620','PB.6DH','PB.658']},
+                  4473: {1200: ['PB.620','PB.6DH','PB.658']},
+                  21699: {1100: ['PB.620','PB.6DH','PB.658']},
+                  4919: {1360: ['PB.6DH'], 1950: ['PB.6DH']},
+                  8429: {1101: ['PB.620','PB.6DH','PB.658']},
+                  1733: {1110: ['PB.620','PB.6DH','PB.658']},
+                  1732: {1111: ['PB.620','PB.6DH','PB.658']},
+                  1736: {1120: ['PB.620','PB.6DH','PB.658']},
+                  6833: {1130: ['PB.620','PB.6DH','PB.658']},}
+        Cia = {455: {1400: ['PB.620','PB.6DH','PB.658']},
+                    18314: {1700: ['PB.620','PB.6DH','PB.658']},
+                    4150: {1100: ['PB.620','PB.6DH','PB.658']},}
+        Ipp = {47: {1700: ['PB.620','PB.6DH','PB.658']},
+               2093: {1400: ['PB.620','PB.6DH','PB.658']},}
+        Mim = {17621: {1700: ['PB.620','PB.6DH','PB.658']}}
+        Pet = {5142: {1360: ['PB.6DH'], 1950: ['PB.6DH']}}
+        Rod = {7008: {1700: ['PB.620','PB.6DH','PB.658']},
+                  6815: {1400: ['PB.620','PB.6DH','PB.658']}}
+        Rai = {49: {1700: ['PB.620','PB.6DH','PB.658']},
+                  2163: {1400: ['PB.620','PB.6DH','PB.658']},
+                  2153: {1200: ['PB.620','PB.6DH','PB.658'], 1210: ['PB.620','PB.6DH']},
+                  2150: {1100: ['PB.620','PB.6DH','PB.658']},
+                  2180: {1360: ['PB.6DH'], 1950: ['PB.6DH']},
+                  2155: {1101: ['PB.620','PB.6DH','PB.658']},
+                  18449: {1110: ['PB.620','PB.6DH','PB.658']},
+                  2186: {1111: ['PB.620','PB.6DH','PB.658']},
+                  2168: {1120: ['PB.620','PB.6DH','PB.658']},
+                  2157: {1130: ['PB.620','PB.6DH','PB.658']},}
 
+        self.distribuidoras = [Al, Cia, Ipp, Mim, Pet, Rod,Rai]
+        return self.distribuidoras
 
-    @staticmethod
-    def centro_terrestre():
-        terrestre = [1700, 1400, 1200, 1210, 1100, 1360, 1950, 1101, 1110, 1111, 1120, 1130]
-        return terrestre
-
-    @staticmethod
-    def centro_cabotagem():
-        cabotagem = [1401, 1211]
-        return cabotagem
 
