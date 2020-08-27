@@ -13,6 +13,7 @@ class Risco:
         self.taxas = 0
         self.wb = load_workbook(filename='template_risco_sacado.xlsx')
         self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado.xlsx')
+        self.centro = int
 
     def interface(self):
         self.abrir_arq()
@@ -42,8 +43,7 @@ class Risco:
         self.wb_cpgt.save('Cadastro_em_lote.xlsx')
 
     def cpgt_terrestre_cabotagem(self):
-        cpgt_centro = [1360, 1950]
-        if cpgt_centro == 1360 or cpgt_centro == 1950:
+        if self.centro == 1360 or self.centro == 1950:
             return 'ZC'+self.cpgt
         else:
             return 'ZD'+self.cpgt
@@ -67,7 +67,6 @@ class Risco:
     def clientes_distr(self):
         if self.lista_distr()[0] in self.distri_cliente_polo_produto():
             return self.lista_distr()[0]
-
 
     def distri_cliente_polo_produto(self):
         self.distribuidoras = {'Al': {8187: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
@@ -100,7 +99,6 @@ class Risco:
                                        2168: {1120: ['PB.620', 'PB.6DH', 'PB.658']},
                                        2157: {1130: ['PB.620', 'PB.6DH', 'PB.658']}}}
 
-        #self.distribuidoras = [Cia, Al, Ipp, Mim, Pet, Rod, Rai]
         return self.distribuidoras
 
     @staticmethod
@@ -118,28 +116,25 @@ class Risco:
     def abrir_plan_risco_sacado(self):
         aba_act = self.wb.active
         self.lista_distr()
-        for linha_plan in range(2, 3):
+        for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = self.distri_cliente_polo_produto()[self.lista_distr()[0]]
             for fili, info_1 in info.items():
-                for centro, prod in info_1.items():
+                for self.centro, prod in info_1.items():
                     for combust in prod:
                         aba_act.cell(row=linha_plan, column=2).value = self.lista_distr()[0]
                         aba_act.cell(row=linha_plan, column=3).value = self.orgv()
                         aba_act.cell(row=linha_plan, column=4).value = self.claros()
                         aba_act.cell(row=linha_plan, column=5).value = fili
-                        aba_act.cell(row=linha_plan, column=6).value = centro
+                        aba_act.cell(row=linha_plan, column=6).value = self.centro
                         aba_act.cell(row=linha_plan, column=7).value = combust
                         aba_act.cell(row=linha_plan, column=8).value = self.cpgt_terrestre_cabotagem()
-                        aba_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1]
+                        aba_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1]+' a.m.'
                         aba_act.cell(row=linha_plan, column=10).value = assists.data_inicio()
                         aba_act.cell(row=linha_plan, column=11).value = assists.data_last_day_risco_sacado()
                         aba_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]
                         aba_act.cell(row=linha_plan, column=13).value = assists.data_cadastro()
                         aba_act.cell(row=linha_plan, column=14).value = self.encargos()
                         linha_plan += 1
-
-
-
 
 
 x = Risco()
