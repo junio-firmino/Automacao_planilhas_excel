@@ -136,6 +136,24 @@ class Risco:
                         aba_act.cell(row=linha_plan, column=14).value = self.encargos()
                         linha_plan += 1
 
+    def abrir_plan_cpgt(self):
+        aba_act_cpgt = self.wb_cpgt.active
+        self.lista_distr()
+        for linha_cpgt in range(2, aba_act_cpgt.max_row + 1):
+            distribuidora = aba_act_cpgt.cell(row=linha_cpgt, column=19).value
+            centro_cpgt = aba_act_cpgt.cell(row=linha_cpgt, column=8).value
+            if distribuidora in self.lista_distr() and centro_cpgt in self.centro_terrestre():
+                aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.lista_distr()[2]
+                aba_act_cpgt.cell(row=linha_cpgt, column=16).value = self.data_inicio()
+                aba_act_cpgt.cell(row=linha_cpgt, column=17).value = self.data_last_day_cpgt()
+                aba_act_cpgt.cell(row=linha_cpgt, column=7).value = self.carencia_cpgt_terrestre()
+            elif distribuidora in self.lista_distr() and centro_cpgt in self.centro_cabotagem():
+                aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.lista_distr()[3]
+                aba_act_cpgt.cell(row=linha_cpgt, column=16).value = self.data_inicio()
+                aba_act_cpgt.cell(row=linha_cpgt, column=17).value = self.data_last_day_cpgt()
+                aba_act_cpgt.cell(row=linha_cpgt, column=7).value = self.carencia_cpgt_cabotagem()
+
+
 
 x = Risco()
 x.interface()
