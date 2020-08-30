@@ -19,7 +19,7 @@ class Risco:
         self.abrir_arq()
         active = True
         while active:
-            self.cliente = input('Qual cliente você irá cadastrar? ').title()
+            self.cliente = self.cliente_1()
             self.taxas = input('Qual a taxa? ')
             self.cpgt = input('Qual o prazo da condição de pagamento? ')
             self.banco = self.banco_1()
@@ -53,6 +53,17 @@ class Risco:
             return self.cpgt_cabotagem()
         else:
             return self.cpgt_terrestre()
+
+    @staticmethod
+    def cliente_1():
+        flag_cli = True
+        while flag_cli:
+            cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen']
+            ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
+            if ask_cliente_distr in cliente_distr:
+                return ask_cliente_distr
+            else:
+                print('Empresa não participante do Risco Sacado.')
 
     @staticmethod
     def banco_1():
@@ -113,7 +124,7 @@ class Risco:
 
     @staticmethod
     def orgv():
-        return "1001"
+        return 1001
 
     @staticmethod
     def claros():
@@ -121,10 +132,10 @@ class Risco:
 
     @staticmethod
     def encargos():
-        return '1,51% a.m'
+        return "1,51% a.m"
 
     def tab(self):
-        tabela = "665"
+        tabela = 665
         return tabela
 
     def carencia_cpgt_terrestre(self):
@@ -185,9 +196,9 @@ class Risco:
                         aba_act_cpgt.cell(row=linha_cpgt, column=8).value = self.centro
                         aba_act_cpgt.cell(row=linha_cpgt, column=9).value = combust
                         aba_act_cpgt.cell(row=linha_cpgt, column=10).value = fili
-                        aba_act_cpgt.cell(row=linha_cpgt, column=12).value = "1"
+                        aba_act_cpgt.cell(row=linha_cpgt, column=12).value = 1
                         aba_act_cpgt.cell(row=linha_cpgt, column=13).value = "BRL"
-                        aba_act_cpgt.cell(row=linha_cpgt, column=14).value = "1"
+                        aba_act_cpgt.cell(row=linha_cpgt, column=14).value = 1
                         aba_act_cpgt.cell(row=linha_cpgt, column=15).value = "M20"
                         aba_act_cpgt.cell(row=linha_cpgt, column=16).value = assists.data_inicio()
                         aba_act_cpgt.cell(row=linha_cpgt, column=17).value = assists.data_last_day_cpgt()
