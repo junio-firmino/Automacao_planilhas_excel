@@ -206,6 +206,44 @@ class Risco:
                         aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.lista_distr()[0]
                         linha_cpgt += 1
 
+    def enviar_email(self):
+        setlocale(LC_ALL, 'pt_BR.utf-8')
+        pergunta_envio = input('Você deseja enviar o email agora?\n'
+                               '(Pressione "enter" para enviar o email.\n'
+                               'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
+
+        if pergunta_envio == '':
+            data_visivel = (self.data_email()).title()
+
+            smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
+            smtpobj.starttls()
+            fro = 'j@gmail.com'
+            to = 'j@.com.br'
+
+            smtpobj.login(fro, '')
+            msg = EmailMessage()
+            msg['From'] = fro
+            msg['To'] = to
+            msg['Subject'] = f'Taxas Risco Sacado {data_visivel}.'
+
+            msg.set_content(
+                f'Prezada Elaine\n\nSegue abaixo as planilhas com as taxas dos clientes que utilizarão'
+                f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.'
+                f' Peço avaliar a solução.')
+            paths = ['risco_sacado(' + self.data_save_arquivo() + ').xlsx',
+                     'Cadastro_em_lote(' + self.data_save_arquivo() + ').xlsx']
+            for path in paths:
+                caminho = open(path, 'rb')
+                arq_data = caminho.read()
+                arq_name = caminho.name
+                msg.add_attachment(arq_data, maintype='application', subtype='octet-stream', filename=arq_name)
+
+            smtpobj.send_message(msg)
+            smtpobj.quit()
+            print('Email enviado!!!!')
+        elif pergunta_envio == "f":
+            pass
+
 
 x = Risco()
 x.interface()
