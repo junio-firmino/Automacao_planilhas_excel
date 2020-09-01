@@ -213,7 +213,7 @@ class Risco:
                                'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
 
         if pergunta_envio == '':
-            data_visivel = (self.data_email()).title()
+            data_visivel = assists.data_email().title()
 
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
@@ -230,8 +230,8 @@ class Risco:
                 f'Prezada Elaine\n\nSegue abaixo as planilhas com as taxas dos clientes que utilizarão'
                 f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.'
                 f' Peço avaliar a solução.')
-            paths = ['risco_sacado(' + self.data_save_arquivo() + ').xlsx',
-                     'Cadastro_em_lote(' + self.data_save_arquivo() + ').xlsx']
+            paths = ['risco_sacado('+assists.data_cadastro()+').xlsx',
+                     'Cadastro_em_lote_RS('+assists.data_cadastro()+').xlsx']
             for path in paths:
                 caminho = open(path, 'rb')
                 arq_data = caminho.read()
