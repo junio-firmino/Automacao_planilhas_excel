@@ -82,18 +82,9 @@ class Parametros:
             self.montante_f2 = 0
             self.montante_f3 = 0
 
-        # if self.list_trabalho()[0] == 'Zn4':
-        #     self.montante_f1_zn4 = input('Qual o parâmetro ZMUE para a faixa até 5%? ')
-        #     self.montante_f2_zn4 = input('Qual o parâmetro ZMUE para a faixa até 10%? ')
-        #     self.montante_f3_zn4 = input('Qual o parâmetro ZMUE para a faixa até 100%? ')
-        # else:
-        #     self.montante_f1_zn4 = 0
-        #     self.montante_f2_zn4 = 0
-        #     self.montante_f3_zn4 = 0
-
     def list_trabalho(self):
         work = [self.pergunta_1, self.montante_cgv, self.montante_a, self.montante_sp, self.montante_f1,
-                self.montante_f2, self.montante_f3]#self.montante_f1_zn4,self.montante_f2_zn4,self.montante_f3_zn4]
+                self.montante_f2, self.montante_f3]
         return work
 
     def cliente_centro_produto(self):
@@ -138,7 +129,7 @@ class Parametros:
                                           1312, 1130, 9060, 1353, 1200, 1500, 1354, 1507, 1311, 1062, 1710],
                                'PB.6DH': [1160, 1423, 1362, 1350, 1422, 1400, 1110, 1352, 1550, 1150, 1111, 1502,
                                           1365, 1560, 2540, 1100, 1050, 1360, 1101, 1421, 1700, 1250, 1120, 1070,
-                                          1312, 1130, 9060, 1353, 1200, 1500, 1354, 1507, 1311, 1062, 1710], }
+                                          1312, 1130, 9060, 1353, 1200, 1500, 1354, 1507, 1311, 1062, 1710],}
         return self.produto_centro
 
     def abrir_arq(self):
@@ -224,11 +215,6 @@ class Parametros:
         data_last = dt.datetime.now() + relativedelta(day=31, months=1)
         data_return = data_last.strftime('%d.%m.%Y')
         return data_return
-
-    @staticmethod
-    def valor_escala():
-        escala = [5, 10, 100]
-        return escala
 
     def planilha_avulso(self):
         aba_avulso = self.wb.active
@@ -323,24 +309,24 @@ class Parametros:
                             aba_zavulso.cell(row=linha_plan, column=19).value = self.tab()
                             linha_plan += 1
 
-    def planilha_zn4(self):  #trabalhar nesta parte
+    def planilha_zn4(self):
         aba_zn4 = self.wb_zn4.active
         self.list_trabalho()
         for linha_plan in range(3, 4):
-            for condi_n4, valor_n4 in self.grc4().items():
-                for gas in self.material():
+            for gas in self.material():
+                for condi_n4, valor_n4 in self.grc4().items():
                     aba_zn4.cell(row=linha_plan, column=1).value = self.marca()
                     aba_zn4.cell(row=linha_plan, column=2).value = self.claros()
                     aba_zn4.cell(row=linha_plan, column=3).value = self.orgv()
                     aba_zn4.cell(row=linha_plan, column=4).value = 'N4'
                     aba_zn4.cell(row=linha_plan, column=10).value = gas
-                    aba_zn4.cell(row=linha_plan, column=11).value =
+                    aba_zn4.cell(row=linha_plan, column=11).value = valor_n4
                     aba_zn4.cell(row=linha_plan, column=12).value = self.moeda()
                     aba_zn4.cell(row=linha_plan, column=13).value = self.por()
                     aba_zn4.cell(row=linha_plan, column=14).value = self.unidade()
                     aba_zn4.cell(row=linha_plan, column=15).value = self.data_inicial()
                     aba_zn4.cell(row=linha_plan, column=16).value = self.data_fim()
-                    aba_zn4.cell(row=linha_plan, column=17).value =
+                    aba_zn4.cell(row=linha_plan, column=17).value = condi_n4
                     aba_zn4.cell(row=linha_plan, column=18).value = self.moeda()
                     aba_zn4.cell(row=linha_plan, column=19).value = self.tab()
                     linha_plan += 1
