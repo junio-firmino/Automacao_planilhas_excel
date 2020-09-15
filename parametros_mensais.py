@@ -73,7 +73,7 @@ class Parametros:
         else:
             self.montante_cgv = 0
 
-        if self.list_trabalho()[0] == 'Zavulso':
+        if self.list_trabalho()[0] == 'Zavulso' or self.list_trabalho()[0] == 'Zn4':
             self.montante_f1 = input('Qual o parâmetro ZMUE para a faixa até 5%? ')
             self.montante_f2 = input('Qual o parâmetro ZMUE para a faixa até 10%? ')
             self.montante_f3 = input('Qual o parâmetro ZMUE para a faixa até 100%? ')
@@ -82,9 +82,18 @@ class Parametros:
             self.montante_f2 = 0
             self.montante_f3 = 0
 
+        # if self.list_trabalho()[0] == 'Zn4':
+        #     self.montante_f1_zn4 = input('Qual o parâmetro ZMUE para a faixa até 5%? ')
+        #     self.montante_f2_zn4 = input('Qual o parâmetro ZMUE para a faixa até 10%? ')
+        #     self.montante_f3_zn4 = input('Qual o parâmetro ZMUE para a faixa até 100%? ')
+        # else:
+        #     self.montante_f1_zn4 = 0
+        #     self.montante_f2_zn4 = 0
+        #     self.montante_f3_zn4 = 0
+
     def list_trabalho(self):
         work = [self.pergunta_1, self.montante_cgv, self.montante_a, self.montante_sp, self.montante_f1,
-                self.montante_f2, self.montante_f3]
+                self.montante_f2, self.montante_f3]#self.montante_f1_zn4,self.montante_f2_zn4,self.montante_f3_zn4]
         return work
 
     def cliente_centro_produto(self):
@@ -201,7 +210,7 @@ class Parametros:
         return "M20"
 
     def tab(self):
-        tabela = {'Cgv': 689, 'Avulso': 525, 'N4': 556, 'Zavulso': 559}
+        tabela = {'Cgv': 689, 'Avulso': 525, 'N4': 556, 'Zavulso': 559,'Zn4': 669}
         return tabela[self.list_trabalho()[0]]
 
     @staticmethod
@@ -323,15 +332,17 @@ class Parametros:
                     aba_zn4.cell(row=linha_plan, column=1).value = self.marca()
                     aba_zn4.cell(row=linha_plan, column=2).value = self.claros()
                     aba_zn4.cell(row=linha_plan, column=3).value = self.orgv()
-                    aba_zn4.cell(row=linha_plan, column=4).value = condi_n4
-                    aba_zn4.cell(row=linha_plan, column=9).value = gas
-                    aba_zn4.cell(row=linha_plan, column=12).value = valor_n4
-                    aba_zn4.cell(row=linha_plan, column=13).value = self.moeda()
-                    aba_zn4.cell(row=linha_plan, column=14).value = self.por()
-                    aba_zn4.cell(row=linha_plan, column=15).value = self.unidade()
-                    aba_zn4.cell(row=linha_plan, column=16).value = self.data_inicial()
-                    aba_zn4.cell(row=linha_plan, column=17).value = self.data_fim()
-                    aba_zn4.cell(row=linha_plan, column=18).value = self.tab()
+                    aba_zn4.cell(row=linha_plan, column=4).value = 'N4'
+                    aba_zn4.cell(row=linha_plan, column=10).value = gas
+                    aba_zn4.cell(row=linha_plan, column=11).value =
+                    aba_zn4.cell(row=linha_plan, column=12).value = self.moeda()
+                    aba_zn4.cell(row=linha_plan, column=13).value = self.por()
+                    aba_zn4.cell(row=linha_plan, column=14).value = self.unidade()
+                    aba_zn4.cell(row=linha_plan, column=15).value = self.data_inicial()
+                    aba_zn4.cell(row=linha_plan, column=16).value = self.data_fim()
+                    aba_zn4.cell(row=linha_plan, column=17).value =
+                    aba_zn4.cell(row=linha_plan, column=18).value = self.moeda()
+                    aba_zn4.cell(row=linha_plan, column=19).value = self.tab()
                     linha_plan += 1
 
 
