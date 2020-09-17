@@ -216,6 +216,12 @@ class Parametros:
         data_return = data_last.strftime('%d.%m.%Y')
         return data_return
 
+    @staticmethod
+    def data_fim_Z():
+        data_last = dt.datetime.now() + relativedelta(day=31, months=2)
+        data_return = data_last.strftime('%d.%m.%Y')
+        return data_return
+
     def planilha_avulso(self):
         aba_avulso = self.wb.active
         self.list_trabalho()
@@ -303,7 +309,7 @@ class Parametros:
                             aba_zavulso.cell(row=linha_plan, column=13).value = self.por()
                             aba_zavulso.cell(row=linha_plan, column=14).value = self.unidade()
                             aba_zavulso.cell(row=linha_plan, column=15).value = self.data_inicial()
-                            aba_zavulso.cell(row=linha_plan, column=16).value = self.data_fim()
+                            aba_zavulso.cell(row=linha_plan, column=16).value = self.data_fim_Z()
                             aba_zavulso.cell(row=linha_plan, column=17).value = escala
                             aba_zavulso.cell(row=linha_plan, column=18).value = self.moeda()
                             aba_zavulso.cell(row=linha_plan, column=19).value = self.tab()
