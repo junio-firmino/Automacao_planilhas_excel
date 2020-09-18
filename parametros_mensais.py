@@ -132,6 +132,13 @@ class Parametros:
                                           1312, 1130, 9060, 1353, 1200, 1500, 1354, 1507, 1311, 1062, 1710],}
         return self.produto_centro
 
+    def cliente_matriz_z(self):
+        self.cliente_matriz = {'PB.620': [760, 623, 724, 1122, 15640],
+                               'PB.650': [1122, 154, 4432],
+                               'PB.658': [760, 623, 724, 1122],
+                               'PB.6DH': [760, 623, 724, 1122]}
+        return self.cliente_matriz
+
     def abrir_arq(self):
         self.open_arq = {'Avulso': self.wb, 'N4': self.wb_n4, 'Cgv': self.wb_cgv,
                          'Zavulso': self.wb_zav, 'Zn4': self.wb_zn4}
@@ -201,7 +208,7 @@ class Parametros:
         return "M20"
 
     def tab(self):
-        tabela = {'Cgv': 689, 'Avulso': 525, 'N4': 556, 'Zavulso': 559,'Zn4': 669}
+        tabela = {'Cgv': 689, 'Avulso': 525, 'N4': 556, 'Zavulso': 652,'Zn4': 669}
         return tabela[self.list_trabalho()[0]]
 
     @staticmethod
@@ -294,26 +301,24 @@ class Parametros:
         aba_zavulso = self.wb_zav.active
         self.list_trabalho()
         for linha_plan in range(3, 4):
-            for filiais, carac in self.cliente_centro_produto().items():
-                for product, centre in carac.items():
-                    for numero_centre in centre:
-                        for escala, valor in self.grc4().items():
-                            aba_zavulso.cell(row=linha_plan, column=1).value = self.marca()
-                            aba_zavulso.cell(row=linha_plan, column=2).value = self.claros()
-                            aba_zavulso.cell(row=linha_plan, column=3).value = self.orgv()
-                            aba_zavulso.cell(row=linha_plan, column=8).value = numero_centre
-                            aba_zavulso.cell(row=linha_plan, column=9).value = filiais
-                            aba_zavulso.cell(row=linha_plan, column=10).value = product
-                            aba_zavulso.cell(row=linha_plan, column=11).value = valor
-                            aba_zavulso.cell(row=linha_plan, column=12).value = self.moeda()
-                            aba_zavulso.cell(row=linha_plan, column=13).value = self.por()
-                            aba_zavulso.cell(row=linha_plan, column=14).value = self.unidade()
-                            aba_zavulso.cell(row=linha_plan, column=15).value = self.data_inicial()
-                            aba_zavulso.cell(row=linha_plan, column=16).value = self.data_fim_Z()
-                            aba_zavulso.cell(row=linha_plan, column=17).value = escala
-                            aba_zavulso.cell(row=linha_plan, column=18).value = self.moeda()
-                            aba_zavulso.cell(row=linha_plan, column=19).value = self.tab()
-                            linha_plan += 1
+            for product, matriz in self.cliente_matriz_z().items():
+                for matrizes in matriz:
+                    for escala, valor in self.grc4().items():
+                        aba_zavulso.cell(row=linha_plan, column=1).value = self.marca()
+                        aba_zavulso.cell(row=linha_plan, column=2).value = self.claros()
+                        aba_zavulso.cell(row=linha_plan, column=3).value = self.orgv()
+                        aba_zavulso.cell(row=linha_plan, column=9).value = matrizes
+                        aba_zavulso.cell(row=linha_plan, column=10).value = product
+                        aba_zavulso.cell(row=linha_plan, column=11).value = valor
+                        aba_zavulso.cell(row=linha_plan, column=12).value = self.moeda()
+                        aba_zavulso.cell(row=linha_plan, column=13).value = self.por()
+                        aba_zavulso.cell(row=linha_plan, column=14).value = self.unidade()
+                        aba_zavulso.cell(row=linha_plan, column=15).value = self.data_inicial()
+                        aba_zavulso.cell(row=linha_plan, column=16).value = self.data_fim_Z()
+                        aba_zavulso.cell(row=linha_plan, column=17).value = escala
+                        aba_zavulso.cell(row=linha_plan, column=18).value = self.moeda()
+                        aba_zavulso.cell(row=linha_plan, column=19).value = self.tab()
+                        linha_plan += 1
 
     def planilha_zn4(self):
         aba_zn4 = self.wb_zn4.active
