@@ -218,6 +218,12 @@ class Parametros:
         return data_inicio_return
 
     @staticmethod
+    def data_inicial_Z():
+        data_inicio = dt.datetime.now() + relativedelta(day=1, months=2)
+        data_inicio_return = data_inicio.strftime('%d.%m.%Y')
+        return data_inicio_return
+
+    @staticmethod
     def data_fim():
         data_last = dt.datetime.now() + relativedelta(day=31, months=1)
         data_return = data_last.strftime('%d.%m.%Y')
@@ -307,13 +313,14 @@ class Parametros:
                         aba_zavulso.cell(row=linha_plan, column=1).value = self.marca()
                         aba_zavulso.cell(row=linha_plan, column=2).value = self.claros()
                         aba_zavulso.cell(row=linha_plan, column=3).value = self.orgv()
+                        aba_zavulso.cell(row=linha_plan, column=4).value = 'N4'
                         aba_zavulso.cell(row=linha_plan, column=9).value = matrizes
                         aba_zavulso.cell(row=linha_plan, column=10).value = product
                         aba_zavulso.cell(row=linha_plan, column=11).value = valor
                         aba_zavulso.cell(row=linha_plan, column=12).value = self.moeda()
                         aba_zavulso.cell(row=linha_plan, column=13).value = self.por()
                         aba_zavulso.cell(row=linha_plan, column=14).value = self.unidade()
-                        aba_zavulso.cell(row=linha_plan, column=15).value = self.data_inicial()
+                        aba_zavulso.cell(row=linha_plan, column=15).value = self.data_inicial_Z()
                         aba_zavulso.cell(row=linha_plan, column=16).value = self.data_fim_Z()
                         aba_zavulso.cell(row=linha_plan, column=17).value = escala
                         aba_zavulso.cell(row=linha_plan, column=18).value = self.moeda()
