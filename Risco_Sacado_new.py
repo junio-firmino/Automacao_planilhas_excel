@@ -11,8 +11,8 @@ class Risco:
     def __init__(self):
         self.cliente = 'utf-8'
         self.taxas = 0
-        self.wb = load_workbook(filename='template_risco_sacado_new.xlsx')
-        self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
+        self.wb = load_workbook(filename='risco_sacado(29.09.2020).xlsx')
+        self.wb_cpgt = load_workbook(filename='Cadastro_em_lote_RS(29.09.2020).xlsx')
         self.centro = int
 
     def interface(self):
@@ -33,7 +33,7 @@ class Risco:
                 active = False
         self.wb.close()
         self.wb_cpgt.close()
-        #self.enviar_email()
+        self.enviar_email()
 
     def abrir_arq(self):
         return self.wb and self.wb_cpgt
@@ -63,7 +63,7 @@ class Risco:
             if ask_cliente_distr in cliente_distr:
                 return ask_cliente_distr
             else:
-                print('Empresa não participante do Risco Sacado.')
+                print('Empresa não participante do Risco Sacado, tente outra empresa!.')
 
     @staticmethod
     def banco_1():
@@ -95,12 +95,17 @@ class Risco:
                                       #1733: {1110: ['PB.620', 'PB.6DH', 'PB.658']},
                                       #1732: {1111: ['PB.620', 'PB.6DH', 'PB.658']},
                                       #1736: {1120: ['PB.620', 'PB.6DH', 'PB.658']},
-                                      6833: {1130: ['PB.620', 'PB.6DH', 'PB.658']}},
+                                      6833: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
+                                      6515: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
                                'Ciapetro': {455: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
                                        18314: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       4150: {1100: ['PB.620', 'PB.6DH', 'PB.658']}},       #1110, 1111, 1120
+                                       4150: {1100: ['PB.620', 'PB.6DH', 'PB.658']},       #1110, 1111, 1120
+                                       20497: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
                                'Ipp': {47: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       2093: {1400: ['PB.620', 'PB.6DH', 'PB.658']}},
+                                       2093: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
+                                       2086: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
+                                       2102: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
+                                       15629: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
                                'Mime': {17621: {1700: ['PB.620', 'PB.6DH', 'PB.658']}},
                                'Petrox': {5142: {1360: ['PB.6DH'], 1950: ['PB.6DH']}},
                                'Rodoil': {7008: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
@@ -114,7 +119,8 @@ class Risco:
                                        #18449: {1110: ['PB.620', 'PB.6DH', 'PB.658']},
                                        #2186: {1111: ['PB.620', 'PB.6DH', 'PB.658']},
                                        #2168: {1120: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       2157: {1130: ['PB.620', 'PB.6DH', 'PB.658']}}}
+                                       2157: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
+                                       2144:{1250:['PB.620', 'PB.6DH', 'PB.658']}}}
 
         return self.distribuidoras
 
@@ -134,8 +140,9 @@ class Risco:
     def encargos():
         return "1,51% a.m"
 
-    def tab(self):
-        tabela = 665
+    @staticmethod
+    def tab():
+        tabela = 655
         return tabela
 
     def carencia_cpgt_terrestre(self):
@@ -191,6 +198,7 @@ class Risco:
                     for combust in prod:
                         aba_act_cpgt.cell(row=linha_cpgt, column=1).value = self.marca()
                         aba_act_cpgt.cell(row=linha_cpgt, column=2).value = self.claros()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.cpgt_terrestre_cabotagem()
                         aba_act_cpgt.cell(row=linha_cpgt, column=4).value = self.orgv()
                         aba_act_cpgt.cell(row=linha_cpgt, column=7).value = self.carencia_cpgt_terrestre_cabotagem()
                         aba_act_cpgt.cell(row=linha_cpgt, column=8).value = self.centro
@@ -200,8 +208,8 @@ class Risco:
                         aba_act_cpgt.cell(row=linha_cpgt, column=13).value = "BRL"
                         aba_act_cpgt.cell(row=linha_cpgt, column=14).value = 1
                         aba_act_cpgt.cell(row=linha_cpgt, column=15).value = "M20"
-                        aba_act_cpgt.cell(row=linha_cpgt, column=16).value = assists.data_inicio()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=17).value = assists.data_last_day_cpgt()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=16).value = "01.08.2020"
+                        aba_act_cpgt.cell(row=linha_cpgt, column=17).value = "31.12.9999"
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.tab()
                         aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.lista_distr()[0]
                         linha_cpgt += 1
@@ -227,9 +235,8 @@ class Risco:
             msg['Subject'] = f'Taxas Risco Sacado {data_visivel}.'
 
             msg.set_content(
-                f'Prezada Elaine\n\nSegue abaixo as planilhas com as taxas dos clientes que utilizarão'
-                f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.'
-                f' Peço avaliar a solução.')
+                f'Prezados\n\nSegue abaixo a planilha com as taxas dos clientes que utilizarão'
+                f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.')
             paths = ['risco_sacado('+assists.data_cadastro()+').xlsx',
                      'Cadastro_em_lote_RS('+assists.data_cadastro()+').xlsx']
             for path in paths:
