@@ -2,26 +2,29 @@ import pandas as pd
 from openpyxl import load_workbook
 from selenium import webdriver
 import os
+from email.message import EmailMessage
 
 
 class Abrir_Scd:
     def __init__(self,site,caminho):
-        self.brower = webdriver.Firefox(executable_path = caminho)
+        self.brower = webdriver.Ie(executable_path = caminho)
         self.brower.get(site)
-        self.brower.implicitly_wait(5)
         self.brower.maximize_window()
-        self.login()
+
+
 
     def login(self):
-        self.brower.find_element_by_css_selector("").send_keys('')
-        self.brower.find_element_by_css_selector("").send_keys('')
-        self.brower.find_element_by_name('').click()
+        self.brower.find_element_by_name("txt_user_login").send_keys('')
+        self.brower.find_element_by_name("pwd_user_password").send_keys('')
+        self.brower.find_element_by_css_selector("#loginForm").click()
 
 
 class Open_NVC(Abrir_Scd):
     def __init__(self, site, caminho):
         super().__init__(site, caminho)
-        #self.brower.close()
+        super().login()
+        self.brower.implicitly_wait(10)
+        self.brower.close()
 
 
 class Close_NVC(Abrir_Scd):
@@ -35,7 +38,35 @@ class Create_path:
 
 
 class Email:
-    pass
+    def __init__(self, email):
+        self.email = email
+
+    def config (self):
+        smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
+        smtpobj.starttls()
+        fro = ''
+        to = ''
+
+        smtpobj.login(fro, '')
+        msg = EmailMessage()
+        msg['From'] = fro
+        msg['To'] = to
+        msg['Subject'] = f'Recebiemnto de Pedido mês {data_visivel}.'
+
+        msg.set_content(
+            f'Prezados\n\nSegue abaixo a planilha com as taxas dos clientes que utilizarão'
+            f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.')
+        paths = ['risco_sacado(' + assists.data_cadastro() + ').xlsx',
+                 'Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx']
+        for path in paths:
+            caminho = open(path, 'rb')
+            arq_data = caminho.read()
+            arq_name = caminho.name
+            msg.add_attachment(arq_data, maintype='application', subtype='octet-stream', filename=arq_name)
+
+        smtpobj.send_message(msg)
+        smtpobj.quit()
+        print('Email enviado!!!!')
 
 
 class Choice_enginer:
@@ -66,4 +97,4 @@ class Enginer_request_assent:
 
 
 if __name__ == '__main__':
-    x=Open_NVC('http://www.anp.gov.br/', 'C:\\Users\\Jrfirmino Planejados\\Downloads\\geckodriver')
+    x=Open_NVC('', 'C:\\Users\\\\Downloads\\IEDriverServer.exe')
