@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 from selenium import webdriver
 import os
 from email.message import EmailMessage
-
+from selenium.webdriver.common.keys import Keys
 
 class Abrir_Scd:
     def __init__(self,site,caminho):
@@ -11,12 +11,12 @@ class Abrir_Scd:
         self.brower.get(site)
         self.brower.maximize_window()
 
-
-
     def login(self):
         self.brower.find_element_by_name("txt_user_login").send_keys('')
         self.brower.find_element_by_name("pwd_user_password").send_keys('')
-        self.brower.find_element_by_css_selector("#loginForm").click()
+        x=self.brower.find_element_by_name("pwd_user_password")
+        x.send_keys(Keys.TAB)
+        x.submit()
 
 
 class Open_NVC(Abrir_Scd):
@@ -24,12 +24,15 @@ class Open_NVC(Abrir_Scd):
         super().__init__(site, caminho)
         super().login()
         self.brower.implicitly_wait(10)
-        self.brower.close()
+
+    def operacion_NVC(self):
+        self.brower.find_element_by_tag_name('  Recebimento  ')
 
 
 class Close_NVC(Abrir_Scd):
     def __init__(self,site):
         super().__init__(site)
+        #self.brower.close()
 
 
 class Create_path:
@@ -51,7 +54,7 @@ class Email:
         msg = EmailMessage()
         msg['From'] = fro
         msg['To'] = to
-        msg['Subject'] = f'Recebiemnto de Pedido mês {data_visivel}.'
+        msg['Subject'] = f'Recebimento de Pedido mês {data_visivel}.'
 
         msg.set_content(
             f'Prezados\n\nSegue abaixo a planilha com as taxas dos clientes que utilizarão'
@@ -97,4 +100,5 @@ class Enginer_request_assent:
 
 
 if __name__ == '__main__':
-    x=Open_NVC('', 'C:\\Users\\\\Downloads\\IEDriverServer.exe')
+    x=Open_NVC('https://servicoca.petrobras.com.br/fwca/pages/AuthenticationForm.jsp?successfulUrl=https://sgcd.petrobras.com.br:443/ASPX/Home/frmHome.aspx&ssoEnabled=False&applicationCatalogId=S223&appEnvUid=493299&integratedAuthenticationEnabled=False&logonPage=', 'C:\\Users\\e43k\\Downloads\\IEDriverServer.exe')
+    x.operacion_NVC()
