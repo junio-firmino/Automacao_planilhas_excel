@@ -5,34 +5,28 @@ import os
 from email.message import EmailMessage
 from selenium.webdriver.common.keys import Keys
 
+
 class Abrir_Scd:
-    def __init__(self,site,caminho):
-        self.brower = webdriver.Ie(executable_path = caminho)
+    def __init__(self, site, caminho):
+        self.brower = webdriver.Ie(executable_path=caminho)
         self.brower.get(site)
         self.brower.maximize_window()
 
-    def login(self):
+
+class Login(Abrir_Scd):
+    def __init__(self, site, caminho):
+        super().__init__(site, caminho)
         self.brower.find_element_by_name("txt_user_login").send_keys('')
         self.brower.find_element_by_name("pwd_user_password").send_keys('')
-        x=self.brower.find_element_by_name("pwd_user_password")
+        x = self.brower.find_element_by_name("pwd_user_password")
         x.send_keys(Keys.TAB)
         x.submit()
 
 
-class Open_NVC(Abrir_Scd):
-    def __init__(self, site, caminho):
-        super().__init__(site, caminho)
-        super().login()
-        self.brower.implicitly_wait(10)
-
-    def operacion_NVC(self):
-        self.brower.find_element_by_tag_name('  Recebimento  ')
-
-
 class Close_NVC(Abrir_Scd):
-    def __init__(self,site):
+    def __init__(self, site):
         super().__init__(site)
-        #self.brower.close()
+        # self.brower.close()
 
 
 class Create_path:
@@ -44,7 +38,7 @@ class Email:
     def __init__(self, email):
         self.email = email
 
-    def config (self):
+    def config(self):
         smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
         smtpobj.starttls()
         fro = ''
@@ -87,8 +81,11 @@ class Choice_enginer:
             return Enginer_request_assent()
 
 
-class Enginer_open_NVC:
-    pass
+class Enginer_open_NVC(Abrir_Scd):
+    def __init__(self, site, caminho):
+        super().__init__(site, caminho)
+        Login(site, caminho)
+        self.brower.implicitly_wait(10)
 
 
 class Enginer_create_spreadsheet:
@@ -100,5 +97,7 @@ class Enginer_request_assent:
 
 
 if __name__ == '__main__':
-    x=Open_NVC('https://servicoca.petrobras.com.br/fwca/pages/AuthenticationForm.jsp?successfulUrl=https://sgcd.petrobras.com.br:443/ASPX/Home/frmHome.aspx&ssoEnabled=False&applicationCatalogId=S223&appEnvUid=493299&integratedAuthenticationEnabled=False&logonPage=', 'C:\\Users\\e43k\\Downloads\\IEDriverServer.exe')
+    x = Open_NVC(
+        'https://servicoca.petrobras.com.br/fwca/pages/AuthenticationForm.jsp?successfulUrl=https://sgcd.petrobras.com.br:443/ASPX/Home/frmHome.aspx&ssoEnabled=False&applicationCatalogId=S223&appEnvUid=493299&integratedAuthenticationEnabled=False&logonPage=',
+        'C:\\Users\\e43k\\Downloads\\IEDriverServer.exe')
     x.operacion_NVC()
