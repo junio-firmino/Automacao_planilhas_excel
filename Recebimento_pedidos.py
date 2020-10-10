@@ -18,9 +18,11 @@ class Login(Abrir_Scd):
         super().__init__(site, caminho)
         self.brower.find_element_by_name("txt_user_login").send_keys('')
         self.brower.find_element_by_name("pwd_user_password").send_keys('')
-        x = self.brower.find_element_by_name("pwd_user_password")
-        x.send_keys(Keys.TAB)
-        x.submit()
+        self.brower.find_element_by_name("//button[text()='Entar']").click()
+
+        # x = self.brower.find_element_by_name("pwd_user_password")
+        # x.send_keys(Keys.TAB)
+        # x.submit()
 
 
 class Close_NVC(Abrir_Scd):
