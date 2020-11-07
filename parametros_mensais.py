@@ -22,6 +22,12 @@ class Parametros:
         self.wb_cgv = load_workbook(filename='template_PVA_PVS.xlsx')
         self.wb_zav = load_workbook(filename='template_ZMUE.xlsx')
         self.wb_zn4 = load_workbook(filename='template_ZMUE.xlsx')
+        self.pergunta_1 = None
+        self.produto_centro = None
+        self.cliente_matriz = None
+        self.open_arq = None
+        self.condicoes_parametro_cgv = None
+        self.condicoes_parametro_zavulso = None
 
     def interface_client(self):
         flag = True
@@ -33,7 +39,7 @@ class Parametros:
             self.save_arq()
             self.fechar_arq()
             alert = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros.\n'
-                           'Caso deseje finalizar selecione "f" em seguida "enter".)-->')
+                          'Caso deseje finalizar selecione "f" em seguida "enter".)-->')
             if alert == 'f':
                 flag = False
         print('Processo finalizado!.')
@@ -129,7 +135,7 @@ class Parametros:
                                           1312, 1130, 9060, 1353, 1200, 1500, 1354, 1507, 1311, 1062, 1710],
                                'PB.6DH': [1160, 1423, 1362, 1350, 1422, 1400, 1110, 1352, 1550, 1150, 1111, 1502,
                                           1365, 1560, 2540, 1100, 1050, 1360, 1101, 1421, 1700, 1250, 1120, 1070,
-                                          1312, 1130, 9060, 1353, 1200, 1500, 1354, 1507, 1311, 1062, 1710],}
+                                          1312, 1130, 9060, 1353, 1200, 1500, 1354, 1507, 1311, 1062, 1710]}
         return self.produto_centro
 
     def cliente_matriz_z(self):
@@ -148,13 +154,13 @@ class Parametros:
         salvar = self.open_arq
         if self.list_trabalho()[0] == 'Avulso' or self.list_trabalho()[0] == 'N4':
             return salvar[self.list_trabalho()[0]].save(
-                'PVA_PVS_'+(self.list_trabalho()[0]).upper()+'('+assists.data_cadastro()+')'+'.xlsx')
+                'PVA_PVS_' + (self.list_trabalho()[0]).upper() + '(' + assists.data_cadastro() + ')' + '.xlsx')
         elif self.list_trabalho()[0] == 'Cgv':
             return salvar[self.list_trabalho()[0]].save(
-                'PVA_' + (self.list_trabalho()[0]).upper()+'(' + assists.data_cadastro() + ')' + '.xlsx')
+                'PVA_' + (self.list_trabalho()[0]).upper() + '(' + assists.data_cadastro() + ')' + '.xlsx')
         elif self.list_trabalho()[0] == 'Zavulso' or self.list_trabalho()[0] == 'Zn4':
             return salvar[self.list_trabalho()[0]].save(
-                (self.list_trabalho()[0]).upper()+'_'+'(' + assists.data_cadastro() + ').xlsx')
+                (self.list_trabalho()[0]).upper() + '_' + '(' + assists.data_cadastro() + ').xlsx')
 
     def fechar_arq(self):
         close = self.open_arq
@@ -208,7 +214,7 @@ class Parametros:
         return "M20"
 
     def tab(self):
-        tabela = {'Cgv': 689, 'Avulso': 525, 'N4': 556, 'Zavulso': 652,'Zn4': 669}
+        tabela = {'Cgv': 689, 'Avulso': 525, 'N4': 556, 'Zavulso': 652, 'Zn4': 669}
         return tabela[self.list_trabalho()[0]]
 
     @staticmethod
@@ -218,7 +224,7 @@ class Parametros:
         return data_inicio_return
 
     @staticmethod
-    def data_inicial_Z():
+    def data_inicial_z():
         data_inicio = dt.datetime.now() + relativedelta(day=1, months=2)
         data_inicio_return = data_inicio.strftime('%d.%m.%Y')
         return data_inicio_return
@@ -230,7 +236,7 @@ class Parametros:
         return data_return
 
     @staticmethod
-    def data_fim_Z():
+    def data_fim_z():
         data_last = dt.datetime.now() + relativedelta(day=31, months=2)
         data_return = data_last.strftime('%d.%m.%Y')
         return data_return
@@ -320,8 +326,8 @@ class Parametros:
                         aba_zavulso.cell(row=linha_plan, column=12).value = self.moeda()
                         aba_zavulso.cell(row=linha_plan, column=13).value = self.por()
                         aba_zavulso.cell(row=linha_plan, column=14).value = self.unidade()
-                        aba_zavulso.cell(row=linha_plan, column=15).value = self.data_inicial_Z()
-                        aba_zavulso.cell(row=linha_plan, column=16).value = self.data_fim_Z()
+                        aba_zavulso.cell(row=linha_plan, column=15).value = self.data_inicial_z()
+                        aba_zavulso.cell(row=linha_plan, column=16).value = self.data_fim_z()
                         aba_zavulso.cell(row=linha_plan, column=17).value = escala
                         aba_zavulso.cell(row=linha_plan, column=18).value = self.moeda()
                         aba_zavulso.cell(row=linha_plan, column=19).value = self.tab()
@@ -342,8 +348,8 @@ class Parametros:
                     aba_zn4.cell(row=linha_plan, column=12).value = self.moeda()
                     aba_zn4.cell(row=linha_plan, column=13).value = self.por()
                     aba_zn4.cell(row=linha_plan, column=14).value = self.unidade()
-                    aba_zn4.cell(row=linha_plan, column=15).value = self.data_inicial()
-                    aba_zn4.cell(row=linha_plan, column=16).value = self.data_fim()
+                    aba_zn4.cell(row=linha_plan, column=15).value = self.data_inicial_z()
+                    aba_zn4.cell(row=linha_plan, column=16).value = self.data_fim_z()
                     aba_zn4.cell(row=linha_plan, column=17).value = condi_n4
                     aba_zn4.cell(row=linha_plan, column=18).value = self.moeda()
                     aba_zn4.cell(row=linha_plan, column=19).value = self.tab()
@@ -352,4 +358,3 @@ class Parametros:
 
 x = Parametros()
 x.interface_client()
-
