@@ -1,6 +1,6 @@
 from openpyxl import load_workbook
-import datetime as dt
-from dateutil.relativedelta import relativedelta
+# import datetime as dt
+# from dateutil.relativedelta import relativedelta
 import smtplib
 from email.message import EmailMessage
 from locale import setlocale, LC_ALL
@@ -11,9 +11,12 @@ class Risco:
     def __init__(self):
         self.cliente = 'utf-8'
         self.taxas = 0
-        self.wb = load_workbook(filename='risco_sacado(29.09.2020).xlsx')
-        self.wb_cpgt = load_workbook(filename='Cadastro_em_lote_RS(29.09.2020).xlsx')
+        self.wb = load_workbook(filename='')
+        self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
         self.centro = int
+        self.distribuidoras = None
+        self.banco = None
+        self.cpgt = None
 
     def interface(self):
         self.abrir_arq()
@@ -39,14 +42,14 @@ class Risco:
         return self.wb and self.wb_cpgt
 
     def salvar_arq(self):
-        self.wb.save('risco_sacado('+assists.data_cadastro()+').xlsx')
-        self.wb_cpgt.save('Cadastro_em_lote_RS('+assists.data_cadastro()+').xlsx')
+        self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')
+        self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
 
     def cpgt_terrestre(self):
-        return 'ZD'+self.cpgt
+        return 'ZD' + self.cpgt
 
     def cpgt_cabotagem(self):
-        return 'ZC'+self.cpgt
+        return 'ZC' + self.cpgt
 
     def cpgt_terrestre_cabotagem(self):
         if self.centro == 1401 or self.centro == 1211:
@@ -87,20 +90,20 @@ class Risco:
 
     def distri_cliente_polo_produto(self):
         self.distribuidoras = {'Alesat': {8187: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
-                                      1740: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
-                                      4473: {1200: ['PB.620', 'PB.6DH', 'PB.658']},
-                                      21699: {1100: ['PB.620', 'PB.6DH', 'PB.658']},
-                                      4919: {1360: ['PB.6DH'], 1950: ['PB.6DH']},
-                                      8429: {1101: ['PB.620', 'PB.6DH', 'PB.658']},
-                                      #1733: {1110: ['PB.620', 'PB.6DH', 'PB.658']},
-                                      #1732: {1111: ['PB.620', 'PB.6DH', 'PB.658']},
-                                      #1736: {1120: ['PB.620', 'PB.6DH', 'PB.658']},
-                                      6833: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
-                                      6515: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
+                                          1740: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          4473: {1200: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          21699: {1100: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          4919: {1360: ['PB.6DH'], 1950: ['PB.6DH']},
+                                          8429: {1101: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          # 1733: {1110: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          # 1732: {1111: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          # 1736: {1120: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          6833: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          6515: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
                                'Ciapetro': {455: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       18314: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       4150: {1100: ['PB.620', 'PB.6DH', 'PB.658']},       #1110, 1111, 1120
-                                       20497: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
+                                            18314: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
+                                            4150: {1100: ['PB.620', 'PB.6DH', 'PB.658']},  # 1110, 1111, 1120
+                                            20497: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
                                'Ipp': {47: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
                                        2093: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
                                        2086: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
@@ -108,19 +111,19 @@ class Risco:
                                        15629: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
                                'Mime': {17621: {1700: ['PB.620', 'PB.6DH', 'PB.658']}},
                                'Petrox': {5142: {1360: ['PB.6DH'], 1950: ['PB.6DH']}},
-                               'Rodoil': {7008: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       6815: {1400: ['PB.620', 'PB.6DH', 'PB.658']}},
+                               'Rodoil': {7008: {1700: ['PB.6DH', 'PB.658']},
+                                          6815: {1400: ['PB.6DH', 'PB.658']}},
                                'Raizen': {49: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       2163: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       2153: {1200: ['PB.620', 'PB.6DH', 'PB.658'], 1210: ['PB.620', 'PB.6DH']},
-                                       2150: {1100: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       2180: {1360: ['PB.6DH'], 1950: ['PB.6DH']},
-                                       2155: {1101: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       #18449: {1110: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       #2186: {1111: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       #2168: {1120: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       2157: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
-                                       2144:{1250:['PB.620', 'PB.6DH', 'PB.658']}}}
+                                          2163: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          2153: {1200: ['PB.620', 'PB.6DH', 'PB.658'], 1210: ['PB.620', 'PB.6DH']},
+                                          2150: {1100: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          2180: {1360: ['PB.6DH'], 1950: ['PB.6DH']},
+                                          2155: {1101: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          # 18449: {1110: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          # 2186: {1111: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          # 2168: {1120: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          2157: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          2144: {1250: ['PB.620', 'PB.6DH', 'PB.658']}}}
 
         return self.distribuidoras
 
@@ -180,7 +183,7 @@ class Risco:
                         aba_act.cell(row=linha_plan, column=6).value = self.centro
                         aba_act.cell(row=linha_plan, column=7).value = combust
                         aba_act.cell(row=linha_plan, column=8).value = self.cpgt_terrestre_cabotagem()
-                        aba_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1]+' a.m.'
+                        aba_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1] + ' a.m.'
                         aba_act.cell(row=linha_plan, column=10).value = assists.data_inicio()
                         aba_act.cell(row=linha_plan, column=11).value = assists.data_last_day_risco_sacado()
                         aba_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]
@@ -214,7 +217,8 @@ class Risco:
                         aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.lista_distr()[0]
                         linha_cpgt += 1
 
-    def enviar_email(self):
+    @staticmethod
+    def enviar_email():
         setlocale(LC_ALL, 'pt_BR.utf-8')
         pergunta_envio = input('Você deseja enviar o email agora?\n'
                                '(Pressione "enter" para enviar o email.\n'
@@ -225,10 +229,10 @@ class Risco:
 
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
-            fro = 'j@gmail.com'
+            fro = 'j@.com'
             to = 'j@.com.br'
 
-            smtpobj.login(fro, '')
+            smtpobj.login(fro, 'yevq kufu ejsx awpz')
             msg = EmailMessage()
             msg['From'] = fro
             msg['To'] = to
@@ -237,8 +241,8 @@ class Risco:
             msg.set_content(
                 f'Prezados\n\nSegue abaixo a planilha com as taxas dos clientes que utilizarão'
                 f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.')
-            paths = ['risco_sacado('+assists.data_cadastro()+').xlsx',
-                     'Cadastro_em_lote_RS('+assists.data_cadastro()+').xlsx']
+            paths = ['risco_sacado(' + assists.data_cadastro() + ').xlsx',
+                     'Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx']
             for path in paths:
                 caminho = open(path, 'rb')
                 arq_data = caminho.read()
