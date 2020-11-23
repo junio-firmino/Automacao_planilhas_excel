@@ -256,5 +256,6 @@ class Risco:
             pass
 
 
+if __name__ == '__main__':
 x = Risco()
 x.interface()
