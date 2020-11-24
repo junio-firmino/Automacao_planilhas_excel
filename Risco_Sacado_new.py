@@ -11,7 +11,7 @@ class Risco:
     def __init__(self):
         self.cliente = 'utf-8'
         self.taxas = 0
-        self.wb = load_workbook(filename='')
+        self.wb = load_workbook(filename='')  # Adicionar o nosso template
         self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
         self.centro = int
         self.distribuidoras = None
@@ -168,6 +168,7 @@ class Risco:
         else:
             return self.carencia_cpgt_terrestre()
 
+    # Mudar somente essa parte
     def abrir_plan_risco_sacado(self):
         aba_act = self.wb.active
         self.lista_distr()
