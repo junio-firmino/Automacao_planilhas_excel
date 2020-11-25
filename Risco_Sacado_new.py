@@ -11,7 +11,7 @@ class Risco:
     def __init__(self):
         self.cliente = 'utf-8'
         self.taxas = 0
-        self.wb = load_workbook(filename='')  # Adicionar o nosso template
+        self.wb = load_workbook(filename='Risco Sacado TMP(preço).xlsx')
         self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
         self.centro = int
         self.distribuidoras = None
