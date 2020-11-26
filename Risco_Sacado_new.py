@@ -179,17 +179,17 @@ class Risco:
                     for combust in prod:
                         # aba_act.cell(row=linha_plan, column=0).value = self.lista_distr()[0]  # Nome do cliente
                         # aba_act.cell(row=linha_plan, column=3).value = self.orgv()
-                        # aba_act.cell(row=linha_plan, column=4).value = self.claros()
                         aba_act.cell(row=linha_plan, column=1).value = fili  # Filial
                         aba_act.cell(row=linha_plan, column=2).value = self.cpgt_terrestre_cabotagem()  # CPGT
                         aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
                         aba_act.cell(row=linha_plan, column=4).value = self.centro  # Centro
                         aba_act.cell(row=linha_plan, column=6).value = self.lista_distr()[1] + ' a.m.'  # Taxas
+                        aba_act.cell(row=linha_plan, column=7).value = "%"
+                        aba_act.cell(row=linha_plan, column=10).value = "A"
                         aba_act.cell(row=linha_plan, column=12).value = assists.data_inicio()  # Data inicial
                         aba_act.cell(row=linha_plan, column=13).value = assists.data_last_day_risco_sacado()  # Data final
-                        aba_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]
-                        aba_act.cell(row=linha_plan, column=13).value = assists.data_cadastro()
-                        aba_act.cell(row=linha_plan, column=14).value = self.encargos()
+                        aba_act.cell(row=linha_plan, column=14).value = assists.data_cadastro()
+                        aba_act.cell(row=linha_plan, column=15).value = self.encargos()
                         linha_plan += 1
 
     def abrir_plan_cpgt(self):
