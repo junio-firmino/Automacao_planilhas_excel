@@ -172,21 +172,21 @@ class Risco:
     def abrir_plan_risco_sacado(self):
         aba_act = self.wb.active
         self.lista_distr()
-        for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
+        for linha_plan in range(aba_act.max_row + 6, aba_act.max_row + 7):
             info = self.distri_cliente_polo_produto()[self.lista_distr()[0]]
             for fili, info_1 in info.items():
                 for self.centro, prod in info_1.items():
                     for combust in prod:
-                        aba_act.cell(row=linha_plan, column=2).value = self.lista_distr()[0]
-                        aba_act.cell(row=linha_plan, column=3).value = self.orgv()
-                        aba_act.cell(row=linha_plan, column=4).value = self.claros()
-                        aba_act.cell(row=linha_plan, column=5).value = fili
-                        aba_act.cell(row=linha_plan, column=6).value = self.centro
-                        aba_act.cell(row=linha_plan, column=7).value = combust
-                        aba_act.cell(row=linha_plan, column=8).value = self.cpgt_terrestre_cabotagem()
-                        aba_act.cell(row=linha_plan, column=9).value = self.lista_distr()[1] + ' a.m.'
-                        aba_act.cell(row=linha_plan, column=10).value = assists.data_inicio()
-                        aba_act.cell(row=linha_plan, column=11).value = assists.data_last_day_risco_sacado()
+                        # aba_act.cell(row=linha_plan, column=0).value = self.lista_distr()[0]  # Nome do cliente
+                        # aba_act.cell(row=linha_plan, column=3).value = self.orgv()
+                        # aba_act.cell(row=linha_plan, column=4).value = self.claros()
+                        aba_act.cell(row=linha_plan, column=1).value = fili  # Filial
+                        aba_act.cell(row=linha_plan, column=2).value = self.cpgt_terrestre_cabotagem()  # CPGT
+                        aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
+                        aba_act.cell(row=linha_plan, column=4).value = self.centro  # Centro
+                        aba_act.cell(row=linha_plan, column=6).value = self.lista_distr()[1] + ' a.m.'  # Taxas
+                        aba_act.cell(row=linha_plan, column=12).value = assists.data_inicio()  # Data inicial
+                        aba_act.cell(row=linha_plan, column=13).value = assists.data_last_day_risco_sacado()  # Data final
                         aba_act.cell(row=linha_plan, column=12).value = self.lista_distr()[-1]
                         aba_act.cell(row=linha_plan, column=13).value = assists.data_cadastro()
                         aba_act.cell(row=linha_plan, column=14).value = self.encargos()
