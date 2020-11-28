@@ -11,7 +11,7 @@ class Risco:
     def __init__(self):
         self.cliente = 'utf-8'
         self.taxas = 0
-        self.wb = load_workbook(filename='Risco Sacado TMP(preço).xlsx')
+        self.wb = load_workbook(filename='risco_sacado(27.11.2020).xlsx')
         self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
         self.centro = int
         self.distribuidoras = None
@@ -61,7 +61,7 @@ class Risco:
     def cliente_1():
         flag_cli = True
         while flag_cli:
-            cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen']
+            cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen', 'Rejaile', 'Total']
             ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
             if ask_cliente_distr in cliente_distr:
                 return ask_cliente_distr
@@ -89,18 +89,18 @@ class Risco:
             return self.lista_distr()[0]
 
     def distri_cliente_polo_produto(self):
-        self.distribuidoras = {'Alesat': {8187: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
-                                          1740: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
-                                          4473: {1200: ['PB.620', 'PB.6DH', 'PB.658']},
-                                          21699: {1100: ['PB.620', 'PB.6DH', 'PB.658']},
-                                          4919: {1360: ['PB.6DH'], 1950: ['PB.6DH']},
-                                          8429: {1101: ['PB.620', 'PB.6DH', 'PB.658']},
-                                          # 1733: {1110: ['PB.620', 'PB.6DH', 'PB.658']},
-                                          # 1732: {1111: ['PB.620', 'PB.6DH', 'PB.658']},
-                                          # 1736: {1120: ['PB.620', 'PB.6DH', 'PB.658']},
-                                          6833: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
-                                          6515: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
-                               'Ciapetro': {455: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
+        self.distribuidoras = {'Alesat': {8187: {1700: ['PB.620', 'PB.6DH', 'PB.658']},  # 1700 - Canoas
+                                          1740: {1400: ['PB.620', 'PB.6DH', 'PB.658']},  # 1400 - Araucária
+                                          4473: {1200: ['PB.620', 'PB.6DH', 'PB.658']},  # 1250 - Betim
+                                          21699: {1100: ['PB.620', 'PB.6DH', 'PB.658']},  # 1200 - Cubatão
+                                          4919: {1360: ['PB.6DH'], 1950: ['PB.6DH']},  # 1100 - Paulinia
+                                          8429: {1101: ['PB.620', 'PB.6DH', 'PB.658']},  # 1101 - Ribeirão Preto
+                                          # 1733: {1110: ['PB.620', 'PB.6DH', 'PB.658']}, # 1360 - Ipojuca
+                                          # 1732: {1111: ['PB.620', 'PB.6DH', 'PB.658']}, # 1110 - Uberaba
+                                          1736: {1120: ['PB.620', 'PB.6DH', 'PB.658']},  # 1111 - Uberlândia
+                                          6833: {1130: ['PB.620', 'PB.6DH', 'PB.658']},  # 1120 - Senador Canedo
+                                          6515: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},  # 1130 - Brasília
+                               'Ciapetro': {455: {1400: ['PB.620', 'PB.6DH', 'PB.658']},  # 1950 -
                                             18314: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
                                             4150: {1100: ['PB.620', 'PB.6DH', 'PB.658']},  # 1110, 1111, 1120
                                             20497: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
@@ -123,7 +123,13 @@ class Risco:
                                           # 2186: {1111: ['PB.620', 'PB.6DH', 'PB.658']},
                                           # 2168: {1120: ['PB.620', 'PB.6DH', 'PB.658']},
                                           2157: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
-                                          2144: {1250: ['PB.620', 'PB.6DH', 'PB.658']}}}
+                                          2144: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
+                               'Rejaile': {19364: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
+                                           21184: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
+                                           156: {1400: ['PB.620', 'PB.6DH', 'PB.658']}},
+                               'Total': {21973: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
+                                         22176: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
+                                         21997: {1101: ['PB.620', 'PB.6DH', 'PB.658']}}}
 
         return self.distribuidoras
 
@@ -172,13 +178,12 @@ class Risco:
     def abrir_plan_risco_sacado(self):
         aba_act = self.wb.active
         self.lista_distr()
-        for linha_plan in range(aba_act.max_row + 6, aba_act.max_row + 7):
+        for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = self.distri_cliente_polo_produto()[self.lista_distr()[0]]
             for fili, info_1 in info.items():
                 for self.centro, prod in info_1.items():
                     for combust in prod:
                         # aba_act.cell(row=linha_plan, column=0).value = self.lista_distr()[0]  # Nome do cliente
-                        # aba_act.cell(row=linha_plan, column=3).value = self.orgv()
                         aba_act.cell(row=linha_plan, column=1).value = fili  # Filial
                         aba_act.cell(row=linha_plan, column=2).value = self.cpgt_terrestre_cabotagem()  # CPGT
                         aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
@@ -187,9 +192,11 @@ class Risco:
                         aba_act.cell(row=linha_plan, column=7).value = "%"
                         aba_act.cell(row=linha_plan, column=10).value = "A"
                         aba_act.cell(row=linha_plan, column=12).value = assists.data_inicio()  # Data inicial
-                        aba_act.cell(row=linha_plan, column=13).value = assists.data_last_day_risco_sacado()  # Data final
+                        aba_act.cell(row=linha_plan,
+                                     column=13).value = assists.data_last_day_risco_sacado()  # Data final
                         aba_act.cell(row=linha_plan, column=14).value = assists.data_cadastro()
                         aba_act.cell(row=linha_plan, column=15).value = self.encargos()
+                        aba_act.cell(row=linha_plan, column=16).value = self.banco
                         linha_plan += 1
 
     def abrir_plan_cpgt(self):
@@ -231,7 +238,7 @@ class Risco:
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
             fro = 'j@.com'
-            to = 'j@.com.br'
+            to = 'j@com.br'
 
             smtpobj.login(fro, 'yevq kufu ejsx awpz')
             msg = EmailMessage()
@@ -257,6 +264,5 @@ class Risco:
             pass
 
 
-if __name__ == '__main__':
 x = Risco()
 x.interface()
