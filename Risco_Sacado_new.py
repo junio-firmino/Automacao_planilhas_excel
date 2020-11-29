@@ -183,7 +183,6 @@ class Risco:
             for fili, info_1 in info.items():
                 for self.centro, prod in info_1.items():
                     for combust in prod:
-                        # aba_act.cell(row=linha_plan, column=0).value = self.lista_distr()[0]  # Nome do cliente
                         aba_act.cell(row=linha_plan, column=1).value = fili  # Filial
                         aba_act.cell(row=linha_plan, column=2).value = self.cpgt_terrestre_cabotagem()  # CPGT
                         aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
@@ -194,9 +193,10 @@ class Risco:
                         aba_act.cell(row=linha_plan, column=12).value = assists.data_inicio()  # Data inicial
                         aba_act.cell(row=linha_plan,
                                      column=13).value = assists.data_last_day_risco_sacado()  # Data final
-                        aba_act.cell(row=linha_plan, column=14).value = assists.data_cadastro()
+                        aba_act.cell(row=linha_plan, column=14).value = self.lista_distr()[0]
                         aba_act.cell(row=linha_plan, column=15).value = self.encargos()
                         aba_act.cell(row=linha_plan, column=16).value = self.banco
+                        aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()
                         linha_plan += 1
 
     def abrir_plan_cpgt(self):
