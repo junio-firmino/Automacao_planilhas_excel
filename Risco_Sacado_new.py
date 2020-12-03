@@ -102,8 +102,8 @@ class Risco:
                                           6515: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},  # 1130 - Brasília
                                'Ciapetro': {455: {1400: ['PB.620', 'PB.6DH', 'PB.658']},  # 1950 -
                                             18314: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
-                                            4150: {1100: ['PB.620', 'PB.6DH', 'PB.658']},  # 1110, 1111
-                                            20497: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
+                                            4150: {1100: ['PB.620', 'PB.6DH', 'PB.658']},       # 1110 - Uberaba*
+                                            20497: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},     # 1111 - Uberlandia*
                                'Ipp': {47: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
                                        2093: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
                                        2086: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
@@ -169,8 +169,8 @@ class Risco:
         return resultado_cabotagem
 
     def carencia_cpgt_terrestre_cabotagem(self):
-        if self.centro == 1401 or self.centro == 1211:
-            return self.carencia_cpgt_cabotagem()
+        if self.centro == 1401 or self.centro == 1211:      # 1401 - Paranaguá
+            return self.carencia_cpgt_cabotagem()           # 1211 - Santos
         else:
             return self.carencia_cpgt_terrestre()
 
