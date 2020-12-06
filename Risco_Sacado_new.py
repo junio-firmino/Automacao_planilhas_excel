@@ -11,7 +11,7 @@ class Risco:
     def __init__(self):
         self.cliente = 'utf-8'
         self.taxas = 0
-        self.wb = load_workbook(filename='risco_sacado(27.11.2020).xlsx')
+        self.wb = load_workbook(filename='Risco Sacado - TMP(preço).xlsx')
         self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
         self.centro = int
         self.distribuidoras = None
@@ -89,22 +89,22 @@ class Risco:
             return self.lista_distr()[0]
 
     def distri_cliente_polo_produto(self):
-        self.distribuidoras = {'Alesat': {8187: {1700: ['PB.620', 'PB.6DH', 'PB.658']},   # 1700 - Canoas
-                                          1740: {1400: ['PB.620', 'PB.6DH', 'PB.658']},   # 1400 - Araucária
-                                          4473: {1200: ['PB.620', 'PB.6DH', 'PB.658']},   # 1250 - Betim
-                                          21699: {1100: ['PB.620', 'PB.6DH', 'PB.658']},  # 1200 - Cubatão
-                                          4919: {1360: ['PB.6DH'], 1950: ['PB.6DH']},     # 1100 - Paulinia
-                                          8429: {1101: ['PB.620', 'PB.6DH', 'PB.658']},   # 1101 - Ribeirão Preto
-                                          # 1733: {1110: ['PB.620', 'PB.6DH', 'PB.658']}, # 1360 - Ipojuca
-                                          # 1732: {1111: ['PB.620', 'PB.6DH', 'PB.658']}, # 1110 - Uberaba
-                                          1736: {1120: ['PB.620', 'PB.6DH', 'PB.658']},   # 1111 - Uberlândia
-                                          6833: {1130: ['PB.620', 'PB.6DH', 'PB.658']},   # 1120 - Senador Canedo
-                                          6515: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},  # 1130 - Brasília
-                               'Ciapetro': {455: {1400: ['PB.620', 'PB.6DH', 'PB.658']},  # 1950 -
-                                            18314: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
+        self.distribuidoras = {'Alesat': {8187: {1700: ['PB.620', 'PB.6DH', 'PB.658']},         # 1700 - Canoas
+                                          1740: {1400: ['PB.620', 'PB.6DH', 'PB.658']},         # 1400 - Araucária
+                                          4473: {1200: ['PB.620', 'PB.6DH', 'PB.658']},         # 1250 - Betim
+                                          21699: {1100: ['PB.620', 'PB.6DH', 'PB.658']},        # 1200 - Cubatão
+                                          4919: {1360: ['PB.6DH'], 1950: ['PB.6DH']},           # 1100 - Paulinia
+                                          8429: {1101: ['PB.620', 'PB.6DH', 'PB.658']},         # 1101 - Ribeirão Preto
+                                          # 1733: {1110: ['PB.620', 'PB.6DH', 'PB.658']},       # 1360 - Ipojuca
+                                          # 1732: {1111: ['PB.620', 'PB.6DH', 'PB.658']},       # 1110 - Uberaba
+                                          1736: {1120: ['PB.620', 'PB.6DH', 'PB.658']},         # 1111 - Uberlândia
+                                          6833: {1130: ['PB.620', 'PB.6DH', 'PB.658']},         # 1120 - Senador Canedo
+                                          6515: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},        # 1130 - Brasília
+                               'Ciapetro': {455: {1400: ['PB.620', 'PB.6DH', 'PB.658']},        # 1211 - Santos
+                                            18314: {1700: ['PB.620', 'PB.6DH', 'PB.658']},      # 1401 - Paranaguá
                                             4150: {1100: ['PB.620', 'PB.6DH', 'PB.658']},       # 1110 - Uberaba*
                                             20497: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},     # 1111 - Uberlandia*
-                               'Ipp': {47: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
+                               'Ipp': {47: {1700: ['PB.620', 'PB.6DH', 'PB.658']},              
                                        2093: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
                                        2086: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
                                        2102: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
@@ -169,8 +169,8 @@ class Risco:
         return resultado_cabotagem
 
     def carencia_cpgt_terrestre_cabotagem(self):
-        if self.centro == 1401 or self.centro == 1211:      # 1401 - Paranaguá
-            return self.carencia_cpgt_cabotagem()           # 1211 - Santos
+        if self.centro == 1401 or self.centro == 1211:      # 1401 - Paranaguá; 1211 - Santos
+            return self.carencia_cpgt_cabotagem()
         else:
             return self.carencia_cpgt_terrestre()
 
