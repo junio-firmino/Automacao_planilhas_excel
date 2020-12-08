@@ -263,6 +263,7 @@ class Risco:
         elif pergunta_envio == "f":
             pass
 
+if __name__ == '__main__':
 
-x = Risco()
-x.interface()
+    x = Risco()
+    x.interface()
