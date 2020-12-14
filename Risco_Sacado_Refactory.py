@@ -11,13 +11,14 @@ class Managerriscosacado:
         print('Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
 
     def create_plan_risco_sacado(self):
-        self.plan_risco_sacado =
+        self.plan_risco_sacado = Plan_risco_sacado()
 
     def create_plan_cpgt(self):
         self.plan_cpgt =
 
 
-    def plan_risco_sacado
+class Plan_risco_sacado:
+    def plan_taxes(self):
         aba_act = self.wb.active
         self.lista_distr()
            for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
@@ -41,3 +42,5 @@ class Managerriscosacado:
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
                         linha_plan += 1
 
+
+class
