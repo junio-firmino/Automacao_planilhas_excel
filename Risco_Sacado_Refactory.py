@@ -17,7 +17,7 @@ class Managerriscosacado:
         self.plan_cpgt =
 
 
-class Plan_risco_sacado:
+class Planriscosacado:
     def plan_taxes(self):
         aba_act = self.wb.active
         self.lista_distr()
@@ -43,4 +43,29 @@ class Plan_risco_sacado:
                         linha_plan += 1
 
 
-class
+class Plancpgt:
+    def plan_cpgt(self):
+        aba_act_cpgt = self.wb_cpgt.active
+        self.lista_distr()
+        for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
+            info = self.distri_cliente_polo_produto()[self.lista_distr()[0]]
+            for fili, info_1 in info.items():
+                for self.centro, prod in info_1.items():
+                    for combust in prod:
+                        aba_act_cpgt.cell(row=linha_cpgt, column=1).value = self.marca()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=2).value = self.claros()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.cpgt_terrestre_cabotagem()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=4).value = self.orgv()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=7).value = self.carencia_cpgt_terrestre_cabotagem()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=8).value = self.centro
+                        aba_act_cpgt.cell(row=linha_cpgt, column=9).value = combust
+                        aba_act_cpgt.cell(row=linha_cpgt, column=10).value = fili
+                        aba_act_cpgt.cell(row=linha_cpgt, column=12).value = 1
+                        aba_act_cpgt.cell(row=linha_cpgt, column=13).value = "BRL"
+                        aba_act_cpgt.cell(row=linha_cpgt, column=14).value = 1
+                        aba_act_cpgt.cell(row=linha_cpgt, column=15).value = "M20"
+                        aba_act_cpgt.cell(row=linha_cpgt, column=16).value = "01.08.2020"
+                        aba_act_cpgt.cell(row=linha_cpgt, column=17).value = "31.12.9999"
+                        aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.tab()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.lista_distr()[0]
+                        linha_cpgt += 1
