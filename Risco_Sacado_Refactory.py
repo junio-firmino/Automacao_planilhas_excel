@@ -9,12 +9,22 @@ import assists
 class Managerriscosacado:
     def __init__(self):
         print('Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
+        self.cliente = 'utf-8'
+        self.taxas = 0
+        self.wb = load_workbook(filename='Risco Sacado - TMP(preço).xlsx')
+        self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
+        self.centro = int
+        self.distribuidoras = None
+        self.banco = None
+        self.cpgt = None
 
     def create_plan_risco_sacado(self):
-        self.plan_risco_sacado = Plan_risco_sacado()
+        self.plan_risco_sacado = Planriscosacado()
+        self.plan_risco_sacado.plan_taxes()
 
     def create_plan_cpgt(self):
-        self.plan_cpgt =
+        self.plan_cpgt = Plancpgt()
+        self.plan_cpgt.plan_cpgt()
 
 
 class Planriscosacado:
@@ -69,3 +79,25 @@ class Plancpgt:
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.tab()
                         aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.lista_distr()[0]
                         linha_cpgt += 1
+
+
+class Cliente:
+    @staticmethod
+    def cliente_1():
+        flag_cli = True
+        while flag_cli:
+            cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen', 'Rejaile', 'Total']
+            ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
+            if ask_cliente_distr in cliente_distr:
+                return ask_cliente_distr
+            else:
+                print('Empresa não participante do Risco Sacado, tente outra empresa!.')
+
+
+class Listdistribuidora:
+    def lista_distr(self):
+        distri = [Cliente(), self.taxas, self.cpgt_terrestre(), self.cpgt_cabotagem(), self.banco]
+        return distri
+
+#class Interface:
+
