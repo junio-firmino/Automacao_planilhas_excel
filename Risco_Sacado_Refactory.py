@@ -99,5 +99,43 @@ class Listdistribuidora:
         distri = [Cliente(), self.taxas, self.cpgt_terrestre(), self.cpgt_cabotagem(), self.banco]
         return distri
 
+
+class Listbancos:
+    def banco_1():
+        flag = True
+        while flag:
+            bancos = {'s': 'Santander', 'b': 'Bradesco', 'c': 'Citibank'}
+            banco_marca = input('Escolha o banco?\n("s" para Santander, "b" para Bradesco e "c" para Citibank)'
+                                ' + "enter" -->')
+            if banco_marca in bancos:
+                return bancos[banco_marca]
+            else:
+                print('Essa escolha não é possível, tente novamente!.')
+
+
+class Informationconstant:
+
+    @staticmethod
+    def marca():
+        return "x"
+
+    @staticmethod
+    def orgv():
+        return 1001
+
+    @staticmethod
+    def claros():
+        return "02"
+
+    @staticmethod
+    def encargos():
+        return "1,51% a.m"
+
+    @staticmethod
+    def tab():
+        tabela = 655
+        return tabela
+
+
 #class Interface:
 
