@@ -6,6 +6,7 @@ import assists
 
 # I will refactory This project, for do it I chose the design pattern Facade.
 
+
 class Managerriscosacado:
     def __init__(self):
         print('Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
@@ -17,6 +18,8 @@ class Managerriscosacado:
         self.distribuidoras = None
         self.banco = None
         self.cpgt = None
+        self.plan_risco_sacado = None
+        self.plan_cpgt = None
 
     def create_plan_risco_sacado(self):
         self.plan_risco_sacado = Planriscosacado()
@@ -31,7 +34,7 @@ class Planriscosacado:
     def plan_taxes(self):
         aba_act = self.wb.active
         self.lista_distr()
-           for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
+        for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = self.distri_cliente_polo_produto()[self.lista_distr()[0]]
             for fili, info_1 in info.items():
                 for self.centro, prod in info_1.items():
@@ -47,8 +50,8 @@ class Planriscosacado:
                         aba_act.cell(row=linha_plan,
                                      column=13).value = assists.data_last_day_risco_sacado()  # Data final
                         aba_act.cell(row=linha_plan, column=14).value = self.lista_distr()[0]  # Cliente
-                        aba_act.cell(row=linha_plan, column=15).value = self.encargos()  # Encargos
-                        aba_act.cell(row=linha_plan, column=16).value = self.banco  # Banco
+                        aba_act.cell(row=linha_plan, column=15).value = Informationconstant.encargos()  # Encargos
+                        aba_act.cell(row=linha_plan, column=16).value = Listbancos()  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
                         linha_plan += 1
 
@@ -62,11 +65,11 @@ class Plancpgt:
             for fili, info_1 in info.items():
                 for self.centro, prod in info_1.items():
                     for combust in prod:
-                        aba_act_cpgt.cell(row=linha_cpgt, column=1).value = self.marca()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=2).value = self.claros()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.cpgt_terrestre_cabotagem()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=4).value = self.orgv()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=7).value = self.carencia_cpgt_terrestre_cabotagem()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=1).value = Informationconstant().marca()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=2).value = Informationconstant().claros()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = Carencia().carencia_cpgt_cabotagem()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=4).value = Informationconstant().orgv()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=7).value = Carencia().carencia_cpgt_terrestre_cabotagem()
                         aba_act_cpgt.cell(row=linha_cpgt, column=8).value = self.centro
                         aba_act_cpgt.cell(row=linha_cpgt, column=9).value = combust
                         aba_act_cpgt.cell(row=linha_cpgt, column=10).value = fili
@@ -76,8 +79,8 @@ class Plancpgt:
                         aba_act_cpgt.cell(row=linha_cpgt, column=15).value = "M20"
                         aba_act_cpgt.cell(row=linha_cpgt, column=16).value = "01.08.2020"
                         aba_act_cpgt.cell(row=linha_cpgt, column=17).value = "31.12.9999"
-                        aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.tab()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.lista_distr()[0]
+                        aba_act_cpgt.cell(row=linha_cpgt, column=18).value = Informationconstant().tab()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = Listdistribuidora().lista_distr()[0]
                         linha_cpgt += 1
 
 
@@ -96,11 +99,13 @@ class Cliente:
 
 class Listdistribuidora:
     def lista_distr(self):
-        distri = [Cliente(), self.taxas, self.cpgt_terrestre(), self.cpgt_cabotagem(), self.banco]
+        distri = [Cliente().cliente_1(), taxas, Informationconstant().cpgt_terrestre(),
+                  Informationconstant().cpgt_cabotagem(), Listbancos().banco_1()]
         return distri
 
 
 class Listbancos:
+    @staticmethod
     def banco_1():
         flag = True
         while flag:
@@ -135,6 +140,89 @@ class Informationconstant:
     def tab():
         tabela = 655
         return tabela
+
+    def cpgt_terrestre(self):
+        return 'ZD' + self.cpgt
+
+    def cpgt_cabotagem(self):
+        return 'ZC' + self.cpgt
+
+    def cpgt_terrestre_cabotagem(self):
+        if self.centro == 1401 or self.centro == 1211:
+            return self.cpgt_cabotagem()
+        else:
+            return self.cpgt_terrestre()
+
+    def abrir_arq(self):
+        return self.wb and self.wb_cpgt
+
+    def salvar_arq(self):
+        self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')
+        self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
+
+
+class Carencia:
+    @staticmethod
+    def carencia_cpgt_terrestre():
+        condicoes_cpgt = Listdistribuidora().lista_distr()[2]
+        list_separador = condicoes_cpgt.split('D')
+        valor_separado = list_separador[1]
+        resultado = int(valor_separado) - 1
+        return resultado
+
+    @staticmethod
+    def carencia_cpgt_cabotagem():
+        condicoes_cpgt_cabotagem = Listdistribuidora().lista_distr()[3]
+        list_separador_cabotagem = condicoes_cpgt_cabotagem.split('C')
+        valor_separado_cabotagem = list_separador_cabotagem[1]
+        resultado_cabotagem = int(valor_separado_cabotagem) - 4
+        return resultado_cabotagem
+
+    def carencia_cpgt_terrestre_cabotagem(self):
+        if self.centro == 1401 or self.centro == 1211:  # 1401 - Paranaguá; 1211 - Santos
+            return self.carencia_cpgt_cabotagem()
+        else:
+            return self.carencia_cpgt_terrestre()
+
+
+class Email:
+    @staticmethod
+    def enviar_email():
+        setlocale(LC_ALL, 'pt_BR.utf-8')
+        pergunta_envio = input('Você deseja enviar o email agora?\n'
+                               '(Pressione "enter" para enviar o email.\n'
+                               'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
+
+        if pergunta_envio == '':
+            data_visivel = assists.data_email().title()
+
+            smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
+            smtpobj.starttls()
+            fro = 'j@.com'
+            to = 'j@com.br'
+
+            smtpobj.login(fro, 'yevq kufu ejsx awpz')
+            msg = EmailMessage()
+            msg['From'] = fro
+            msg['To'] = to
+            msg['Subject'] = f'Taxas Risco Sacado {data_visivel}.'
+
+            msg.set_content(
+                f'Prezados\n\nSegue abaixo a planilha com as taxas dos clientes que utilizarão'
+                f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.')
+            paths = ['risco_sacado(' + assists.data_cadastro() + ').xlsx',
+                     'Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx']
+            for path in paths:
+                caminho = open(path, 'rb')
+                arq_data = caminho.read()
+                arq_name = caminho.name
+                msg.add_attachment(arq_data, maintype='application', subtype='octet-stream', filename=arq_name)
+
+            smtpobj.send_message(msg)
+            smtpobj.quit()
+            print('Email enviado!!!!')
+        elif pergunta_envio == "f":
+            pass
 
 
 #class Interface:
