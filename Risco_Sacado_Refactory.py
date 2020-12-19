@@ -98,7 +98,8 @@ class Cliente:
 
 
 class Listdistribuidora:
-    def lista_distr(self):
+    @staticmethod
+    def lista_distr(taxas):
         distri = [Cliente().cliente_1(), taxas, Informationconstant().cpgt_terrestre(),
                   Informationconstant().cpgt_cabotagem(), Listbancos().banco_1()]
         return distri
@@ -185,6 +186,52 @@ class Carencia:
             return self.carencia_cpgt_terrestre()
 
 
+class Distribuidoras:
+    def distri_cliente_polo_produto(self):
+        self.distribuidoras = {'Alesat': {8187: {1700: ['PB.620', 'PB.6DH', 'PB.658']},  # 1700 - Canoas
+                                          1740: {1400: ['PB.620', 'PB.6DH', 'PB.658']},  # 1400 - Araucária
+                                          4473: {1200: ['PB.620', 'PB.6DH', 'PB.658']},  # 1250 - Betim
+                                          21699: {1100: ['PB.620', 'PB.6DH', 'PB.658']},  # 1200 - Cubatão
+                                          4919: {1360: ['PB.6DH'], 1950: ['PB.6DH']},  # 1100 - Paulinia
+                                          8429: {1101: ['PB.620', 'PB.6DH', 'PB.658']},  # 1101 - Ribeirão Preto
+                                          # 1733: {1110: ['PB.620', 'PB.6DH', 'PB.658']},       # 1360 - Ipojuca
+                                          # 1732: {1111: ['PB.620', 'PB.6DH', 'PB.658']},       # 1110 - Uberaba
+                                          1736: {1120: ['PB.620', 'PB.6DH', 'PB.658']},  # 1111 - Uberlândia
+                                          6833: {1130: ['PB.620', 'PB.6DH', 'PB.658']},  # 1120 - Senador Canedo
+                                          6515: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},  # 1130 - Brasília
+                               'Ciapetro': {455: {1400: ['PB.620', 'PB.6DH', 'PB.658']},  # 1211 - Santos
+                                            18314: {1700: ['PB.620', 'PB.6DH', 'PB.658']},  # 1401 - Paranaguá
+                                            4150: {1100: ['PB.620', 'PB.6DH', 'PB.658']},  # 1110 - Uberaba*
+                                            20497: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},  # 1111 - Uberlandia*
+                               'Ipp': {47: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
+                                       2093: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
+                                       2086: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
+                                       2102: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
+                                       15629: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
+                               'Mime': {17621: {1700: ['PB.620', 'PB.6DH', 'PB.658']}},
+                               'Petrox': {5142: {1360: ['PB.6DH'], 1950: ['PB.6DH']}},
+                               'Rodoil': {7008: {1700: ['PB.6DH', 'PB.658']},
+                                          6815: {1400: ['PB.6DH', 'PB.658']}},
+                               'Raizen': {49: {1700: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          2163: {1400: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          2153: {1200: ['PB.620', 'PB.6DH', 'PB.658'], 1210: ['PB.620', 'PB.6DH']},
+                                          2150: {1100: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          2180: {1360: ['PB.6DH'], 1950: ['PB.6DH']},
+                                          2155: {1101: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          # 18449: {1110: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          # 2186: {1111: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          # 2168: {1120: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          2157: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
+                                          2144: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},
+                               'Rejaile': {19364: {1250: ['PB.6DH', 'PB.658']},
+                                           21184: {1700: ['PB.6DH', 'PB.658']},
+                                           156: {1400: ['PB.6DH', 'PB.658']}},
+                               'Total': {21973: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
+                                         22176: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
+                                         21997: {1101: ['PB.620', 'PB.6DH', 'PB.658']}}}
+        return self.distribuidoras
+
+
 class Email:
     @staticmethod
     def enviar_email():
@@ -225,5 +272,4 @@ class Email:
             pass
 
 
-#class Interface:
-
+# class Interface:
