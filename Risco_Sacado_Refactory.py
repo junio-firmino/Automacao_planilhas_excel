@@ -8,7 +8,7 @@ import assists
 
 
 class Managerriscosacado:
-    def __init__(self):
+    def __init__(self, cpgt):
         print('Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
         self.cliente = 'utf-8'
         self.taxas = 0
@@ -17,7 +17,7 @@ class Managerriscosacado:
         self.centro = int
         self.distribuidoras = None
         self.banco = None
-        self.cpgt = None
+        self.cpgt = cpgt
         self.plan_risco_sacado = None
         self.plan_cpgt = None
 
@@ -33,23 +33,25 @@ class Managerriscosacado:
 class Planriscosacado:
     def plan_taxes(self):
         aba_act = self.wb.active
-        self.lista_distr()
+        Listdistribuidora().lista_distr(taxas)
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
-            info = self.distri_cliente_polo_produto()[self.lista_distr()[0]]
+            info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora.lista_distr(taxas)[0]]
             for fili, info_1 in info.items():
                 for self.centro, prod in info_1.items():
                     for combust in prod:
                         aba_act.cell(row=linha_plan, column=1).value = fili  # Filial
-                        aba_act.cell(row=linha_plan, column=2).value = self.cpgt_terrestre_cabotagem()  # CPGT
+                        aba_act.cell(row=linha_plan, column=2).value = Carencia().carencia_cpgt_cabotagem()  # CPGT
                         aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
                         aba_act.cell(row=linha_plan, column=4).value = self.centro  # Centro
-                        aba_act.cell(row=linha_plan, column=6).value = self.lista_distr()[1] + ' a.m.'  # Taxas
+                        aba_act.cell(row=linha_plan,
+                                     column=6).value = Listdistribuidora().lista_distr(taxas)[1] + ' a.m.'  # Taxas
                         aba_act.cell(row=linha_plan, column=7).value = "%"
                         aba_act.cell(row=linha_plan, column=10).value = "A"
                         aba_act.cell(row=linha_plan, column=12).value = assists.data_inicio()  # Data inicial
                         aba_act.cell(row=linha_plan,
                                      column=13).value = assists.data_last_day_risco_sacado()  # Data final
-                        aba_act.cell(row=linha_plan, column=14).value = self.lista_distr()[0]  # Cliente
+                        aba_act.cell(row=linha_plan,
+                                     column=14).value = Listdistribuidora().lista_distr(taxas)[0]  # Cliente
                         aba_act.cell(row=linha_plan, column=15).value = Informationconstant.encargos()  # Encargos
                         aba_act.cell(row=linha_plan, column=16).value = Listbancos()  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
@@ -59,9 +61,9 @@ class Planriscosacado:
 class Plancpgt:
     def plan_cpgt(self):
         aba_act_cpgt = self.wb_cpgt.active
-        self.lista_distr()
+        Listdistribuidora().lista_distr(taxas)
         for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
-            info = self.distri_cliente_polo_produto()[self.lista_distr()[0]]
+            info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora.lista_distr(taxas)[0]]
             for fili, info_1 in info.items():
                 for self.centro, prod in info_1.items():
                     for combust in prod:
@@ -69,7 +71,8 @@ class Plancpgt:
                         aba_act_cpgt.cell(row=linha_cpgt, column=2).value = Informationconstant().claros()
                         aba_act_cpgt.cell(row=linha_cpgt, column=3).value = Carencia().carencia_cpgt_cabotagem()
                         aba_act_cpgt.cell(row=linha_cpgt, column=4).value = Informationconstant().orgv()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=7).value = Carencia().carencia_cpgt_terrestre_cabotagem()
+                        aba_act_cpgt.cell(row=linha_cpgt,
+                                          column=7).value = Carencia().carencia_cpgt_terrestre_cabotagem()
                         aba_act_cpgt.cell(row=linha_cpgt, column=8).value = self.centro
                         aba_act_cpgt.cell(row=linha_cpgt, column=9).value = combust
                         aba_act_cpgt.cell(row=linha_cpgt, column=10).value = fili
@@ -80,7 +83,7 @@ class Plancpgt:
                         aba_act_cpgt.cell(row=linha_cpgt, column=16).value = "01.08.2020"
                         aba_act_cpgt.cell(row=linha_cpgt, column=17).value = "31.12.9999"
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = Informationconstant().tab()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = Listdistribuidora().lista_distr()[0]
+                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = Listdistribuidora().lista_distr(taxas)[1]
                         linha_cpgt += 1
 
 
@@ -143,7 +146,8 @@ class Informationconstant:
         return tabela
 
     def cpgt_terrestre(self):
-        return 'ZD' + self.cpgt
+        Managerriscosacado(cpgt)
+        return 'ZD' + cpgt
 
     def cpgt_cabotagem(self):
         return 'ZC' + self.cpgt
@@ -165,7 +169,7 @@ class Informationconstant:
 class Carencia:
     @staticmethod
     def carencia_cpgt_terrestre():
-        condicoes_cpgt = Listdistribuidora().lista_distr()[2]
+        condicoes_cpgt = Listdistribuidora().lista_distr(taxas)[2]
         list_separador = condicoes_cpgt.split('D')
         valor_separado = list_separador[1]
         resultado = int(valor_separado) - 1
@@ -173,7 +177,7 @@ class Carencia:
 
     @staticmethod
     def carencia_cpgt_cabotagem():
-        condicoes_cpgt_cabotagem = Listdistribuidora().lista_distr()[3]
+        condicoes_cpgt_cabotagem = Listdistribuidora().lista_distr(taxas)[3]
         list_separador_cabotagem = condicoes_cpgt_cabotagem.split('C')
         valor_separado_cabotagem = list_separador_cabotagem[1]
         resultado_cabotagem = int(valor_separado_cabotagem) - 4
@@ -187,6 +191,9 @@ class Carencia:
 
 
 class Distribuidoras:
+    def __init__(self):
+        self.distribuidoras = dict
+
     def distri_cliente_polo_produto(self):
         self.distribuidoras = {'Alesat': {8187: {1700: ['PB.620', 'PB.6DH', 'PB.658']},  # 1700 - Canoas
                                           1740: {1400: ['PB.620', 'PB.6DH', 'PB.658']},  # 1400 - Araucária
@@ -272,4 +279,6 @@ class Email:
             pass
 
 
-# class Interface:
+class Interface:
+    def __init__(self):
+        
