@@ -6,14 +6,11 @@ import assists
 
 # I will refactory This project, for do it I chose the design pattern Facade.
 
-
 class Managerriscosacado:
     def __init__(self, cpgt):
         print('Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
         self.cliente = 'utf-8'
         self.taxas = 0
-        self.wb = load_workbook(filename='Risco Sacado - TMP(preço).xlsx')
-        self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
         self.centro = int
         self.distribuidoras = None
         self.banco = None
@@ -32,7 +29,7 @@ class Managerriscosacado:
 
 class Planriscosacado:
     def plan_taxes(self):
-        aba_act = self.wb.active
+        aba_act = Loadworkbook().wb.active
         Listdistribuidora().lista_distr(taxas)
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora.lista_distr(taxas)[0]]
@@ -60,7 +57,7 @@ class Planriscosacado:
 
 class Plancpgt:
     def plan_cpgt(self):
-        aba_act_cpgt = self.wb_cpgt.active
+        aba_act_cpgt = Loadworkbook().wb_cpgt.active
         Listdistribuidora().lista_distr(taxas)
         for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora.lista_distr(taxas)[0]]
@@ -122,6 +119,27 @@ class Listbancos:
                 print('Essa escolha não é possível, tente novamente!.')
 
 
+class Loadworkbook:
+    def __init__(self):
+        self.wb = None
+        self.wb_cpgt = None
+
+    def load(self):
+        self.wb = load_workbook(filename='Risco Sacado - TMP(preço).xlsx')
+        self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
+
+
+class Openworkbook(Loadworkbook):
+    def open(self):
+        return self.wb and self.wb_cpgt
+
+
+class Saveworbook(Loadworkbook):
+    def save(self):
+        self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')
+        self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
+
+
 class Informationconstant:
 
     @staticmethod
@@ -146,7 +164,6 @@ class Informationconstant:
         return tabela
 
     def cpgt_terrestre(self):
-        Managerriscosacado(cpgt)
         return 'ZD' + cpgt
 
     def cpgt_cabotagem(self):
@@ -157,13 +174,6 @@ class Informationconstant:
             return self.cpgt_cabotagem()
         else:
             return self.cpgt_terrestre()
-
-    def abrir_arq(self):
-        return self.wb and self.wb_cpgt
-
-    def salvar_arq(self):
-        self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')
-        self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
 
 
 class Carencia:
@@ -281,4 +291,4 @@ class Email:
 
 class Interface:
     def __init__(self):
-        
+
