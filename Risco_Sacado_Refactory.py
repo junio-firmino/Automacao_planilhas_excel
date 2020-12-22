@@ -31,6 +31,7 @@ class Planriscosacado:
     def plan_taxes(self):
         aba_act = Loadworkbook().wb.active
         Listdistribuidora().lista_distr()
+        Openworkbook().open()
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora.lista_distr()[0]]
             for fili, info_1 in info.items():
@@ -53,12 +54,16 @@ class Planriscosacado:
                         aba_act.cell(row=linha_plan, column=16).value = Listbancos()  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
                         linha_plan += 1
+        Saveworbook().save()
+        Closeworbook().close()
 
 
 class Plancpgt:
-    def plan_cpgt(self):
+    @staticmethod
+    def plan_cpgt():
         aba_act_cpgt = Loadworkbook().wb_cpgt.active
         Listdistribuidora().lista_distr()
+        Openworkbook().open()
         for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora.lista_distr()[0]]
             for fili, info_1 in info.items():
@@ -70,7 +75,7 @@ class Plancpgt:
                         aba_act_cpgt.cell(row=linha_cpgt, column=4).value = Informationconstant().orgv()
                         aba_act_cpgt.cell(row=linha_cpgt,
                                           column=7).value = Carencia().carencia_cpgt_terrestre_cabotagem()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=8).value = self.centro
+                        aba_act_cpgt.cell(row=linha_cpgt, column=8).value = centro
                         aba_act_cpgt.cell(row=linha_cpgt, column=9).value = combust
                         aba_act_cpgt.cell(row=linha_cpgt, column=10).value = fili
                         aba_act_cpgt.cell(row=linha_cpgt, column=12).value = 1
@@ -82,6 +87,8 @@ class Plancpgt:
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = Informationconstant().tab()
                         aba_act_cpgt.cell(row=linha_cpgt, column=19).value = Listdistribuidora().lista_distr()[1]
                         linha_cpgt += 1
+        Saveworbook().save()
+        Closeworbook().close()
 
 
 class Cliente:
@@ -100,7 +107,7 @@ class Cliente:
 class Listdistribuidora:
     @staticmethod
     def lista_distr():
-        distri = [Cliente().cliente_1(), Taxas().taxas, Cpgt().cpgt_terrestre(),
+        distri = [Cliente().cliente_1(), Taxas().answertaxas(), Cpgt().cpgt_terrestre(),
                   Cpgt().cpgt_cabotagem(), Listbancos().banco_1()]
         return distri
 
@@ -128,12 +135,25 @@ class Loadworkbook:
 class Openworkbook(Loadworkbook):
     def open(self):
         return self.wb and self.wb_cpgt
+        # if Planriscosacado():
+        #     return self.wb
+        # else:
+        #     return self.wb_cpgt
 
 
 class Saveworbook(Loadworkbook):
     def save(self):
-        self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')
-        self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
+        return self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx') \
+               and self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
+        # if Planriscosacado():
+        #     return self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')
+        # else:
+        #     return self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
+
+
+class Closeworbook(Loadworkbook):
+    def close(self):
+        return self.wb.close() and self.wb_cpgt.close()
 
 
 class Informationconstant:
@@ -158,14 +178,20 @@ class Informationconstant:
         tabela = 655
         return tabela
 
+
 class Cpgt:
-    cpgt = input('Qual é a taxa? ')
+    def __init__(self):
+        self.cpgt = str
+
+    def answercpgt(self):
+        self.cpgt = input('Qual é a condição de pagamento? ')
+        return self.cpgt
 
     def cpgt_terrestre(self):
-        return 'ZD' + cpgt
+        return 'ZD' + self.answercpgt()
 
     def cpgt_cabotagem(self):
-        return 'ZC' + cpgt
+        return 'ZC' + self.answercpgt()
 
     def cpgt_terrestre_cabotagem(self):
         # if  == 1401 or self.centro == 1211:
@@ -176,11 +202,15 @@ class Cpgt:
 
 class Taxas:
     def __init__(self):
+        self.taxas = float
+
+    def answertaxas(self):
         self.taxas = input('Qual a taxa? ')
+
 
 class Carencia:
     @staticmethod
-    def carencia_cpgt_terrestre():
+    def carencia_cpgt_terrestre():  # Rever a possibilidade de utilizar a classe e não a lista
         condicoes_cpgt = Listdistribuidora().lista_distr()[2]
         list_separador = condicoes_cpgt.split('D')
         valor_separado = list_separador[1]
@@ -188,7 +218,7 @@ class Carencia:
         return resultado
 
     @staticmethod
-    def carencia_cpgt_cabotagem():
+    def carencia_cpgt_cabotagem():  # Rever a possibilidade de utilizar a classe e não a lista
         condicoes_cpgt_cabotagem = Listdistribuidora().lista_distr()[3]
         list_separador_cabotagem = condicoes_cpgt_cabotagem.split('C')
         valor_separado_cabotagem = list_separador_cabotagem[1]
