@@ -29,11 +29,11 @@ class Managerriscosacado:
 
 class Planriscosacado:
     def plan_taxes(self):
-        aba_act = Loadworkbook().wb.active
-        Listdistribuidora().lista_distr()
-        Openworkbook().open()
+        aba_act = Openworkbook().open_cpgt().active
+        # Listdistribuidora().lista_distr()
+        # Openworkbook().open()
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
-            info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora.lista_distr()[0]]
+            info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora().lista_distr()[0]]
             for fili, info_1 in info.items():
                 for self.centro, prod in info_1.items():
                     for combust in prod:
@@ -61,11 +61,11 @@ class Planriscosacado:
 class Plancpgt:
     @staticmethod
     def plan_cpgt():
-        aba_act_cpgt = Loadworkbook().wb_cpgt.active
-        Listdistribuidora().lista_distr()
-        Openworkbook().open()
+        aba_act_cpgt = Openworkbook().open_wb_cpgt().active
+        # Listdistribuidora().lista_distr()
+        # Openworkbook().open()
         for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
-            info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora.lista_distr()[0]]
+            info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora().lista_distr()[0]]
             for fili, info_1 in info.items():
                 for centro, prod in info_1.items():
                     for combust in prod:
@@ -133,12 +133,11 @@ class Loadworkbook:
 
 
 class Openworkbook(Loadworkbook):
-    def open(self):
-        return self.wb and self.wb_cpgt
-        # if Planriscosacado():
-        #     return self.wb
-        # else:
-        #     return self.wb_cpgt
+    def open_cpgt(self):
+        return self.wb
+
+    def open_wb_cpgt(self):
+        return self.wb_cpgt
 
 
 class Saveworbook(Loadworkbook):
@@ -206,12 +205,13 @@ class Taxas:
 
     def answertaxas(self):
         self.taxas = input('Qual a taxa? ')
+        return self.taxas
 
 
 class Carencia:
     @staticmethod
     def carencia_cpgt_terrestre():  # Rever a possibilidade de utilizar a classe e não a lista
-        condicoes_cpgt = Listdistribuidora().lista_distr()[2]
+        condicoes_cpgt = Listdistribuidora().lista_distr()[2]   # Terrestre
         list_separador = condicoes_cpgt.split('D')
         valor_separado = list_separador[1]
         resultado = int(valor_separado) - 1
@@ -219,7 +219,7 @@ class Carencia:
 
     @staticmethod
     def carencia_cpgt_cabotagem():  # Rever a possibilidade de utilizar a classe e não a lista
-        condicoes_cpgt_cabotagem = Listdistribuidora().lista_distr()[3]
+        condicoes_cpgt_cabotagem = Listdistribuidora().lista_distr()[3]    # Cabotagem
         list_separador_cabotagem = condicoes_cpgt_cabotagem.split('C')
         valor_separado_cabotagem = list_separador_cabotagem[1]
         resultado_cabotagem = int(valor_separado_cabotagem) - 4
@@ -322,6 +322,13 @@ class Email:
 
 
 class Interface:
+    def __init__(self):
+        # Openworkbook().open()
+        Cliente().cliente_1()
+        Taxas().answertaxas()
+        Cpgt().answercpgt()
+        Listbancos().banco_1()
+
     @staticmethod
     def askinterface():
         me = Managerriscosacado()
