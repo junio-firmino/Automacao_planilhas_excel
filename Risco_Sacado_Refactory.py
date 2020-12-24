@@ -10,11 +10,6 @@ import assists
 class Managerriscosacado:
     def __init__(self):
         print('Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
-        self.cliente = 'utf-8'
-        self.taxas = 0
-        self.centro = int
-        self.distribuidoras = None
-        self.banco = None
         self.plan_risco_sacado = None
         self.plan_cpgt = None
 
@@ -30,8 +25,6 @@ class Managerriscosacado:
 class Planriscosacado:
     def plan_taxes(self):
         aba_act = Openworkbook().open_cpgt().active
-        # Listdistribuidora().lista_distr()
-        # Openworkbook().open()
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora().lista_distr()[0]]
             for fili, info_1 in info.items():
@@ -106,7 +99,7 @@ class Cliente:
 
 class Listdistribuidora:
     @staticmethod
-    def lista_distr():
+    def lista_distr():      # Avaliar a opção de usar *arg and **karg para a persistencia dos dados
         distri = [Cliente().cliente_1(), Taxas().answertaxas(), Cpgt().cpgt_terrestre(),
                   Cpgt().cpgt_cabotagem(), Listbancos().banco_1()]
         return distri
