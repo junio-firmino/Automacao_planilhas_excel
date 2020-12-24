@@ -144,10 +144,6 @@ class Saveworbook(Loadworkbook):
     def save(self):
         return self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx') \
                and self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
-        # if Planriscosacado():
-        #     return self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')
-        # else:
-        #     return self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
 
 
 class Closeworbook(Loadworkbook):
@@ -193,10 +189,7 @@ class Cpgt:
         return 'ZC' + self.answercpgt()
 
     def cpgt_terrestre_cabotagem(self):
-        # if  == 1401 or self.centro == 1211:
         return self.cpgt_cabotagem()
-        # else:
-        #     return self.cpgt_terrestre()
 
 
 class Taxas:
@@ -210,7 +203,7 @@ class Taxas:
 
 class Carencia:
     @staticmethod
-    def carencia_cpgt_terrestre():  # Rever a possibilidade de utilizar a classe e não a lista
+    def carencia_cpgt_terrestre():
         condicoes_cpgt = Listdistribuidora().lista_distr()[2]   # Terrestre
         list_separador = condicoes_cpgt.split('D')
         valor_separado = list_separador[1]
@@ -218,7 +211,7 @@ class Carencia:
         return resultado
 
     @staticmethod
-    def carencia_cpgt_cabotagem():  # Rever a possibilidade de utilizar a classe e não a lista
+    def carencia_cpgt_cabotagem():
         condicoes_cpgt_cabotagem = Listdistribuidora().lista_distr()[3]    # Cabotagem
         list_separador_cabotagem = condicoes_cpgt_cabotagem.split('C')
         valor_separado_cabotagem = list_separador_cabotagem[1]
@@ -226,10 +219,7 @@ class Carencia:
         return resultado_cabotagem
 
     def carencia_cpgt_terrestre_cabotagem(self):
-        # if self.centro == 1401 or self.centro == 1211:  # 1401 - Paranaguá; 1211 - Santos
         return self.carencia_cpgt_cabotagem()
-        # else:
-        #     return self.carencia_cpgt_terrestre()
 
 
 class Distribuidoras:
@@ -332,7 +322,7 @@ class Interface:
     @staticmethod
     def askinterface():
         me = Managerriscosacado()
-        return me.create_plan_cpgt() and me.create_plan_risco_sacado()
+        return me.create_plan_risco_sacado() and me.create_plan_cpgt()
 
 
 if __name__ == '__main__':
