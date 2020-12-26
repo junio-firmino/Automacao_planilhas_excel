@@ -99,9 +99,13 @@ class Cliente:
 
 class Listdistribuidora:
     @staticmethod
-    def lista_distr():      # Avaliar a opção de usar *arg and **karg para a persistencia dos dados
-        distri = [Cliente().cliente_1(), Taxas().answertaxas(), Cpgt().cpgt_terrestre(),
-                  Cpgt().cpgt_cabotagem(), Listbancos().banco_1()]
+    def lista_distr(**kwargs):      # Avaliar a opção de usar *arg and **karg para a persistencia dos dados
+        client = kwargs.get(Cliente().cliente_1())
+        tax = kwargs.get(Taxas().answertaxas())
+        condicao_terr = kwargs.get(Cpgt().cpgt_terrestre())
+        condicao_cabo = kwargs.get(Cpgt().cpgt_cabotagem())
+        bank = kwargs.get(Listbancos().banco_1())
+        distri = [client, tax, condicao_terr, condicao_cabo, bank]
         return distri
 
 
