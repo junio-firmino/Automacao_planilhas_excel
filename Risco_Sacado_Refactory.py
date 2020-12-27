@@ -89,17 +89,46 @@ class Plancpgt:
 
 class Cliente:
     @staticmethod
-    def cliente_1(cliente):
+    def cliente():
         flag_cli = True
         while flag_cli:
             cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen', 'Rejaile', 'Total']
-            #ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
-            if cliente in cliente_distr:
-                return cliente
+            ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
+            if ask_cliente_distr in cliente_distr:
+                return ask_cliente_distr
             else:
-                flag_cli = False
-                print('Empresa não participante do Risco Sacado, tente outra empresa!.')
+               print('Empresa não participante do Risco Sacado, tente outra empresa!.')
 
+    @staticmethod
+    def cliente_1(cliente):
+        return cliente
+
+
+class Cpgt:
+    def __init__(self):
+        self.cpgt = str
+
+    def answercpgt(self):
+        self.cpgt = input('Qual é a condição de pagamento? ')
+        return self.cpgt
+
+    def cpgt_terrestre(self):
+        return 'ZD' + self.answercpgt()
+
+    def cpgt_cabotagem(self):
+        return 'ZC' + self.answercpgt()
+
+    def cpgt_terrestre_cabotagem(self):
+        return self.cpgt_cabotagem()
+
+
+class Taxas:
+    def __init__(self):
+        self.taxas = float
+
+    def answertaxas(self):
+        self.taxas = input('Qual a taxa? ')
+        return self.taxas
 
 # TODO CLASSE LISTA DE CONSUMO
 # class Listdistribuidora:
@@ -114,20 +143,22 @@ class Cliente:
 #         return distri
 
 
-
 class Listbancos:
     @staticmethod
-    def banco_1():
+    def banco():
         flag = True
         while flag:
             bancos = {'s': 'Santander', 'b': 'Bradesco', 'c': 'Citibank'}
             banco_marca = input('Escolha o banco?\n("s" para Santander, "b" para Bradesco e "c" para Citibank)'
-                                ' + "enter" -->')
+                          ' + "enter" -->')
             if banco_marca in bancos:
                 return bancos[banco_marca]
             else:
                 print('Essa escolha não é possível, tente novamente!.')
 
+    @staticmethod
+    def banco_1(banco):
+        return banco
 
 
 class Loadworkbook:
@@ -181,31 +212,6 @@ class Informationconstant:
         return tabela
 
 
-class Cpgt:
-    def __init__(self):
-        self.cpgt = str
-
-    def answercpgt(self):
-        self.cpgt = input('Qual é a condição de pagamento? ')
-        return self.cpgt
-
-    def cpgt_terrestre(self):
-        return 'ZD' + self.answercpgt()
-
-    def cpgt_cabotagem(self):
-        return 'ZC' + self.answercpgt()
-
-    def cpgt_terrestre_cabotagem(self):
-        return self.cpgt_cabotagem()
-
-
-class Taxas:
-    def __init__(self):
-        self.taxas = float
-
-    def answertaxas(self):
-        self.taxas = input('Qual a taxa? ')
-        return self.taxas
 
 
 class Carencia:
@@ -320,7 +326,7 @@ class Email:
 
 class Interface:
     # def __init__(self):
-    #     # Openworkbook().open()
+    #     Openworkbook().open()
     #     Cliente().cliente_1()
     #     Taxas().answertaxas()
     #     Cpgt().answercpgt()
@@ -333,9 +339,17 @@ class Interface:
 
 
 if __name__ == '__main__':
-    cliente = input('Qual cliente você irá cadastrar? ').title()
+    # b = Listbancos()
+    # b1 = b.banco()
+    # b2 = b.banco_1(banco=b1)
+    # print(b1)
+    # print(b2)
+
+   # cliente = input('Qual cliente você irá cadastrar? ').title()
     cli = Cliente()
-    cliente_p = cli.cliente_1(cliente)
+    cliente_p = cli.cliente()
+    cli1 = cli.cliente_1(cliente=cliente_p)
+    print(cli1)
     print(cliente_p)
 
     # inter = Interface()
