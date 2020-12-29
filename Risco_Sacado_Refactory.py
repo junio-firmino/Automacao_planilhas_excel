@@ -4,6 +4,7 @@ from email.message import EmailMessage
 from locale import setlocale, LC_ALL
 import assists
 
+
 # I will refactory This project, for do it I chose the design pattern Facade.
 
 
@@ -26,9 +27,10 @@ class Managerriscosacado:
 class Planriscosacado:
     @staticmethod
     def plan_taxes():
+        x=Cliente()
         aba_act = Openworkbook().open_cpgt().active
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
-            info = Distribuidoras().distri_cliente_polo_produto()[Cliente().cliente_1(cliente)]
+            info = Distribuidoras().distri_cliente_polo_produto()[Cliente().cliente_1(cliente=Cliente().cliente())]
             for fili, info_1 in info.items():
                 for centro, prod in info_1.items():
                     for combust in prod:
@@ -37,14 +39,14 @@ class Planriscosacado:
                         aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
                         aba_act.cell(row=linha_plan, column=4).value = centro  # Centro
                         aba_act.cell(row=linha_plan,
-                                     column=6).value = Listdistribuidora().lista_distr()[1] + ' a.m.'  # Taxas
+                                     column=6).value = Taxas().answertaxas() + ' a.m.'  # Taxas
                         aba_act.cell(row=linha_plan, column=7).value = "%"
                         aba_act.cell(row=linha_plan, column=10).value = "A"
                         aba_act.cell(row=linha_plan, column=12).value = assists.data_inicio()  # Data inicial
                         aba_act.cell(row=linha_plan,
                                      column=13).value = assists.data_last_day_risco_sacado()  # Data final
                         aba_act.cell(row=linha_plan,
-                                     column=14).value = Listdistribuidora().lista_distr()[0]  # Cliente
+                                     column=14).value = Cliente().cliente_1(cliente=Cliente().cliente())  # Cliente
                         aba_act.cell(row=linha_plan, column=15).value = Informationconstant.encargos()  # Encargos
                         aba_act.cell(row=linha_plan, column=16).value = Listbancos()  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
@@ -61,7 +63,7 @@ class Plancpgt:
         # Listdistribuidora().lista_distr()
         # Openworkbook().open()
         for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
-            info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora().lista_distr()[0]]  #problem nesta parte
+            info = Distribuidoras().distri_cliente_polo_produto()[Cliente().cliente_1(cliente=Cliente().cliente())]
             for fili, info_1 in info.items():
                 for centro, prod in info_1.items():
                     for combust in prod:
@@ -81,7 +83,7 @@ class Plancpgt:
                         aba_act_cpgt.cell(row=linha_cpgt, column=16).value = "01.08.2020"
                         aba_act_cpgt.cell(row=linha_cpgt, column=17).value = "31.12.9999"
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = Informationconstant().tab()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = Listdistribuidora().lista_distr()[1]
+                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = Taxas().answertaxas()
                         linha_cpgt += 1
         Saveworbook().save()
         Closeworbook().close()
@@ -97,7 +99,7 @@ class Cliente:
             if ask_cliente_distr in cliente_distr:
                 return ask_cliente_distr
             else:
-               print('Empresa não participante do Risco Sacado, tente outra empresa!.')
+                print('Empresa não participante do Risco Sacado, tente outra empresa!.')
 
     @staticmethod
     def cliente_1(cliente):
@@ -111,6 +113,10 @@ class Cpgt:
     def answercpgt(self):
         self.cpgt = input('Qual é a condição de pagamento? ')
         return self.cpgt
+
+    @staticmethod
+    def mainanswercpgt(resposta):
+        return resposta
 
     def cpgt_terrestre(self):
         return 'ZD' + self.answercpgt()
@@ -129,6 +135,7 @@ class Taxas:
     def answertaxas(self):
         self.taxas = input('Qual a taxa? ')
         return self.taxas
+
 
 # TODO CLASSE LISTA DE CONSUMO
 # class Listdistribuidora:
@@ -150,7 +157,7 @@ class Listbancos:
         while flag:
             bancos = {'s': 'Santander', 'b': 'Bradesco', 'c': 'Citibank'}
             banco_marca = input('Escolha o banco?\n("s" para Santander, "b" para Bradesco e "c" para Citibank)'
-                          ' + "enter" -->')
+                                ' + "enter" -->')
             if banco_marca in bancos:
                 return bancos[banco_marca]
             else:
@@ -167,14 +174,12 @@ class Loadworkbook:
         self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
 
 
-
 class Openworkbook(Loadworkbook):
     def open_cpgt(self):
         return self.wb
 
     def open_wb_cpgt(self):
         return self.wb_cpgt
-
 
 
 class Saveworbook(Loadworkbook):
@@ -186,7 +191,6 @@ class Saveworbook(Loadworkbook):
 class Closeworbook(Loadworkbook):
     def close(self):
         return self.wb.close() and self.wb_cpgt.close()
-
 
 
 class Informationconstant:
@@ -212,12 +216,10 @@ class Informationconstant:
         return tabela
 
 
-
-
 class Carencia:
     @staticmethod
     def carencia_cpgt_terrestre():
-        condicoes_cpgt = Cpgt().cpgt_terrestre()   # Terrestre
+        condicoes_cpgt = Cpgt().cpgt_terrestre()  # Terrestre
         list_separador = condicoes_cpgt.split('D')
         valor_separado = list_separador[1]
         resultado = int(valor_separado) - 1
@@ -225,7 +227,7 @@ class Carencia:
 
     @staticmethod
     def carencia_cpgt_cabotagem():
-        condicoes_cpgt_cabotagem = Cpgt().cpgt_cabotagem()    # Cabotagem
+        condicoes_cpgt_cabotagem = Cpgt().cpgt_cabotagem()  # Cabotagem
         list_separador_cabotagem = condicoes_cpgt_cabotagem.split('C')
         valor_separado_cabotagem = list_separador_cabotagem[1]
         resultado_cabotagem = int(valor_separado_cabotagem) - 4
@@ -325,12 +327,12 @@ class Email:
 
 
 class Interface:
-    # def __init__(self):
-    #     Openworkbook().open()
-    #     Cliente().cliente_1()
-    #     Taxas().answertaxas()
-    #     Cpgt().answercpgt()
-    #     Listbancos().banco_1()
+    def __init__(self):
+        # Openworkbook().open()
+        Cliente().cliente_1(cliente=Cliente().cliente())
+        Taxas().answertaxas()
+        Cpgt().answercpgt()
+        Listbancos().banco_1(banco=Listbancos().banco())
 
     @staticmethod
     def askinterface():
@@ -345,12 +347,33 @@ if __name__ == '__main__':
     # print(b1)
     # print(b2)
 
-   # cliente = input('Qual cliente você irá cadastrar? ').title()
-    cli = Cliente()
-    cliente_p = cli.cliente()
-    cli1 = cli.cliente_1(cliente=cliente_p)
-    print(cli1)
-    print(cliente_p)
+    # cliente = input('Qual cliente você irá cadastrar? ').title()
+    # cli = Cliente()
+    # cliente_p = cli.cliente()
+    # cli1 = cli.cliente_1(cliente=cliente_p)
+    # print(cli1)
+    # print(cliente_p)
+
+# TODO (QUAL O CLIENTE)
+    flag_cli = True
+    while flag_cli:
+        cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen', 'Rejaile', 'Total']
+        ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
+        if ask_cliente_distr in cliente_distr:
+            cliente = ask_cliente_distr
+            flag_cli = False
+        else:
+            print('Empresa não participante do Risco Sacado, tente outra empresa!.')
+
+    v = Cliente()
+    v1 = v.cliente_1(cliente)
+    print(v1)
+# TODO (QUAL A TAXA)
+
+# TODO (QUAL A CPGT)
+
+# TODO (QUAL BANCO)
+
 
     # inter = Interface()
     # inter.askinterface()
