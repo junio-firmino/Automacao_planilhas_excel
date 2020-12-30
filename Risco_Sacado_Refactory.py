@@ -132,9 +132,9 @@ class Taxas:
     def __init__(self):
         self.taxas = float
 
-    def answertaxas(self):
-        self.taxas = input('Qual a taxa? ')
-        return self.taxas
+    @staticmethod
+    def answertaxas(taxas):
+        return taxas
 
 
 # TODO CLASSE LISTA DE CONSUMO
@@ -355,6 +355,7 @@ if __name__ == '__main__':
     # print(cliente_p)
 
 # TODO (QUAL O CLIENTE)
+
     flag_cli = True
     while flag_cli:
         cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen', 'Rejaile', 'Total']
@@ -366,14 +367,16 @@ if __name__ == '__main__':
             print('Empresa não participante do Risco Sacado, tente outra empresa!.')
 
     v = Cliente()
-    v1 = v.cliente_1(cliente)
+    v1 = v.cliente_1(cliente=cliente)
     print(v1)
 # TODO (QUAL A TAXA)
-
+    t = Taxas()
+    taxas = input('Qual a taxa? ')
+    t1 = t.answertaxas(taxas=taxas)
+    print(t1)
 # TODO (QUAL A CPGT)
 
 # TODO (QUAL BANCO)
-
 
     # inter = Interface()
     # inter.askinterface()
