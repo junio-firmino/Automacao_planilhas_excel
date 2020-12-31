@@ -107,12 +107,9 @@ class Cliente:
 
 
 class Cpgt:
-    def __init__(self):
-        self.cpgt = str
-
-    def answercpgt(self):
-        self.cpgt = input('Qual é a condição de pagamento? ')
-        return self.cpgt
+    @staticmethod
+    def answercpgt(condicao):
+        return condicao
 
     @staticmethod
     def mainanswercpgt(resposta):
@@ -327,12 +324,12 @@ class Email:
 
 
 class Interface:
-    def __init__(self):
-        # Openworkbook().open()
-        Cliente().cliente_1(cliente=Cliente().cliente())
-        Taxas().answertaxas()
-        Cpgt().answercpgt()
-        Listbancos().banco_1(banco=Listbancos().banco())
+    # def __init__(self):
+    #     # Openworkbook().open()
+    #     # Cliente().cliente_1(cliente=Cliente().cliente())
+    #     # Taxas().answertaxas()
+    #     # Cpgt().answercpgt()
+    #     # Listbancos().banco_1(banco=Listbancos().banco())
 
     @staticmethod
     def askinterface():
@@ -375,6 +372,10 @@ if __name__ == '__main__':
     t1 = t.answertaxas(taxas=taxas)
     print(t1)
 # TODO (QUAL A CPGT)
+    cpgt = input('Qual é a condição de pagamento? ')
+    cp = Cpgt()
+    cp1 = cp.answercpgt(condicao=cpgt)
+    print(cp1)
 
 # TODO (QUAL BANCO)
 
