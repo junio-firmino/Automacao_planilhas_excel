@@ -148,17 +148,8 @@ class Taxas:
 
 
 class Listbancos:
-    @staticmethod
-    def banco():
-        flag = True
-        while flag:
-            bancos = {'s': 'Santander', 'b': 'Bradesco', 'c': 'Citibank'}
-            banco_marca = input('Escolha o banco?\n("s" para Santander, "b" para Bradesco e "c" para Citibank)'
-                                ' + "enter" -->')
-            if banco_marca in bancos:
-                return bancos[banco_marca]
-            else:
-                print('Essa escolha não é possível, tente novamente!.')
+    # @staticmethod
+    # def banco():
 
     @staticmethod
     def banco_1(banco):
@@ -378,6 +369,18 @@ if __name__ == '__main__':
     print(cp1)
 
 # TODO (QUAL BANCO)
+    flag = True
+    while flag:
+        bancos = {'s': 'Santander', 'b': 'Bradesco', 'c': 'Citibank'}
+        banco_marca = input('Escolha o banco?\n("s" para Santander, "b" para Bradesco e "c" para Citibank)'
+                            ' + "enter" -->')
+        if banco_marca in bancos:
+            banco_choice = bancos[banco_marca]
+            flag = False
+        else:
+            print('Essa escolha não é possível, tente novamente!.')
+
+    
 
     # inter = Interface()
     # inter.askinterface()
