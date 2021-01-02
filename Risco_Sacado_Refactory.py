@@ -148,9 +148,6 @@ class Taxas:
 
 
 class Listbancos:
-    # @staticmethod
-    # def banco():
-
     @staticmethod
     def banco_1(banco):
         return banco
@@ -380,6 +377,9 @@ if __name__ == '__main__':
         else:
             print('Essa escolha não é possível, tente novamente!.')
 
+    bc = Listbancos()
+    bc1 = bc.banco_1(banco=banco_choice)
+    print(bc1)
     
 
     # inter = Interface()
