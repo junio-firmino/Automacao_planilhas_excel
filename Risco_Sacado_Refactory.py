@@ -27,7 +27,7 @@ class Managerriscosacado:
 class Planriscosacado:
     @staticmethod
     def plan_taxes():
-        x=Cliente()
+        x = Cliente()
         aba_act = Openworkbook().open_cpgt().active
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[Cliente().cliente_1(cliente=Cliente().cliente())]
@@ -326,46 +326,32 @@ class Interface:
 
 
 if __name__ == '__main__':
-    # b = Listbancos()
-    # b1 = b.banco()
-    # b2 = b.banco_1(banco=b1)
-    # print(b1)
-    # print(b2)
 
-    # cliente = input('Qual cliente você irá cadastrar? ').title()
-    # cli = Cliente()
-    # cliente_p = cli.cliente()
-    # cli1 = cli.cliente_1(cliente=cliente_p)
-    # print(cli1)
-    # print(cliente_p)
-
-# TODO (QUAL O CLIENTE)
-
+    # ------------------------- Cliente ------------------#
     flag_cli = True
     while flag_cli:
         cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen', 'Rejaile', 'Total']
         ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
         if ask_cliente_distr in cliente_distr:
-            cliente = ask_cliente_distr
+            ask_cliente_distr
             flag_cli = False
         else:
             print('Empresa não participante do Risco Sacado, tente outra empresa!.')
 
     v = Cliente()
-    v1 = v.cliente_1(cliente=cliente)
-    print(v1)
-# TODO (QUAL A TAXA)
+    v1 = v.cliente_1(cliente=ask_cliente_distr)
+
+    # ----------------- Taxas --------------------------#
     t = Taxas()
     taxas = input('Qual a taxa? ')
     t1 = t.answertaxas(taxas=taxas)
-    print(t1)
-# TODO (QUAL A CPGT)
+
+    # ---------------- CPGT ---------------------------#
     cpgt = input('Qual é a condição de pagamento? ')
     cp = Cpgt()
     cp1 = cp.answercpgt(condicao=cpgt)
-    print(cp1)
 
-# TODO (QUAL BANCO)
+    # ---------------- Banco -------------------------#
     flag = True
     while flag:
         bancos = {'s': 'Santander', 'b': 'Bradesco', 'c': 'Citibank'}
@@ -379,8 +365,6 @@ if __name__ == '__main__':
 
     bc = Listbancos()
     bc1 = bc.banco_1(banco=banco_choice)
-    print(bc1)
-    
 
     # inter = Interface()
     # inter.askinterface()
