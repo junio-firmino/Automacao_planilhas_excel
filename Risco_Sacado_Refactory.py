@@ -312,13 +312,7 @@ class Email:
 
 
 class Interface:
-    # def __init__(self):
-    #     # Openworkbook().open()
-    #     # Cliente().cliente_1(cliente=Cliente().cliente())
-    #     # Taxas().answertaxas()
-    #     # Cpgt().answercpgt()
-    #     # Listbancos().banco_1(banco=Listbancos().banco())
-
+    
     @staticmethod
     def askinterface():
         me = Managerriscosacado()
