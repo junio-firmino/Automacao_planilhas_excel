@@ -100,11 +100,13 @@ class Cpgt:
     def answercpgt(condicao):
         return condicao
 
-    def cpgt_terrestre(self):
-        return 'ZD' + self.answercpgt(condicao=Interface().t1)
+    @staticmethod
+    def cpgt_terrestre():
+        return 'ZD' + Listdistribuidora().list[2]
 
-    def cpgt_cabotagem(self):
-        return 'ZC' + self.answercpgt(condicao=Interface().t1)
+    @staticmethod
+    def cpgt_cabotagem():
+        return 'ZC' + Listdistribuidora().list[2]
 
     def cpgt_terrestre_cabotagem(self):
         return self.cpgt_cabotagem()
@@ -118,11 +120,12 @@ class Taxas:
     def answertaxas(taxas):
         return taxas
 
+
 class Listdistribuidora:
     def __init__(self):
         self.list = []
 
-    def lista_distr(self, escolha):      # Avaliar a opção de usar *arg and **karg para a persistencia dos dados
+    def lista_distr(self, escolha):
         self.list.append(escolha)
         return self.list
 
@@ -131,11 +134,6 @@ class Listdistribuidora:
         self.lista_distr(Interface().taxas())
         self.lista_distr(Interface().cpgt())
         self.lista_distr(Interface().banco())
-
-
-class Listbancos:
-    def banco_1(self, banco):
-        return banco
 
 
 class Loadworkbook:
@@ -297,7 +295,11 @@ class Email:
 
 
 class Interface:
-    #def __init__(self):
+    def __init__(self):
+        self.taxas = None
+        self.ask_cliente_distr = None
+        self.banco_choice = None
+        self.cpgt = None
 
     def client(self):
         flag_cli = True
@@ -314,8 +316,8 @@ class Interface:
         return self.taxas
 
     def cpgt(self):
-       self.cpgt = input('Qual é a condição de pagamento? ')
-       return self.cpgt
+        self.cpgt = input('Qual é a condição de pagamento? ')
+        return self.cpgt
 
     def banco(self):
         flag = True
@@ -335,10 +337,10 @@ class Interface:
         return me.create_plan_risco_sacado() and me.create_plan_cpgt()
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros clientes.
     lo = Listdistribuidora()
-    lo1 = lo.createlista()
-    #lo1 = lo.lista_distr(Cliente().cliente_1(cliente=Interface().v1))
+    lo.createlista()
+    # lo1 = lo.lista_distr(Cliente().cliente_1(cliente=Interface().v1))
     lo2 = lo.list
     print(lo2)
     # v = Carencia()
