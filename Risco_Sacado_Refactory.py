@@ -118,18 +118,20 @@ class Taxas:
     def answertaxas(taxas):
         return taxas
 
-
-# TODO CLASSE LISTA DE CONSUMO
 class Listdistribuidora:
     def __init__(self):
         self.list = []
 
-    def lista_distr(self, *args):      # Avaliar a opção de usar *arg and **karg para a persistencia dos dados
-        self.list.append(*args)
+    def lista_distr(self, escolha):      # Avaliar a opção de usar *arg and **karg para a persistencia dos dados
+        self.list.append(escolha)
         return self.list
 
     def createlista(self):
-        self.lista_distr(Interface().bc1, Interface().t1, Interface().cpgt)
+        self.lista_distr(Interface().client())
+        self.lista_distr(Interface().taxas())
+        self.lista_distr(Interface().cpgt())
+        self.lista_distr(Interface().banco())
+
 
 class Listbancos:
     def banco_1(self, banco):
@@ -295,32 +297,27 @@ class Email:
 
 
 class Interface:
-    def __init__(self):
-    # ------------------------- Cliente ------------------#
+    #def __init__(self):
+
+    def client(self):
         flag_cli = True
         while flag_cli:
             cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen', 'Rejaile', 'Total']
-            ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
-            if ask_cliente_distr in cliente_distr:
-                ask_cliente_distr
-                flag_cli = False
+            self.ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
+            if self.ask_cliente_distr in cliente_distr:
+                return self.ask_cliente_distr
             else:
                 print('Empresa não participante do Risco Sacado, tente outra empresa!.')
 
-        v = Cliente()
-        self.v1 = v.cliente_1(cliente=ask_cliente_distr)
-
-        # ----------------- Taxas --------------------------#
+    def taxas(self):
         self.taxas = input('Qual a taxa? ')
-        t = Taxas()
-        self.t1 = t.answertaxas(taxas=self.taxas)
+        return self.taxas
 
-        # ---------------- CPGT ---------------------------#
-        self.cpgt = input('Qual é a condição de pagamento? ')
-        cp = Cpgt()
-        self.cp1 = cp.answercpgt(condicao=self.cpgt)
+    def cpgt(self):
+       self.cpgt = input('Qual é a condição de pagamento? ')
+       return self.cpgt
 
-        # ---------------- Banco -------------------------#
+    def banco(self):
         flag = True
         while flag:
             bancos = {'s': 'Santander', 'b': 'Bradesco', 'c': 'Citibank'}
@@ -328,11 +325,9 @@ class Interface:
                                 ' + "enter" -->')
             if banco_marca in bancos:
                 self.banco_choice = bancos[banco_marca]
-                flag = False
+                return self.banco_choice
             else:
                 print('Essa escolha não é possível, tente novamente!.')
-        bc = Listbancos()
-        self.bc1 = bc.banco_1(banco=self.banco_choice)
 
     @staticmethod
     def askinterface():
@@ -341,8 +336,10 @@ class Interface:
 
 
 if __name__ == '__main__':
-    inter = Interface()
-    inter.askinterface()
-    print(Listdistribuidora().lista_distr())
+    lo = Listdistribuidora()
+    lo1 = lo.createlista()
+    #lo1 = lo.lista_distr(Cliente().cliente_1(cliente=Interface().v1))
+    lo2 = lo.list
+    print(lo2)
     # v = Carencia()
     # print(v.carencia_cpgt_terrestre(), v.carencia_cpgt_cabotagem())
