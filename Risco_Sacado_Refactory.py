@@ -12,25 +12,29 @@ class Managerriscosacado:
     def __init__(self):
         print('Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
         self.plan_risco_sacado = None
-        self.plan_cpgt = None
+        # self.plan_cpgt = None
 
     def create_plan_risco_sacado(self):
         self.plan_risco_sacado = Planriscosacado()
         self.plan_risco_sacado.plan_taxes()
+        self.plan_risco_sacado.plan_cpgt()
 
-    def create_plan_cpgt(self):
-        self.plan_cpgt = Plancpgt()
-        self.plan_cpgt.plan_cpgt()
+    # def create_plan_cpgt(self):
+    #     self.plan_cpgt = Plancpgt()
+    #     self.plan_cpgt.plan_cpgt()
 
 
-# TODO PLANILHA RISCO SACADO
 class Planriscosacado:
+    # def __init__(self):
+    #     lo = Listdistribuidora()
+    #     lo.createlista()
+    #     lo.list
+
     @staticmethod
     def plan_taxes():
-        x = Cliente()
         aba_act = Openworkbook().open_cpgt().active
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
-            info = Distribuidoras().distri_cliente_polo_produto()[Cliente().cliente_1(cliente=Cliente().cliente())]
+            info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora().list[0]]
             for fili, info_1 in info.items():
                 for centro, prod in info_1.items():
                     for combust in prod:
@@ -39,31 +43,28 @@ class Planriscosacado:
                         aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
                         aba_act.cell(row=linha_plan, column=4).value = centro  # Centro
                         aba_act.cell(row=linha_plan,
-                                     column=6).value = Taxas().answertaxas() + ' a.m.'  # Taxas
+                                     column=6).value = Listdistribuidora().list[1] + ' a.m.'  # Taxas
                         aba_act.cell(row=linha_plan, column=7).value = "%"
                         aba_act.cell(row=linha_plan, column=10).value = "A"
                         aba_act.cell(row=linha_plan, column=12).value = assists.data_inicio()  # Data inicial
                         aba_act.cell(row=linha_plan,
                                      column=13).value = assists.data_last_day_risco_sacado()  # Data final
                         aba_act.cell(row=linha_plan,
-                                     column=14).value = Cliente().cliente_1(cliente=Cliente().cliente())  # Cliente
+                                     column=14).value = Listdistribuidora().list[0]  # Cliente
                         aba_act.cell(row=linha_plan, column=15).value = Informationconstant.encargos()  # Encargos
-                        aba_act.cell(row=linha_plan, column=16).value = Listbancos()  # Banco
+                        aba_act.cell(row=linha_plan, column=16).value = Listdistribuidora().list[3]  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
                         linha_plan += 1
         Saveworbook().save()
         Closeworbook().close()
 
 
-# TODO PLANILHA CPGT
-class Plancpgt:
+#class Plancpgt:
     @staticmethod
     def plan_cpgt():  # pensar em trabalhar com kwargs aqui neste ponto.
         aba_act_cpgt = Openworkbook().open_wb_cpgt().active
-        # Listdistribuidora().lista_distr()
-        # Openworkbook().open()
         for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
-            info = Distribuidoras().distri_cliente_polo_produto()[Cliente().cliente_1(cliente=Cliente().cliente())]
+            info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora().list[0]]
             for fili, info_1 in info.items():
                 for centro, prod in info_1.items():
                     for combust in prod:
@@ -83,7 +84,7 @@ class Plancpgt:
                         aba_act_cpgt.cell(row=linha_cpgt, column=16).value = "01.08.2020"
                         aba_act_cpgt.cell(row=linha_cpgt, column=17).value = "31.12.9999"
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = Informationconstant().tab()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = Taxas().answertaxas()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = Listdistribuidora().list[1]
                         linha_cpgt += 1
         Saveworbook().save()
         Closeworbook().close()
@@ -112,13 +113,13 @@ class Cpgt:
         return self.cpgt_cabotagem()
 
 
-class Taxas:
-    def __init__(self):
-        self.taxas = float
-
-    @staticmethod
-    def answertaxas(taxas):
-        return taxas
+# class Taxas:
+#     def __init__(self):
+#         self.taxas = str
+#
+#     @staticmethod
+#     def answertaxas(taxas):
+#         return taxas
 
 
 class Listdistribuidora:
@@ -296,10 +297,10 @@ class Email:
 
 class Interface:
     def __init__(self):
-        self.taxas = None
-        self.ask_cliente_distr = None
-        self.banco_choice = None
-        self.cpgt = None
+        self.ask_cliente_distr = str
+        # self.taxas = str
+        self.banco_choice = str
+        # self.cpgt = str
 
     def client(self):
         flag_cli = True
@@ -334,14 +335,13 @@ class Interface:
     @staticmethod
     def askinterface():
         me = Managerriscosacado()
-        return me.create_plan_risco_sacado() and me.create_plan_cpgt()
+        return me.create_plan_risco_sacado() #and me.create_plan_cpgt()
 
 
 if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros clientes.
-    lo = Listdistribuidora()
-    lo.createlista()
-    # lo1 = lo.lista_distr(Cliente().cliente_1(cliente=Interface().v1))
-    lo2 = lo.list
-    print(lo2)
-    # v = Carencia()
-    # print(v.carencia_cpgt_terrestre(), v.carencia_cpgt_cabotagem())
+    list = Listdistribuidora()
+    list.createlista()
+    list2 = list.list[1]
+    print(list2)
+
+
