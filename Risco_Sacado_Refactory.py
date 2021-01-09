@@ -19,47 +19,41 @@ class Managerriscosacado:
         self.plan_risco_sacado.plan_taxes()
         self.plan_risco_sacado.plan_cpgt()
 
-    # def create_plan_cpgt(self):
-    #     self.plan_cpgt = Plancpgt()
-    #     self.plan_cpgt.plan_cpgt()
-
 
 class Planriscosacado:
-    # def __init__(self):
-    #     lo = Listdistribuidora()
-    #     lo.createlista()
-    #     lo.list
-
-    @staticmethod
-    def plan_taxes():
+    def plan_taxes(self):
+        self.lo = Listdistribuidora()
+        self.lo.createlista()
+        # self.lo.list
+        # self.carencia1 = Carencia()
+        # self.carencia1.carencia_cpgt_cabotagem()
         aba_act = Openworkbook().open_cpgt().active
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
-            info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora().list[0]]
+            info = Distribuidoras().distri_cliente_polo_produto()[self.lo.list[0]]
             for fili, info_1 in info.items():
                 for centro, prod in info_1.items():
                     for combust in prod:
                         aba_act.cell(row=linha_plan, column=1).value = fili  # Filial
-                        aba_act.cell(row=linha_plan, column=2).value = Carencia().carencia_cpgt_cabotagem()  # CPGT
+                        aba_act.cell(row=linha_plan, column=2).value = self.carencia  # CPGT###
                         aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
                         aba_act.cell(row=linha_plan, column=4).value = centro  # Centro
                         aba_act.cell(row=linha_plan,
-                                     column=6).value = Listdistribuidora().list[1] + ' a.m.'  # Taxas
+                                     column=6).value = self.lo.list[1] + ' a.m.'  # Taxas
                         aba_act.cell(row=linha_plan, column=7).value = "%"
                         aba_act.cell(row=linha_plan, column=10).value = "A"
                         aba_act.cell(row=linha_plan, column=12).value = assists.data_inicio()  # Data inicial
                         aba_act.cell(row=linha_plan,
                                      column=13).value = assists.data_last_day_risco_sacado()  # Data final
                         aba_act.cell(row=linha_plan,
-                                     column=14).value = Listdistribuidora().list[0]  # Cliente
-                        aba_act.cell(row=linha_plan, column=15).value = Informationconstant.encargos()  # Encargos
-                        aba_act.cell(row=linha_plan, column=16).value = Listdistribuidora().list[3]  # Banco
+                                     column=14).value = self.lo.list[0]  # Cliente
+                        aba_act.cell(row=linha_plan, column=15).value = self.infor2  # Encargos
+                        aba_act.cell(row=linha_plan, column=16).value = self.lo.list[3]  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
                         linha_plan += 1
         Saveworbook().save()
         Closeworbook().close()
 
 
-#class Plancpgt:
     @staticmethod
     def plan_cpgt():  # pensar em trabalhar com kwargs aqui neste ponto.
         aba_act_cpgt = Openworkbook().open_wb_cpgt().active
@@ -97,29 +91,14 @@ class Cliente:
 
 
 class Cpgt:
-    @staticmethod
-    def answercpgt(condicao):
-        return condicao
-
-    @staticmethod
-    def cpgt_terrestre():
-        return 'ZD' + Listdistribuidora().list[2]
-
-    @staticmethod
-    def cpgt_cabotagem():
-        return 'ZC' + Listdistribuidora().list[2]
-
-    def cpgt_terrestre_cabotagem(self):
-        return self.cpgt_cabotagem()
+    #def __init__(self):
 
 
-# class Taxas:
-#     def __init__(self):
-#         self.taxas = str
-#
-#     @staticmethod
-#     def answertaxas(taxas):
-#         return taxas
+    def cpgt_terrestre(self):
+        return 'ZD' + self.lo.list[2]
+
+    def cpgt_cabotagem(self):
+        return 'ZC' + self.lo.list[2]
 
 
 class Listdistribuidora:
@@ -335,13 +314,15 @@ class Interface:
     @staticmethod
     def askinterface():
         me = Managerriscosacado()
-        return me.create_plan_risco_sacado() #and me.create_plan_cpgt()
-
+        return me.create_plan_risco_sacado()
 
 if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros clientes.
-    list = Listdistribuidora()
-    list.createlista()
-    list2 = list.list[1]
-    print(list2)
+    # list = Listdistribuidora()
+    # list.createlista()
+    # list2 = list.list[1]
+    # print(list2)
+
+    inte = Interface()
+    inte.askinterface()
 
 
