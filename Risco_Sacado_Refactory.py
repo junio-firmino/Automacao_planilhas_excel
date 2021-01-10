@@ -12,7 +12,6 @@ class Managerriscosacado:
     def __init__(self):
         print('Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
         self.plan_risco_sacado = None
-        # self.plan_cpgt = None
 
     def create_plan_risco_sacado(self):
         self.plan_risco_sacado = Planriscosacado()
@@ -21,13 +20,12 @@ class Managerriscosacado:
 
 
 class Planriscosacado:
-    def plan_taxes(self):
+    def __init__(self):
         self.lo = Listdistribuidora()
         self.lo.createlista()
         self.info = Informationconstant()
-        # self.lo.list
-        # self.carencia1 = Carencia()
-        # self.carencia1.carencia_cpgt_cabotagem()
+
+    def plan_taxes(self):
         aba_act = Openworkbook().open_cpgt().active
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[self.lo.list[0]]
@@ -57,7 +55,6 @@ class Planriscosacado:
         close = Closeworbook()
         close.close()
 
-
     def plan_cpgt(self):  # pensar em trabalhar com kwargs aqui neste ponto.
         aba_act_cpgt = Openworkbook().open_wb_cpgt().active
         for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
@@ -65,10 +62,10 @@ class Planriscosacado:
             for fili, info_1 in info.items():
                 for centro, prod in info_1.items():
                     for combust in prod:
-                        aba_act_cpgt.cell(row=linha_cpgt, column=1).value = Informationconstant().marca()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=2).value = Informationconstant().claros()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=1).value = self.info.marca()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=2).value = self.info.claros()
                         aba_act_cpgt.cell(row=linha_cpgt, column=3).value = Carencia().carencia_cpgt_cabotagem()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=4).value = Informationconstant().orgv()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=4).value = self.info.orgv()
                         aba_act_cpgt.cell(row=linha_cpgt,
                                           column=7).value = Carencia().carencia_cpgt_terrestre_cabotagem()
                         aba_act_cpgt.cell(row=linha_cpgt, column=8).value = centro
@@ -80,23 +77,16 @@ class Planriscosacado:
                         aba_act_cpgt.cell(row=linha_cpgt, column=15).value = "M20"
                         aba_act_cpgt.cell(row=linha_cpgt, column=16).value = "01.08.2020"
                         aba_act_cpgt.cell(row=linha_cpgt, column=17).value = "31.12.9999"
-                        aba_act_cpgt.cell(row=linha_cpgt, column=18).value = Informationconstant().tab()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = Listdistribuidora().list[1]
+                        aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.info.tab()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.lo.list[1]
                         linha_cpgt += 1
-        Saveworbook().save()
-        Closeworbook().close()
-
-
-class Cliente:
-    @staticmethod
-    def cliente_1(cliente):
-        return cliente
+        save_plan_cpgt = Saveworbook()
+        save_plan_cpgt.save()
+        close_pla_cpgt = Closeworbook()
+        close_pla_cpgt.close()
 
 
 class Cpgt:
-
-
-
     def cpgt_terrestre(self):
         return 'ZD' + self.lo.list[2]
 
@@ -320,11 +310,6 @@ class Interface:
         return me.create_plan_risco_sacado()
 
 if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros clientes.
-    # list = Listdistribuidora()
-    # list.createlista()
-    # list2 = list.list[1]
-    # print(list2)
-
     inte = Interface()
     inte.askinterface()
 
