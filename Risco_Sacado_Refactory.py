@@ -24,6 +24,7 @@ class Planriscosacado:
     def plan_taxes(self):
         self.lo = Listdistribuidora()
         self.lo.createlista()
+        self.info = Informationconstant()
         # self.lo.list
         # self.carencia1 = Carencia()
         # self.carencia1.carencia_cpgt_cabotagem()
@@ -34,7 +35,7 @@ class Planriscosacado:
                 for centro, prod in info_1.items():
                     for combust in prod:
                         aba_act.cell(row=linha_plan, column=1).value = fili  # Filial
-                        aba_act.cell(row=linha_plan, column=2).value = self.carencia  # CPGT###
+                        aba_act.cell(row=linha_plan, column=2).value = self.lo.list[2]  # CPGT
                         aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
                         aba_act.cell(row=linha_plan, column=4).value = centro  # Centro
                         aba_act.cell(row=linha_plan,
@@ -43,22 +44,24 @@ class Planriscosacado:
                         aba_act.cell(row=linha_plan, column=10).value = "A"
                         aba_act.cell(row=linha_plan, column=12).value = assists.data_inicio()  # Data inicial
                         aba_act.cell(row=linha_plan,
-                                     column=13).value = assists.data_last_day_risco_sacado()  # Data final
+                                     column=13).value = assists.data_last_day_risco_sacado()  # Data
                         aba_act.cell(row=linha_plan,
                                      column=14).value = self.lo.list[0]  # Cliente
-                        aba_act.cell(row=linha_plan, column=15).value = self.infor2  # Encargos
+                        aba_act.cell(row=linha_plan, column=15).value = self.info.encargos()  # Encargos
                         aba_act.cell(row=linha_plan, column=16).value = self.lo.list[3]  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
                         linha_plan += 1
-        Saveworbook().save()
-        Closeworbook().close()
+
+        save = Saveworbook()
+        save.save()
+        close = Closeworbook()
+        close.close()
 
 
-    @staticmethod
-    def plan_cpgt():  # pensar em trabalhar com kwargs aqui neste ponto.
+    def plan_cpgt(self):  # pensar em trabalhar com kwargs aqui neste ponto.
         aba_act_cpgt = Openworkbook().open_wb_cpgt().active
         for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
-            info = Distribuidoras().distri_cliente_polo_produto()[Listdistribuidora().list[0]]
+            info = Distribuidoras().distri_cliente_polo_produto()[self.lo.list[0]]
             for fili, info_1 in info.items():
                 for centro, prod in info_1.items():
                     for combust in prod:
@@ -91,7 +94,7 @@ class Cliente:
 
 
 class Cpgt:
-    #def __init__(self):
+
 
 
     def cpgt_terrestre(self):
