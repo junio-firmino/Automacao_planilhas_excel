@@ -15,8 +15,8 @@ class Managerriscosacado:
 
     def create_plan_risco_sacado(self):
         self.plan_risco_sacado = Planriscosacado()
-        self.plan_risco_sacado.plan_taxes()
-        self.plan_risco_sacado.plan_cpgt()
+        #self.plan_risco_sacado.plan_taxes()
+       # self.plan_risco_sacado.plan_cpgt()
 
 
 class Planriscosacado:
@@ -24,6 +24,7 @@ class Planriscosacado:
         self.lo = Listdistribuidora()
         self.lo.createlista()
         self.info = Informationconstant()
+        self.carencia = Carencia()
 
     def plan_taxes(self):
         aba_act = Openworkbook().open_cpgt().active
@@ -64,10 +65,10 @@ class Planriscosacado:
                     for combust in prod:
                         aba_act_cpgt.cell(row=linha_cpgt, column=1).value = self.info.marca()
                         aba_act_cpgt.cell(row=linha_cpgt, column=2).value = self.info.claros()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = Carencia().carencia_cpgt_cabotagem()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.carencia.carencia_cpgt_terrestre() # A classe carência tem que buscar a mesma lista que essa classe está buscando.
                         aba_act_cpgt.cell(row=linha_cpgt, column=4).value = self.info.orgv()
                         aba_act_cpgt.cell(row=linha_cpgt,
-                                          column=7).value = Carencia().carencia_cpgt_terrestre_cabotagem()
+                                          column=7).value =self.carencia.carencia_cpgt_terrestre()  #Carencia().carencia_cpgt_terrestre_cabotagem()
                         aba_act_cpgt.cell(row=linha_cpgt, column=8).value = centro
                         aba_act_cpgt.cell(row=linha_cpgt, column=9).value = combust
                         aba_act_cpgt.cell(row=linha_cpgt, column=10).value = fili
@@ -87,11 +88,14 @@ class Planriscosacado:
 
 
 class Cpgt:
+    def __init__(self):
+        self.lo_cpgt = Listdistribuidora().list
+
     def cpgt_terrestre(self):
-        return 'ZD' + self.lo.list[2]
+        return 'ZD' + self.lo_cpgt[2]
 
     def cpgt_cabotagem(self):
-        return 'ZC' + self.lo.list[2]
+        return 'ZC' + self.lo_cpgt[2]
 
 
 class Listdistribuidora:
@@ -158,18 +162,19 @@ class Informationconstant:
 
 
 class Carencia:
-    @staticmethod
-    def carencia_cpgt_terrestre():
-        condicoes_cpgt = Cpgt().cpgt_terrestre()
-        list_separador = condicoes_cpgt.split('D')
+    def __int__(self, cpgt= Interface()):
+        self.condicoes_cpgt = cpgt
+
+    def carencia_cpgt_terrestre(self):
+        self.cpgt = cpgt
+        list_separador = self.condicoes_cpgt.cpgt_terrestre().split('D')
         valor_separado = list_separador[1]
         resultado = int(valor_separado) - 1
         return resultado
 
-    @staticmethod
-    def carencia_cpgt_cabotagem():
-        condicoes_cpgt_cabotagem = Cpgt().cpgt_cabotagem()
-        list_separador_cabotagem = condicoes_cpgt_cabotagem.split('C')
+    def carencia_cpgt_cabotagem(self, cpgt= Interface()):
+        self.cpgt= cpgt
+        list_separador_cabotagem = self.condicoes_cpgt.cpgt_cabotagem().split('C')
         valor_separado_cabotagem = list_separador_cabotagem[1]
         resultado_cabotagem = int(valor_separado_cabotagem) - 4
         return resultado_cabotagem
@@ -310,7 +315,15 @@ class Interface:
         return me.create_plan_risco_sacado()
 
 if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros clientes.
-    inte = Interface()
-    inte.askinterface()
+    # inte = Interface()
+    # inte.askinterface()
+    plan = Planriscosacado()
+    plan1 = plan.lo.list
+    print(plan1)
+    cp = Cpgt()
+    cp1 = cp.cpgt_cabotagem()
+    cp2 = cp.cpgt_terrestre()
+    print(cp1)
+    print(cp2)
 
 
