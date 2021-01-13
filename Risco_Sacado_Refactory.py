@@ -15,7 +15,7 @@ class Managerriscosacado:
 
     def create_plan_risco_sacado(self):
         self.plan_risco_sacado = Planriscosacado()
-        #self.plan_risco_sacado.plan_taxes()
+       # self.plan_risco_sacado.plan_taxes()
        # self.plan_risco_sacado.plan_cpgt()
 
 
@@ -162,18 +162,16 @@ class Informationconstant:
 
 
 class Carencia:
-    def __int__(self, cpgt= Interface()):
+    def __int__(self, cpgt=Interface()):
         self.condicoes_cpgt = cpgt
 
     def carencia_cpgt_terrestre(self):
-        self.cpgt = cpgt
         list_separador = self.condicoes_cpgt.cpgt_terrestre().split('D')
         valor_separado = list_separador[1]
         resultado = int(valor_separado) - 1
         return resultado
 
-    def carencia_cpgt_cabotagem(self, cpgt= Interface()):
-        self.cpgt= cpgt
+    def carencia_cpgt_cabotagem(self):
         list_separador_cabotagem = self.condicoes_cpgt.cpgt_cabotagem().split('C')
         valor_separado_cabotagem = list_separador_cabotagem[1]
         resultado_cabotagem = int(valor_separado_cabotagem) - 4
