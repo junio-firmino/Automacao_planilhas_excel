@@ -88,8 +88,8 @@ class Planriscosacado:
 
 
 class Cpgt:
-    def __init__(self):
-        self.lo_cpgt = Listdistribuidora().list
+    def __init__(self, dict_list=Listdistribuidora()):
+        self.lo_cpgt = dict_list
 
     def cpgt_terrestre(self):
         return 'ZD' + self.lo_cpgt[2]
@@ -162,7 +162,7 @@ class Informationconstant:
 
 
 class Carencia:
-    def __int__(self, cpgt=Interface()):
+    def __int__(self, cpgt=Cpgt()):
         self.condicoes_cpgt = cpgt
 
     def carencia_cpgt_terrestre(self):
