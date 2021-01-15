@@ -24,7 +24,7 @@ class Planriscosacado:
         self.lo = Listdistribuidora()
         self.lo.createlista()
         self.info = Informationconstant()
-        self.carencia = Carencia()
+        self.carencia = Carencia(valores)
 
     def plan_taxes(self):
         aba_act = Openworkbook().open_cpgt().active
@@ -56,7 +56,7 @@ class Planriscosacado:
         close = Closeworbook()
         close.close()
 
-    def plan_cpgt(self):  # pensar em trabalhar com kwargs aqui neste ponto.
+    def plan_cpgt(self):
         aba_act_cpgt = Openworkbook().open_wb_cpgt().active
         for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[self.lo.list[0]]
@@ -87,15 +87,6 @@ class Planriscosacado:
         close_pla_cpgt.close()
 
 
-class Cpgt:
-    def __init__(self, dict_list=Listdistribuidora()):
-        self.lo_cpgt = dict_list
-
-    def cpgt_terrestre(self):
-        return 'ZD' + self.lo_cpgt[2]
-
-    def cpgt_cabotagem(self):
-        return 'ZC' + self.lo_cpgt[2]
 
 
 class Listdistribuidora:
@@ -107,11 +98,21 @@ class Listdistribuidora:
         return self.list
 
     def createlista(self):
-        self.lista_distr(Interface().client())
-        self.lista_distr(Interface().taxas())
-        self.lista_distr(Interface().cpgt())
-        self.lista_distr(Interface().banco())
+        self.lista_distr(Answer().client())
+        self.lista_distr(Answer().taxas())
+        self.lista_distr(Answer().cpgt())
+        self.lista_distr(Answer().banco())
 
+
+class Cpgt:
+    def __init__(self, cpgt):
+        self.abs = cpgt
+
+    def cpgt_terrestre(self):
+        return 'ZD' + self.abs
+
+    def cpgt_cabotagem(self):
+        return 'ZC' + self.abs
 
 class Loadworkbook:
     def __init__(self):
@@ -162,8 +163,8 @@ class Informationconstant:
 
 
 class Carencia:
-    def __int__(self, cpgt=Cpgt()):
-        self.condicoes_cpgt = cpgt
+    def __init__(self, valores):
+        self.condicoes_cpgt = valores
 
     def carencia_cpgt_terrestre(self):
         list_separador = self.condicoes_cpgt.cpgt_terrestre().split('D')
@@ -270,12 +271,12 @@ class Email:
             pass
 
 
-class Interface:
+class Answer:
     def __init__(self):
         self.ask_cliente_distr = str
-        # self.taxas = str
+        #self.taxas = str
         self.banco_choice = str
-        # self.cpgt = str
+        #self.cpgt = str
 
     def client(self):
         flag_cli = True
@@ -307,6 +308,8 @@ class Interface:
             else:
                 print('Essa escolha não é possível, tente novamente!.')
 
+
+class Interface:
     @staticmethod
     def askinterface():
         me = Managerriscosacado()
@@ -317,11 +320,17 @@ if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros cli
     # inte.askinterface()
     plan = Planriscosacado()
     plan1 = plan.lo.list
-    print(plan1)
-    cp = Cpgt()
+    plan2 = plan.lo.list[2]
+    print(plan2)
+    cp = Cpgt(cpgt=plan2)
     cp1 = cp.cpgt_cabotagem()
     cp2 = cp.cpgt_terrestre()
     print(cp1)
     print(cp2)
+    ca = Carencia(valores=cp)
+    ca1 = ca.carencia_cpgt_terrestre()
+    ca2 = ca.carencia_cpgt_cabotagem()
+    print(ca1)
+    print(ca2)
 
 
