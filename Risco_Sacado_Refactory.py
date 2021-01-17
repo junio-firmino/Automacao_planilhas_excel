@@ -20,13 +20,10 @@ class Managerriscosacado:
 
 
 class Planriscosacado:
-    def __init__(self):
-        self.lo = Listdistribuidora()
-        self.lo.createlista()
-        self.info = Informationconstant()
-        self.carencia = Carencia(valores)
+    # def __init__(self):
 
     def plan_taxes(self):
+        self.carencia = Carencia(valores=cp)
         aba_act = Openworkbook().open_cpgt().active
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[self.lo.list[0]]
@@ -85,8 +82,6 @@ class Planriscosacado:
         save_plan_cpgt.save()
         close_pla_cpgt = Closeworbook()
         close_pla_cpgt.close()
-
-
 
 
 class Listdistribuidora:
@@ -316,13 +311,15 @@ class Interface:
         return me.create_plan_risco_sacado()
 
 if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros clientes.
-    # inte = Interface()
-    # inte.askinterface()
-    plan = Planriscosacado()
-    plan1 = plan.lo.list
-    plan2 = plan.lo.list[2]
-    print(plan2)
-    cp = Cpgt(cpgt=plan2)
+    inte = Interface()
+    inte.askinterface()
+    listy = Listdistribuidora()
+    listy.createlista()
+    listy1 = listy.list[0]
+    listy2 = listy.list[2]
+    print(listy1)
+    print(listy2)
+    cp = Cpgt(cpgt=listy2)
     cp1 = cp.cpgt_cabotagem()
     cp2 = cp.cpgt_terrestre()
     print(cp1)
