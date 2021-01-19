@@ -27,6 +27,9 @@ class Planriscosacado:
         self.banco3 = banco
         self.info = Informationconstant()
         self.carencia = Carencia(valores=cp)
+        self.save = Saveworbook()
+        self.close = Closeworbook()
+
 
     def plan_taxes(self):
         aba_act = Openworkbook().open_cpgt().active
@@ -52,11 +55,8 @@ class Planriscosacado:
                         aba_act.cell(row=linha_plan, column=16).value = self.banco3  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
                         linha_plan += 1
-
-        save = Saveworbook()
-        save.save()
-        close = Closeworbook()
-        close.close()
+        self.save.save()
+        self.close.close()
 
     def plan_cpgt(self):
         aba_act_cpgt = Openworkbook().open_wb_cpgt().active
@@ -83,10 +83,8 @@ class Planriscosacado:
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.info.tab()
                         aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.lo.list[1]
                         linha_cpgt += 1
-        save_plan_cpgt = Saveworbook()
-        save_plan_cpgt.save_wb_cpgt()
-        close_pla_cpgt = Closeworbook()
-        close_pla_cpgt.close_wb_cpgt()
+        self.save.save_wb_cpgt()
+        self.close.close_wb_cpgt()
 
 
 class Listdistribuidora:
@@ -329,19 +327,14 @@ if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros cli
     listy3 = listy.list[3]  # Banco
     # inte = Interface()
     # inte.askinterface()
-    print(listy1)
-    print(listy2)
     cp = Cpgt(cpgt=listy2)
     cp1 = cp.cpgt_cabotagem()
     cp2 = cp.cpgt_terrestre()
-    print(cp1)
-    print(cp2)
     ca = Carencia(valores=cp)
     ca1 = ca.carencia_cpgt_terrestre()
     ca2 = ca.carencia_cpgt_cabotagem()
-    print(ca1)
-    print(ca2)
     plan = Planriscosacado(cliente=listy0, taxas=listy1, cpgt=listy2, banco=listy3)
     plan1 = plan.plan_taxes()
+
 
 
