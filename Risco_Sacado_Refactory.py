@@ -16,7 +16,7 @@ class Managerriscosacado:
     def create_plan_risco_sacado(self):
         self.plan_risco_sacado = Planriscosacado(cliente=listy0, taxas=listy1, cpgt=listy2, banco=listy3)
         self.plan_risco_sacado.plan_taxes()
-       # self.plan_risco_sacado.plan_cpgt()
+        self.plan_risco_sacado.plan_cpgt()
 
 
 class Planriscosacado:
@@ -27,12 +27,12 @@ class Planriscosacado:
         self.banco3 = banco
         self.info = Informationconstant()
         self.carencia = Carencia(valores=cp)
+        self.open = Openworkbook()
         self.save = Saveworbook()
         self.close = Closeworbook()
 
-
     def plan_taxes(self):
-        aba_act = Openworkbook().open_cpgt().active
+        aba_act = self.open.open_cpgt().active
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[self.client0]
             for fili, info_1 in info.items():
@@ -42,15 +42,12 @@ class Planriscosacado:
                         aba_act.cell(row=linha_plan, column=2).value = self.cpgt2  # CPGT
                         aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
                         aba_act.cell(row=linha_plan, column=4).value = centro  # Centro
-                        aba_act.cell(row=linha_plan,
-                                     column=6).value = self.taxas1 + ' a.m.'  # Taxas
+                        aba_act.cell(row=linha_plan, column=6).value = self.taxas1 + ' a.m.'  # Taxas
                         aba_act.cell(row=linha_plan, column=7).value = "%"
                         aba_act.cell(row=linha_plan, column=10).value = "A"
                         aba_act.cell(row=linha_plan, column=12).value = assists.data_inicio()  # Data inicial
-                        aba_act.cell(row=linha_plan,
-                                     column=13).value = assists.data_last_day_risco_sacado()  # Data
-                        aba_act.cell(row=linha_plan,
-                                     column=14).value = self.client0  # Cliente
+                        aba_act.cell(row=linha_plan, column=13).value = assists.data_last_day_risco_sacado()  # Data
+                        aba_act.cell(row=linha_plan, column=14).value = self.client0  # Cliente
                         aba_act.cell(row=linha_plan, column=15).value = self.info.encargos()  # Encargos
                         aba_act.cell(row=linha_plan, column=16).value = self.banco3  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
@@ -59,18 +56,18 @@ class Planriscosacado:
         self.close.close()
 
     def plan_cpgt(self):
-        aba_act_cpgt = Openworkbook().open_wb_cpgt().active
+        aba_act_cpgt = self.open.open_wb_cpgt().active
         for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
-            info = Distribuidoras().distri_cliente_polo_produto()[self.lo.list[0]]
+            info = Distribuidoras().distri_cliente_polo_produto()[self.client0]
             for fili, info_1 in info.items():
                 for centro, prod in info_1.items():
                     for combust in prod:
                         aba_act_cpgt.cell(row=linha_cpgt, column=1).value = self.info.marca()
                         aba_act_cpgt.cell(row=linha_cpgt, column=2).value = self.info.claros()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.carencia.carencia_cpgt_terrestre() # A classe carência tem que buscar a mesma lista que essa classe está buscando.
+                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.carencia.carencia_cpgt_terrestre()
                         aba_act_cpgt.cell(row=linha_cpgt, column=4).value = self.info.orgv()
                         aba_act_cpgt.cell(row=linha_cpgt,
-                                          column=7).value =self.carencia.carencia_cpgt_terrestre()  #Carencia().carencia_cpgt_terrestre_cabotagem()
+                                          column=7).value = self.carencia.carencia_cpgt_terrestre()
                         aba_act_cpgt.cell(row=linha_cpgt, column=8).value = centro
                         aba_act_cpgt.cell(row=linha_cpgt, column=9).value = combust
                         aba_act_cpgt.cell(row=linha_cpgt, column=10).value = fili
@@ -81,7 +78,7 @@ class Planriscosacado:
                         aba_act_cpgt.cell(row=linha_cpgt, column=16).value = "01.08.2020"
                         aba_act_cpgt.cell(row=linha_cpgt, column=17).value = "31.12.9999"
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.info.tab()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.lo.list[1]
+                        aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.taxas1
                         linha_cpgt += 1
         self.save.save_wb_cpgt()
         self.close.close_wb_cpgt()
@@ -112,6 +109,7 @@ class Cpgt:
     def cpgt_cabotagem(self):
         return 'ZC' + self.abs
 
+
 class Loadworkbook:
     def __init__(self):
         self.wb = load_workbook(filename='Risco Sacado - TMP(preço).xlsx')
@@ -128,18 +126,18 @@ class Openworkbook(Loadworkbook):
 
 class Saveworbook(Loadworkbook):
     def save(self):
-        return self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')
+        self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')
 
     def save_wb_cpgt(self):
-        return self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
+        self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
 
 
 class Closeworbook(Loadworkbook):
     def close(self):
-        return self.wb.close()
+        self.wb.close()
 
     def close_wb_cpgt(self):
-        return self.wb_cpgt.close()
+        self.wb_cpgt.close()
 
 
 class Informationconstant:
@@ -277,9 +275,9 @@ class Email:
 class Answer:
     def __init__(self):
         self.ask_cliente_distr = str
-        #self.taxas = str
+        # self.taxas = str
         self.banco_choice = str
-        #self.cpgt = str
+        # self.cpgt = str
 
     def client(self):
         flag_cli = True
@@ -318,6 +316,7 @@ class Interface:
         me = Managerriscosacado()
         return me.create_plan_risco_sacado()
 
+
 if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros clientes.
     listy = Listdistribuidora()
     listy.createlista()
@@ -334,7 +333,5 @@ if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros cli
     ca1 = ca.carencia_cpgt_terrestre()
     ca2 = ca.carencia_cpgt_cabotagem()
     plan = Planriscosacado(cliente=listy0, taxas=listy1, cpgt=listy2, banco=listy3)
-    plan1 = plan.plan_taxes()
-
-
-
+    plan.plan_taxes()
+    # plan.plan_cpgt()
