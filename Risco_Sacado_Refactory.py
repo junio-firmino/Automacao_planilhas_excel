@@ -27,12 +27,10 @@ class Planriscosacado:
         self.banco3 = banco
         self.info = Informationconstant()
         self.carencia = Carencia(valores=cp)
-        self.open = Openworkbook()
-        self.save = Saveworbook()
-        self.close = Closeworbook()
+        self.load = Loadworkbook()
 
     def plan_taxes(self):
-        aba_act = self.open.open_cpgt().active
+        aba_act = self.load.wb.active
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[self.client0]
             for fili, info_1 in info.items():
@@ -52,11 +50,11 @@ class Planriscosacado:
                         aba_act.cell(row=linha_plan, column=16).value = self.banco3  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
                         linha_plan += 1
-        self.save.save()
-        self.close.close()
+        self.load.save()
+        self.load.close()
 
     def plan_cpgt(self):
-        aba_act_cpgt = self.open.open_wb_cpgt().active
+        aba_act_cpgt = self.load.open_wb_cpgt().active
         for linha_cpgt in range(aba_act_cpgt.max_row + 1, aba_act_cpgt.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[self.client0]
             for fili, info_1 in info.items():
@@ -80,8 +78,8 @@ class Planriscosacado:
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.info.tab()
                         aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.taxas1
                         linha_cpgt += 1
-        self.save.save_wb_cpgt()
-        self.close.close_wb_cpgt()
+        self.load.save_wb_cpgt()
+        self.load.close_wb_cpgt()
 
 
 class Listdistribuidora:
@@ -115,24 +113,18 @@ class Loadworkbook:
         self.wb = load_workbook(filename='Risco Sacado - TMP(preço).xlsx')
         self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
 
-
-class Openworkbook(Loadworkbook):
-    def open_cpgt(self):
+    def open(self):
         return self.wb
 
     def open_wb_cpgt(self):
         return self.wb_cpgt
 
-
-class Saveworbook(Loadworkbook):
     def save(self):
         self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')
 
     def save_wb_cpgt(self):
         self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
 
-
-class Closeworbook(Loadworkbook):
     def close(self):
         self.wb.close()
 
@@ -275,9 +267,9 @@ class Email:
 class Answer:
     def __init__(self):
         self.ask_cliente_distr = str
-        # self.taxas = str
+        self.taxas_1 = str
         self.banco_choice = str
-        # self.cpgt = str
+        self.cpgt_1 = str
 
     def client(self):
         flag_cli = True
@@ -290,12 +282,12 @@ class Answer:
                 print('Empresa não participante do Risco Sacado, tente outra empresa!.')
 
     def taxas(self):
-        self.taxas = input('Qual a taxa? ')
-        return self.taxas
+        self.taxas_1 = input('Qual a taxa? ')
+        return self.taxas_1
 
     def cpgt(self):
-        self.cpgt = input('Qual é a condição de pagamento? ')
-        return self.cpgt
+        self.cpgt_1 = input('Qual é a condição de pagamento? ')
+        return self.cpgt_1
 
     def banco(self):
         flag = True
