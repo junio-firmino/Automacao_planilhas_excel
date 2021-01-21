@@ -14,9 +14,16 @@ class Managerriscosacado:
         self.plan_risco_sacado = None
 
     def create_plan_risco_sacado(self):
+        listy = Listdistribuidora()
+        listy.createlista()
+        listy0 = listy.list[0]  # Cliente
+        listy1 = listy.list[1]  # Taxas
+        listy2 = listy.list[2]  # CPGT
+        listy3 = listy.list[3]  # Banco
         self.plan_risco_sacado = Planriscosacado(cliente=listy0, taxas=listy1, cpgt=listy2, banco=listy3)
         self.plan_risco_sacado.plan_taxes()
         self.plan_risco_sacado.plan_cpgt()
+        # cp = Cpgt(cpgt=listy2)
 
 
 class Planriscosacado:
@@ -26,7 +33,7 @@ class Planriscosacado:
         self.cpgt2 = cpgt
         self.banco3 = banco
         self.info = Informationconstant()
-        self.carencia = Carencia(valores=cp)
+        self.carencia = Carencia(valores=Cpgt(cpgt))
         self.load = Loadworkbook()
 
     def plan_taxes(self):
@@ -310,20 +317,7 @@ class Interface:
 
 
 if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros clientes.
-    listy = Listdistribuidora()
-    listy.createlista()
-    listy0 = listy.list[0]  # Cliente
-    listy1 = listy.list[1]  # Taxas
-    listy2 = listy.list[2]  # CPGT
-    listy3 = listy.list[3]  # Banco
-    # inte = Interface()
-    # inte.askinterface()
-    cp = Cpgt(cpgt=listy2)
-    cp1 = cp.cpgt_cabotagem()
-    cp2 = cp.cpgt_terrestre()
-    ca = Carencia(valores=cp)
-    ca1 = ca.carencia_cpgt_terrestre()
-    ca2 = ca.carencia_cpgt_cabotagem()
-    plan = Planriscosacado(cliente=listy0, taxas=listy1, cpgt=listy2, banco=listy3)
-    plan.plan_taxes()
-    # plan.plan_cpgt()
+    inte = Interface()
+    inte.askinterface()
+
+    # plan = Planriscosacado(cliente=listy0, taxas=listy1, cpgt=listy2, banco=listy3
