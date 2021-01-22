@@ -12,20 +12,37 @@ class Managerriscosacado:
     def __init__(self):
         print('Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
         self.plan_risco_sacado = None
+        self.load = Loadworkbook()
+        self.email = Email()
 
     def create_plan_risco_sacado(self):
-        listy = Listdistribuidora()
-        listy.createlista()
-        listy0 = listy.list[0]  # Cliente
-        listy1 = listy.list[1]  # Taxas
-        listy2 = listy.list[2]  # CPGT
-        listy3 = listy.list[3]  # Banco
-        self.plan_risco_sacado = Planriscosacado(cliente=listy0, taxas=listy1, cpgt=listy2, banco=listy3)
-        self.plan_risco_sacado.plan_taxes()
-        self.plan_risco_sacado.plan_cpgt()
-        # cp = Cpgt(cpgt=listy2)
+        flag = True
+        while flag:
+            listy = Listdistribuidora()
+            listy.createlista()
+            listy0 = listy.list[0]  # Cliente
+            listy1 = listy.list[1]  # Taxas
+            listy2 = listy.list[2]  # CPGT
+            listy3 = listy.list[3]  # Banco
+            self.plan_risco_sacado = Planriscosacado(cliente=listy0, taxas=listy1, cpgt=listy2, banco=listy3)
+            self.plan_risco_sacado.plan_taxes()
+            self.plan_risco_sacado.plan_cpgt()
+            alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros.\n'
+                           'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
+            if alerta == 'f':
+                flag = False
+        self.load.save()
+        self.load.close()
+        self.load.save_wb_cpgt()
+        self.load.close_wb_cpgt()
+        email_answer = input('Deseja enviar o email? \n(Pressione "enter" para continuar com os cadastros.\n'
+                             'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
+        if email_answer == 'f':
+            pass
+        else:
+            self.email.enviar_email()
 
-
+    
 class Planriscosacado:
     def __init__(self, cliente, taxas, cpgt, banco):
         self.client0 = cliente
@@ -34,7 +51,6 @@ class Planriscosacado:
         self.banco3 = banco
         self.info = Informationconstant()
         self.carencia = Carencia(valores=Cpgt(cpgt))
-        self.load = Loadworkbook()
 
     def plan_taxes(self):
         aba_act = self.load.wb.active
@@ -57,8 +73,6 @@ class Planriscosacado:
                         aba_act.cell(row=linha_plan, column=16).value = self.banco3  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
                         linha_plan += 1
-        self.load.save()
-        self.load.close()
 
     def plan_cpgt(self):
         aba_act_cpgt = self.load.open_wb_cpgt().active
@@ -85,8 +99,6 @@ class Planriscosacado:
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.info.tab()
                         aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.taxas1
                         linha_cpgt += 1
-        self.load.save_wb_cpgt()
-        self.load.close_wb_cpgt()
 
 
 class Listdistribuidora:
