@@ -16,9 +16,6 @@ class Managerriscosacado:
         self.email = Email()
 
     def create_plan_risco_sacado(self):
-        self.load = Loadworkbook()
-        self.load.open()
-        self.load.open_wb_cpgt()
         flag = True
         while flag:
             listy = Listdistribuidora()
@@ -30,15 +27,11 @@ class Managerriscosacado:
             self.plan_risco_sacado = Planriscosacado(cliente=listy0, taxas=listy1, cpgt=listy2, banco=listy3)
             self.plan_risco_sacado.plan_taxes()
             self.plan_risco_sacado.plan_cpgt()
-            self.load.save()
-            self.load.save_wb_cpgt()
             alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros.\n'
                            'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
             if alerta == 'f':
                 flag = False
 
-        self.load.close()
-        self.load.close_wb_cpgt()
         email_answer = input('Deseja enviar o email? \n(Pressione "enter" para continuar com os cadastros.\n'
                              'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
         if email_answer == 'f':
@@ -47,15 +40,15 @@ class Managerriscosacado:
             self.email.enviar_email()
 
 
-class Planriscosacado(Managerriscosacado):
+class Planriscosacado:
     def __init__(self, cliente, taxas, cpgt, banco):
-        super().__init__()
         self.client0 = cliente
         self.taxas1 = taxas
         self.cpgt2 = cpgt
         self.banco3 = banco
         self.info = Informationconstant()
         self.carencia = Carencia(valores=Cpgt(cpgt))
+        self.load = Loadworkbook()
 
     def plan_taxes(self):
         aba_act = self.load.wb.active
@@ -78,6 +71,8 @@ class Planriscosacado(Managerriscosacado):
                         aba_act.cell(row=linha_plan, column=16).value = self.banco3  # Banco
                         aba_act.cell(row=linha_plan, column=17).value = assists.data_cadastro()  # Data do cadastro
                         linha_plan += 1
+        self.load.save()
+        self.load.close()
 
     def plan_cpgt(self):
         aba_act_cpgt = self.load.open_wb_cpgt().active
@@ -104,12 +99,16 @@ class Planriscosacado(Managerriscosacado):
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.info.tab()
                         aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.client0
                         linha_cpgt += 1
+        self.load.save_wb_cpgt()
+        self.load.close_wb_cpgt()
 
 
 class Loadworkbook:
-    def __init__(self):
-        self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
-        self.wb = load_workbook(filename='Risco Sacado - TMP(preço).xlsx')
+    def __init__(self):  # trabalhar neste ponto
+        # if
+        self.wb = load_workbook(filename='risco_sacado(25.01.2021).xlsx')  # Risco Sacado - TMP(preço).xlsx
+        # template_cpgt_risco_sacado_new.xlsx
+        self.wb_cpgt = load_workbook(filename='Cadastro_em_lote_RS(25.01.2021).xlsx')
 
     def open(self):
         return self.wb
@@ -333,8 +332,6 @@ class Interface:
         return me.create_plan_risco_sacado()
 
 
-if __name__ == '__main__':  # Colocar um loopping aqui para cadastrar outros clientes.
+if __name__ == '__main__':
     inte = Interface()
     inte.askinterface()
-
-    # plan = Planriscosacado(cliente=listy0, taxas=listy1, cpgt=listy2, banco=listy3
