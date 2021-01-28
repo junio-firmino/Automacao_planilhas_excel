@@ -3,6 +3,7 @@ import smtplib
 from email.message import EmailMessage
 from locale import setlocale, LC_ALL
 import assists
+from dateutil.relativedelta import relativedelta
 
 
 # I will refactory This project, for do it I chose the design pattern Facade.
@@ -106,9 +107,12 @@ class Planriscosacado:
 class Loadworkbook:
     def __init__(self):  # trabalhar neste ponto
         # if
-        self.wb = load_workbook(filename='risco_sacado(25.01.2021).xlsx')  # Risco Sacado - TMP(preço).xlsx
+        self.wb = load_workbook(filename='risco_sacado(25.01.2021).xlsx')
         # template_cpgt_risco_sacado_new.xlsx
         self.wb_cpgt = load_workbook(filename='Cadastro_em_lote_RS(25.01.2021).xlsx')
+        # else:
+        # self.wb = load_workbook(filename='Risco Sacado - TMP(preço).xlsx') and
+        # self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')+
 
     def open(self):
         return self.wb
