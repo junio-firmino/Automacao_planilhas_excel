@@ -49,11 +49,11 @@ class Planriscosacado:
         self.banco3 = banco
         self.info = Informationconstant()
         self.carencia = Carencia(valores=Cpgt(cpgt))
-        #self.load = Loadworkbook()
-        self.chg = Change_loadworkbook()
+        self.load = Loadworkbook()
+
 
     def plan_taxes(self):
-        aba_act = self.chg.wb.active
+        aba_act = self.load.wb.active
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
             info = Distribuidoras().distri_cliente_polo_produto()[self.client0]
             for fili, info_1 in info.items():
@@ -109,6 +109,7 @@ class Loadworkbook:
     def __init__(self):  # trabalhar neste ponto com a mudança na instanciação
         self.wb = load_workbook(filename='Risco Sacado - TMP(preço).xlsx')
         self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
+        self.list_load = []
 
     def open(self):
         return self.wb
@@ -128,16 +129,9 @@ class Loadworkbook:
     def close_wb_cpgt(self):
         self.wb_cpgt.close()
 
+    def lista_loadworkbook(self):
+        pass
 
-class Change_loadworkbook:
-    def changing(self):
-        self.change = Loadworkbook()
-        if self.change.wb == load_workbook(filename='risco_sacado(25.01.2021).xlsx'):
-            self.change.wb = load_workbook(filename='risco_sacado(25.01.2021).xlsx')
-        if self.change.wb_cpgt == load_workbook(filename='Cadastro_em_lote_RS(25.01.2021).xlsx'):
-            self.change.wb_cpgt = load_workbook(filename='Cadastro_em_lote_RS(25.01.2021).xlsx')
-        else:
-           return self.change.wb and self.change.wb_cpgt
 
 
 class Listdistribuidora:
