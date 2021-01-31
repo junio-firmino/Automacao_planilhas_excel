@@ -51,7 +51,6 @@ class Planriscosacado:
         self.carencia = Carencia(valores=Cpgt(cpgt))
         self.load = Loadworkbook()
 
-
     def plan_taxes(self):
         aba_act = self.load.wb.active
         for linha_plan in range(aba_act.max_row + 1, aba_act.max_row + 2):
@@ -106,7 +105,7 @@ class Planriscosacado:
 
 
 class Loadworkbook:
-    def __init__(self):  # trabalhar neste ponto com a mudança na instanciação
+    def __init__(self):
         self.wb = load_workbook(filename='Risco Sacado - TMP(preço).xlsx')
         self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
         self.list_load = []
@@ -129,9 +128,8 @@ class Loadworkbook:
     def close_wb_cpgt(self):
         self.wb_cpgt.close()
 
-    def lista_loadworkbook(self):
+    def lista_loadworkbook(self):# trabalhar neste ponto, a idéia é colocar opção de escolher o template.
         pass
-
 
 
 class Listdistribuidora:
