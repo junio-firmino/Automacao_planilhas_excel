@@ -21,11 +21,13 @@ class Managerriscosacado:
         while flag:
             listy = Listdistribuidora()
             listy.createlista()
-            listy0 = listy.list[0]  # Cliente
-            listy1 = listy.list[1]  # Taxas
-            listy2 = listy.list[2]  # CPGT
-            listy3 = listy.list[3]  # Banco
-            self.plan_risco_sacado = Planriscosacado(cliente=listy0, taxas=listy1, cpgt=listy2, banco=listy3)
+            listy0 = listy.list[0]  # template
+            listy1 = listy.list[1]  # Cliente
+            listy2 = listy.list[2]  # Taxas
+            listy3 = listy.list[3]  # CPGT
+            listy4 = listy.list[4]  # Banco
+            self.plan_risco_sacado = Planriscosacado(template=listy0, cliente=listy1,
+                                                     taxas=listy2, cpgt=listy3, banco=listy4)
             self.plan_risco_sacado.plan_taxes()
             self.plan_risco_sacado.plan_cpgt()
             alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros.\n'
@@ -42,14 +44,14 @@ class Managerriscosacado:
 
 
 class Planriscosacado:
-    def __init__(self, cliente, taxas, cpgt, banco):
+    def __init__(self, template, cliente, taxas, cpgt, banco):
         self.client0 = cliente
         self.taxas1 = taxas
         self.cpgt2 = cpgt
         self.banco3 = banco
         self.info = Informationconstant()
         self.carencia = Carencia(valores=Cpgt(cpgt))
-        self.load = Loadworkbook()
+        self.load = Loadworkbook(template)
 
     def plan_taxes(self):
         aba_act = self.load.wb.active
@@ -105,10 +107,9 @@ class Planriscosacado:
 
 
 class Loadworkbook:
-    def __init__(self):
-        self.wb = load_workbook(filename='Risco Sacado - TMP(preço).xlsx')
-        self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
-        self.list_load = []
+    def __init__(self, template):
+        self.wb = load_workbook(filename=template)
+        # self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
 
     def open(self):
         return self.wb
@@ -128,9 +129,6 @@ class Loadworkbook:
     def close_wb_cpgt(self):
         self.wb_cpgt.close()
 
-    def lista_loadworkbook(self):# trabalhar neste ponto, a idéia é colocar opção de escolher o template.
-        pass
-
 
 class Listdistribuidora:
     def __init__(self):
@@ -141,6 +139,7 @@ class Listdistribuidora:
         return self.list
 
     def createlista(self):
+        self.lista_distr(Answer().template())
         self.lista_distr(Answer().client())
         self.lista_distr(Answer().taxas())
         self.lista_distr(Answer().cpgt())
@@ -296,6 +295,14 @@ class Answer:
         self.taxas_1 = str
         self.banco_choice = str
         self.cpgt_1 = str
+
+    @staticmethod
+    def template():
+        arquivo = input('Escolha o seu template ---> ')
+        if arquivo == '':
+            return arquivo == 'Risco Sacado - TMP(preço).xlsx'
+        else:
+            return arquivo
 
     def client(self):
         flag_cli = True
