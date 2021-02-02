@@ -107,7 +107,7 @@ class Planriscosacado:
 
 
 class Loadworkbook:
-    def __init__(self, template):
+    def __init__(self, template):  # resolver a questão da outra planilha.
         self.wb = load_workbook(filename=template)
         # self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
 
