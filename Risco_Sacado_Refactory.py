@@ -26,16 +26,15 @@ class Managerriscosacado:
             listy2 = listy.list[2]  # Taxas
             listy3 = listy.list[3]  # CPGT
             listy4 = listy.list[4]  # Banco
-            self.plan_risco_sacado = Planriscosacado(template=listy0, cliente=listy1,
-                                                     taxas=listy2, cpgt=listy3, banco=listy4)
+            self.plan_risco_sacado = Planriscosacado(template=listy0, cliente=listy1, taxas=listy2, cpgt=listy3, banco=listy4)
             self.plan_risco_sacado.plan_taxes()
-            self.plan_risco_sacado.plan_cpgt()
+            #self.plan_risco_sacado.plan_cpgt()
             alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros.\n'
                            'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
             if alerta == 'f':
                 flag = False
 
-        email_answer = input('Deseja enviar o email? \n(Pressione "enter" para continuar com os cadastros.\n'
+        email_answer = input('Deseja enviar o email? \n(Pressione "enter" para enviar o email.\n'
                              'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
         if email_answer == 'f':
             pass
@@ -51,7 +50,8 @@ class Planriscosacado:
         self.banco3 = banco
         self.info = Informationconstant()
         self.carencia = Carencia(valores=Cpgt(cpgt))
-        self.load = Loadworkbook(template)
+        self.temp = template
+        self.load = Loadworkbook(self.temp)
 
     def plan_taxes(self):
         aba_act = self.load.wb.active
@@ -108,8 +108,8 @@ class Planriscosacado:
 
 class Loadworkbook:
     def __init__(self, template):  # resolver a questão da outra planilha.
-        self.wb = load_workbook(filename=template)
-        # self.wb_cpgt = load_workbook(filename='template_cpgt_risco_sacado_new.xlsx')
+        self.wb = load_workbook(filename=template)  # Risco Sacado - TMP(preço).xlsx
+        self.wb_cpgt = load_workbook(filename='template_cpgt_' + template)
 
     def open(self):
         return self.wb
@@ -300,7 +300,7 @@ class Answer:
     def template():
         arquivo = input('Escolha o seu template ---> ')
         if arquivo == '':
-            return arquivo == 'Risco Sacado - TMP(preço).xlsx'
+            return 'Risco Sacado - TMP(preço).xlsx'
         else:
             return arquivo
 
