@@ -26,9 +26,10 @@ class Managerriscosacado:
             listy2 = listy.list[2]  # Taxas
             listy3 = listy.list[3]  # CPGT
             listy4 = listy.list[4]  # Banco
-            self.plan_risco_sacado = Planriscosacado(template=listy0, cliente=listy1, taxas=listy2, cpgt=listy3, banco=listy4)
+            self.plan_risco_sacado = Planriscosacado(template=listy0, cliente=listy1,
+                                                     taxas=listy2, cpgt=listy3, banco=listy4)
             self.plan_risco_sacado.plan_taxes()
-            #self.plan_risco_sacado.plan_cpgt()
+            self.plan_risco_sacado.plan_cpgt()
             alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros.\n'
                            'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
             if alerta == 'f':
@@ -118,10 +119,10 @@ class Loadworkbook:
         return self.wb_cpgt
 
     def save(self):
-        return self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')
+        return self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')  # Pegar parte deste nome
 
     def save_wb_cpgt(self):
-        return self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')
+        return self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')  # Pegar parte deste nome
 
     def close(self):
         self.wb.close()
@@ -298,6 +299,7 @@ class Answer:
 
     @staticmethod
     def template():
+        # arquivos = ['1':'Risco Sacado - TMP(preço).xlsx','2':'','3':'']
         arquivo = input('Escolha o seu template ---> ')
         if arquivo == '':
             return 'Risco Sacado - TMP(preço).xlsx'
