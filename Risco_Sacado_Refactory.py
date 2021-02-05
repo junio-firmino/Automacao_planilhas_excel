@@ -109,8 +109,8 @@ class Planriscosacado:
 
 class Loadworkbook:
     def __init__(self, template):  # resolver a questão da outra planilha.
-        self.wb = load_workbook(filename=template)  # Risco Sacado - TMP(preço).xlsx
-        self.wb_cpgt = load_workbook(filename='template_cpgt_' + template)
+        self.wb = load_workbook(filename=template + '.xlsx')  # Risco Sacado - TMP(preço).xlsx
+        self.wb_cpgt = load_workbook(filename='template_cpgt_' + template + '.xlsx')
 
     def open(self):
         return self.wb
@@ -119,10 +119,10 @@ class Loadworkbook:
         return self.wb_cpgt
 
     def save(self):
-        return self.wb.save('risco_sacado(' + assists.data_cadastro() + ').xlsx')  # Pegar parte deste nome
+        return self.wb.save('Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ').xlsx')  # Pegar parte deste nome
 
     def save_wb_cpgt(self):
-        return self.wb_cpgt.save('Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx')  # Pegar parte deste nome
+        return self.wb_cpgt.save('template_cpgt_(' + assists.data_cadastro() + ').xlsx')  # Pegar parte deste nome
 
     def close(self):
         self.wb.close()
@@ -299,10 +299,13 @@ class Answer:
 
     @staticmethod
     def template():
-        # arquivos = ['1':'Risco Sacado - TMP(preço).xlsx','2':'','3':'']
-        arquivo = input('Escolha o seu template ---> ')
-        if arquivo == '':
-            return 'Risco Sacado - TMP(preço).xlsx'
+        arquivos = {'1':'Risco Sacado - TMP(preço)','2':'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')',
+                    '3':''}
+        arquivo = input('Escolha o seu template --->\n("1" para Risco Sacado - TMP(preço)\n '
+                        '"2" para Risco Sacado - TMP(preço)(' + assists.data_cadastro() +')')
+        if arquivo in arquivos:
+            choice_arquivos = arquivos[arquivo]
+            return choice_arquivos
         else:
             return arquivo
 
