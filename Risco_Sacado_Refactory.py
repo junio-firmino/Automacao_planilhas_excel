@@ -122,7 +122,7 @@ class Loadworkbook:
         return self.wb.save('Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ').xlsx')  # Pegar parte deste nome
 
     def save_wb_cpgt(self):
-        return self.wb_cpgt.save('template_cpgt_(' + assists.data_cadastro() + ').xlsx')  # Pegar parte deste nome
+        return self.wb_cpgt.save('template_cpgt_Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ').xlsx')
 
     def close(self):
         self.wb.close()
@@ -299,15 +299,21 @@ class Answer:
 
     @staticmethod
     def template():
-        arquivos = {'1':'Risco Sacado - TMP(preço)','2':'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')',
-                    '3':''}
-        arquivo = input('Escolha o seu template --->\n("1" para Risco Sacado - TMP(preço)\n '
-                        '"2" para Risco Sacado - TMP(preço)(' + assists.data_cadastro() +')')
-        if arquivo in arquivos:
-            choice_arquivos = arquivos[arquivo]
-            return choice_arquivos
-        else:
-            return arquivo
+        arquivo = input('"1" para Risco Sacado - TMP(preço)\n'
+                        '"2" para Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n' # solução pode estar por aqui
+                        'Escolha das opções acima qual template utilizar ---> ')
+
+        arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')',
+                    '3': 'Risco Sacado - TMP(preço)(' + input('qual data? ') + ')'}
+        try:
+            if arquivo in arquivos:
+                choice_arquivos = arquivos[arquivo]
+                return choice_arquivos
+            else:
+                return arquivo
+        except FileNotFoundError:
+            # return 'Risco Sacado - TMP(preço)'
+            print('Este arquivo ainda não existe')
 
     def client(self):
         flag_cli = True
