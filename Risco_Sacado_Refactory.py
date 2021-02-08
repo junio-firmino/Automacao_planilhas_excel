@@ -108,8 +108,8 @@ class Planriscosacado:
 
 
 class Loadworkbook:
-    def __init__(self, template):  # resolver a questão da outra planilha.
-        self.wb = load_workbook(filename=template + '.xlsx')  # Risco Sacado - TMP(preço).xlsx
+    def __init__(self, template):  
+        self.wb = load_workbook(filename=template + '.xlsx')
         self.wb_cpgt = load_workbook(filename='template_cpgt_' + template + '.xlsx')
 
     def open(self):
@@ -119,7 +119,7 @@ class Loadworkbook:
         return self.wb_cpgt
 
     def save(self):
-        return self.wb.save('Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ').xlsx')  # Pegar parte deste nome
+        return self.wb.save('Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ').xlsx')
 
     def save_wb_cpgt(self):
         return self.wb_cpgt.save('template_cpgt_Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ').xlsx')
@@ -299,21 +299,21 @@ class Answer:
 
     @staticmethod
     def template():
-        arquivo = input('"1" para Risco Sacado - TMP(preço)\n'
-                        '"2" para Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n' # solução pode estar por aqui
+        arquivo = input('1 - Risco Sacado - TMP(preço)\n'
+                        '2 - Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n'
+                        '3 - Escolha a data do arquivo\n'                                                                                          
                         'Escolha das opções acima qual template utilizar ---> ')
+        arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'}
+        if arquivo == '3':
+            answer_1 = input('Qual a data do arquivo? ')
+            return 'Risco Sacado - TMP(preço)(' + answer_1 + ')'
 
-        arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')',
-                    '3': 'Risco Sacado - TMP(preço)(' + input('qual data? ') + ')'}
-        try:
-            if arquivo in arquivos:
-                choice_arquivos = arquivos[arquivo]
-                return choice_arquivos
-            else:
-                return arquivo
-        except FileNotFoundError:
-            # return 'Risco Sacado - TMP(preço)'
-            print('Este arquivo ainda não existe')
+        if arquivo in arquivos:
+            choice_arquivos = arquivos[arquivo]
+            return choice_arquivos
+
+        else:
+            return arquivo
 
     def client(self):
         flag_cli = True
