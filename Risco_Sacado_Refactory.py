@@ -108,7 +108,7 @@ class Planriscosacado:
 
 
 class Loadworkbook:
-    def __init__(self, template):  
+    def __init__(self, template):
         self.wb = load_workbook(filename=template + '.xlsx')
         self.wb_cpgt = load_workbook(filename='template_cpgt_' + template + '.xlsx')
 
@@ -306,7 +306,7 @@ class Answer:
         arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'}
         if arquivo == '3':
             answer_1 = input('Qual a data do arquivo? ')
-            return 'Risco Sacado - TMP(preço)(' + answer_1 + ')'
+            return 'Risco Sacado - TMP(preço)(' + answer_1 + assists.data_cadastro_month() + ')'
 
         if arquivo in arquivos:
             choice_arquivos = arquivos[arquivo]
