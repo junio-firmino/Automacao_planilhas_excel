@@ -305,7 +305,7 @@ class Answer:
                         'Escolha das opções acima qual template utilizar ---> ')
         arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'}
         if arquivo == '3':
-            answer_1 = input('Qual a data do arquivo? ')
+            answer_1 = input('Qual a data do mês corrente do arquivo? ')
             return 'Risco Sacado - TMP(preço)(' + answer_1 + assists.data_cadastro_month() + ')'
 
         if arquivo in arquivos:
