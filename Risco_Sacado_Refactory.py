@@ -299,21 +299,28 @@ class Answer:
 
     @staticmethod
     def template():
-        arquivo = input('1 - Risco Sacado - TMP(preço)\n'
-                        '2 - Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n'
-                        '3 - Escolha a data do arquivo\n'                                                                                          
-                        'Escolha das opções acima qual template utilizar ---> ')
-        arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'}
-        if arquivo == '3':
-            answer_1 = input('Qual a data do mês corrente do arquivo? ')
-            return 'Risco Sacado - TMP(preço)(' + answer_1 + assists.data_cadastro_month() + ')'
+        flag_template = True
+        while flag_template:
+            arquivo = input('1 - Risco Sacado - TMP(preço)\n'
+                            '2 - Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n'
+                            '3 - Escolha a data do arquivo\n'                                                                                          
+                            'Escolha das opções acima qual template utilizar ---> ')
+            arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'}
+            if arquivo == '':
+                print('Escolha alguma das opções de arquivo acima para prosseguir.\n '
+                      '---------------------------------------------------------')
+                #flag_template = False
 
-        if arquivo in arquivos:
-            choice_arquivos = arquivos[arquivo]
-            return choice_arquivos
+            elif arquivo == '3':
+                answer_1 = input('Qual o dia do mês corrente do arquivo você quer trabalhar? --> ')
+                return 'Risco Sacado - TMP(preço)(' + answer_1 + assists.data_cadastro_month() + ')'
 
-        else:
-            return arquivo
+            elif arquivo in arquivos:
+                choice_arquivos = arquivos[arquivo]
+                return choice_arquivos
+
+            else:
+                return arquivo
 
     def client(self):
         flag_cli = True
