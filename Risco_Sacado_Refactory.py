@@ -263,10 +263,10 @@ class Email:
 
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
-            fro = 'j@.com'
-            to = 'j@com.br'
+            fro = ''
+            to = ''
 
-            smtpobj.login(fro, 'yevq kufu ejsx awpz')
+            smtpobj.login(fro, '')
             msg = EmailMessage()
             msg['From'] = fro
             msg['To'] = to
@@ -275,8 +275,8 @@ class Email:
             msg.set_content(
                 f'Prezados\n\nSegue abaixo a planilha com as taxas dos clientes que utilizarão'
                 f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.')
-            paths = ['risco_sacado(' + assists.data_cadastro() + ').xlsx',
-                     'Cadastro_em_lote_RS(' + assists.data_cadastro() + ').xlsx']
+            paths = ['Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ').xlsx',
+                     'template_cpgt_Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ').xlsx']
             for path in paths:
                 caminho = open(path, 'rb')
                 arq_data = caminho.read()
@@ -305,11 +305,11 @@ class Answer:
                             '2 - Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n'
                             '3 - Escolha a data do arquivo\n'                                                                                          
                             'Escolha das opções acima qual template utilizar ---> ')
-            arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'}
+            arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)'
+                                                               '(' + assists.data_cadastro() + ')'}
             if arquivo == '':
-                print('Escolha alguma das opções de arquivo acima para prosseguir.\n '
+                print('\nEscolha alguma das opções de arquivo acima para prosseguir.\n '
                       '---------------------------------------------------------')
-                #flag_template = False
 
             elif arquivo == '3':
                 answer_1 = input('Qual o dia do mês corrente do arquivo você quer trabalhar? --> ')
