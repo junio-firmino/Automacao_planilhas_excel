@@ -34,13 +34,7 @@ class Managerriscosacado:
                            'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
             if alerta == 'f':
                 flag = False
-
-        email_answer = input('Deseja enviar o email? \n(Pressione "enter" para enviar o email.\n'
-                             'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
-        if email_answer == 'f':
-            pass
-        else:
-            self.email.enviar_email()
+        self.email.enviar_email()
 
 
 class Planriscosacado:
@@ -264,7 +258,7 @@ class Email:
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
             fro = ''
-            to = ''
+            to = 'm'
 
             smtpobj.login(fro, '')
             msg = EmailMessage()
@@ -301,17 +295,17 @@ class Answer:
     def template():
         flag_template = True
         while flag_template:
-            arquivo = input('1 - Risco Sacado - TMP(preço)\n'
-                            '2 - Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n'
-                            '3 - Escolha a data do arquivo\n'                                                                                          
+            arquivo = input('01 - Risco Sacado - TMP(preço)\n'
+                            '02 - Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n'
+                            '03 - Escolha a data do arquivo\n'                                                                                          
                             'Escolha das opções acima qual template utilizar ---> ')
-            arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)'
-                                                               '(' + assists.data_cadastro() + ')'}
-            if arquivo == '':
+            arquivos = {'01': 'Risco Sacado - TMP(preço)', '02': 'Risco Sacado - TMP(preço)'
+                                                                 '(' + assists.data_cadastro() + ')'}
+            if arquivo == '' or arquivo != '01' or arquivo != '02' or arquivo != '03':
                 print('\nEscolha alguma das opções de arquivo acima para prosseguir.\n '
                       '---------------------------------------------------------')
 
-            elif arquivo == '3':
+            elif arquivo == '03':
                 answer_1 = input('Qual o dia do mês corrente do arquivo você quer trabalhar? --> ')
                 return 'Risco Sacado - TMP(preço)(' + answer_1 + assists.data_cadastro_month() + ')'
 
