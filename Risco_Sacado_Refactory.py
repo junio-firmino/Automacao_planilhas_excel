@@ -3,7 +3,6 @@ import smtplib
 from email.message import EmailMessage
 from locale import setlocale, LC_ALL
 import assists
-# from dateutil.relativedelta import relativedelta
 
 
 # I will refactory This project, for do it I chose the design pattern Facade.
@@ -258,7 +257,7 @@ class Email:
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
             fro = ''
-            to = 'm'
+            to = ''
 
             smtpobj.login(fro, '')
             msg = EmailMessage()
