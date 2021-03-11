@@ -268,6 +268,7 @@ class Email:
             msg.set_content(
                 f'Prezados\n\nSegue abaixo a planilha com as taxas dos clientes que utilizarão'
                 f' as condições de pagamento na modalidade risco sacado para o mês de {data_visivel}.')
+            # trabalhar neste ponto da escolha dos arquivos
             paths = ['Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ').xlsx',
                      'template_cpgt_Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ').xlsx']
             for path in paths:
