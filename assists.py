@@ -6,6 +6,10 @@ def data_cadastro():
     data_cad = dt.datetime.now()
     return data_cad.strftime('%d.%m.%Y')
 
+def data_cadastro_month():
+    data_cad = dt.datetime.now()
+    return data_cad.strftime('.%m.%Y')
+
 def data_inicio():
     data_ini = dt.datetime.now() + relativedelta(months=1)
     data_1 = dt.datetime.now().strftime('01.%m.%Y')
