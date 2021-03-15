@@ -297,19 +297,22 @@ class Answer:
         flag_template = True
         while flag_template:
             arquivo = input('-------------------------------------------------------------------\n'
-                            '01 - Risco Sacado - TMP(preço)\n'
-                            '02 - Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n'
-                            '03 - Escolha a data do arquivo\n'  
+                            '1 - Risco Sacado - TMP(preço)\n'
+                            '2 - Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n'
+                            '3 - Escolha a data do arquivo\n'  
                             '-------------------------------------------------------------------\n'
-                            'Escolha das opções acima qual template utilizar --->  '
-                            '-------------------------------------------------------------------\n')
-            arquivos = {'01': 'Risco Sacado - TMP(preço)', '02': 'Risco Sacado - TMP(preço)'
-                                                                 '(' + assists.data_cadastro() + ')'}
-            if arquivo == '' and arquivo != '01' and arquivo != '02' and arquivo != '03':
-                print('\nEscolha alguma das opções de arquivo acima para prosseguir.\n '
-                      '---------------------------------------------------------')
+                            'Escolha das opções acima qual template utilizar ---> ')
 
-            elif arquivo == '03':
+            arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)'
+                                                               '(' + assists.data_cadastro() + ')'}
+            if arquivo == '' or arquivo != '1' and arquivo != '2' and arquivo != '3':
+                print('-------------------------------------------------------------------\n'
+                      '-------------------------------------------------------------------\n'
+                      'Não é possível utilizar essa escolha, tente alguma das'
+                      ' opções de\ntemplate abaixo para prosseguir.\n'
+                      '-------------------------------------------------------------------')
+
+            elif arquivo == '3':
                 answer_1 = input('Qual o dia do mês corrente do arquivo você quer trabalhar? --> ')
                 return 'Risco Sacado - TMP(preço)(' + answer_1 + assists.data_cadastro_month() + ')'
 
