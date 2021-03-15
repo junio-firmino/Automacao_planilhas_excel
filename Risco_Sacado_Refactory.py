@@ -9,7 +9,8 @@ import assists
 
 
 class Managerriscosacado:
-    print('Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
+    print('-------------------------------------------------------------------\n'
+          'Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
 
     def __init__(self):
         self.plan_risco_sacado = None
@@ -295,13 +296,16 @@ class Answer:
     def template():
         flag_template = True
         while flag_template:
-            arquivo = input('01 - Risco Sacado - TMP(preço)\n'
+            arquivo = input('-------------------------------------------------------------------\n'
+                            '01 - Risco Sacado - TMP(preço)\n'
                             '02 - Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n'
-                            '03 - Escolha a data do arquivo\n'                                                                                          
-                            'Escolha das opções acima qual template utilizar ---> ')
+                            '03 - Escolha a data do arquivo\n'  
+                            '-------------------------------------------------------------------\n'
+                            'Escolha das opções acima qual template utilizar --->  '
+                            '-------------------------------------------------------------------\n')
             arquivos = {'01': 'Risco Sacado - TMP(preço)', '02': 'Risco Sacado - TMP(preço)'
                                                                  '(' + assists.data_cadastro() + ')'}
-            if arquivo == '' or arquivo != '01' or arquivo != '02' or arquivo != '03':
+            if arquivo == '' and arquivo != '01' and arquivo != '02' and arquivo != '03':
                 print('\nEscolha alguma das opções de arquivo acima para prosseguir.\n '
                       '---------------------------------------------------------')
 
