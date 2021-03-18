@@ -309,7 +309,7 @@ class Answer:
                 print('-------------------------------------------------------------------\n'
                       '-------------------------------------------------------------------\n'
                       'Não é possível utilizar essa escolha, tente alguma das'
-                      ' opções de\ntemplate abaixo para prosseguir.\n'
+                      ' opções de\ntemplates  abaixo para prosseguir.\n'
                       '-------------------------------------------------------------------')
 
             elif arquivo == '3':
@@ -351,7 +351,9 @@ class Answer:
                 self.banco_choice = bancos[banco_marca]
                 return self.banco_choice
             else:
-                print('Essa escolha não é possível, tente novamente!.')
+                print('-------------------------------------------------------------------\n'
+                      'Essa escolha não é possível, tente novamente!.\n'
+                      '-------------------------------------------------------------------')
 
 
 class Interface:
@@ -359,7 +361,6 @@ class Interface:
     def askinterface():
         me = Managerriscosacado()
         return me.create_plan_risco_sacado()
-
 
 if __name__ == '__main__':
     inte = Interface()
