@@ -248,7 +248,9 @@ class Email:
     @staticmethod
     def enviar_email():
         setlocale(LC_ALL, 'pt_BR.utf-8')
-        pergunta_envio = input('Você deseja enviar o email agora?\n'
+        pergunta_envio = input('-------------------------------------------------------------------\n'
+                               'Você deseja enviar o email agora?\n'
+                               '-------------------------------------------------------------------\n'
                                '(Pressione "enter" para enviar o email.\n'
                                'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
 
