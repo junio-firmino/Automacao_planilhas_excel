@@ -30,8 +30,11 @@ class Managerriscosacado:
                                                      taxas=listy2, cpgt=listy3, banco=listy4)
             self.plan_risco_sacado.plan_taxes()
             self.plan_risco_sacado.plan_cpgt()
-            alerta = input('Prosseguir o cadastro ? \n(Pressione "enter" para continuar com os cadastros.\n'
-                           'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
+            alerta = input('-------------------------------------------------------------------\n'
+                           'Prosseguir o cadastro ?\n'
+                           '-------------------------------------------------------------------\n'
+                           '(Pressione "enter" para continuar com os cadastros.'
+                           ' Caso deseje finalizar pressione "f" em seguida "enter".)-->')
             if alerta == 'f':
                 flag = False
         self.email.enviar_email()
@@ -47,6 +50,7 @@ class Planriscosacado:
         self.carencia = Carencia(valores=Cpgt(cpgt))
         self.temp = template
         self.load = Loadworkbook(self.temp)
+        self.cpgt_main = Cpgt(cpgt=cpgt)
 
     def plan_taxes(self):
         aba_act = self.load.wb.active
@@ -56,7 +60,7 @@ class Planriscosacado:
                 for centro, prod in info_1.items():
                     for combust in prod:
                         aba_act.cell(row=linha_plan, column=1).value = fili  # Filial
-                        aba_act.cell(row=linha_plan, column=2).value = self.cpgt2  # CPGT
+                        aba_act.cell(row=linha_plan, column=2).value = self.cpgt_main.cpgt_terrestre()  # CPGT
                         aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
                         aba_act.cell(row=linha_plan, column=4).value = centro  # Centro
                         aba_act.cell(row=linha_plan, column=6).value = self.taxas1 + ' a.m.'  # Taxas
@@ -81,7 +85,7 @@ class Planriscosacado:
                     for combust in prod:
                         aba_act_cpgt.cell(row=linha_cpgt, column=1).value = self.info.marca()
                         aba_act_cpgt.cell(row=linha_cpgt, column=2).value = self.info.claros()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.carencia.carencia_cpgt_terrestre()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.cpgt_main.cpgt_terrestre()
                         aba_act_cpgt.cell(row=linha_cpgt, column=4).value = self.info.orgv()
                         aba_act_cpgt.cell(row=linha_cpgt,
                                           column=7).value = self.carencia.carencia_cpgt_terrestre()
@@ -251,8 +255,8 @@ class Email:
         pergunta_envio = input('-------------------------------------------------------------------\n'
                                'Você deseja enviar o email agora?\n'
                                '-------------------------------------------------------------------\n'
-                               '(Pressione "enter" para enviar o email.\n'
-                               'Caso deseje finalizar pressione "f" em seguida "enter".)-->')
+                               '(Pressione "enter" para enviar o email.'
+                               ' Caso deseje finalizar pressione "f" em seguida "enter".)-->')
 
         if pergunta_envio == '':
             data_visivel = assists.data_email().title()
@@ -348,7 +352,7 @@ class Answer:
         while flag:
             bancos = {'s': 'Santander', 'b': 'Bradesco', 'c': 'Citibank'}
             banco_marca = input('Escolha o banco?\n("s" para Santander, "b" para Bradesco e "c" para Citibank)'
-                                ' + "enter" -->')
+                                ' + "enter"-->')
             if banco_marca in bancos:
                 self.banco_choice = bancos[banco_marca]
                 return self.banco_choice
@@ -363,6 +367,7 @@ class Interface:
     def askinterface():
         me = Managerriscosacado()
         return me.create_plan_risco_sacado()
+
 
 if __name__ == '__main__':
     inte = Interface()
