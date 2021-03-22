@@ -60,7 +60,8 @@ class Planriscosacado:
                 for centro, prod in info_1.items():
                     for combust in prod:
                         aba_act.cell(row=linha_plan, column=1).value = fili  # Filial
-                        aba_act.cell(row=linha_plan, column=2).value = [centro if centro == '1700' else self.cpgt_main.cpgt_cabotagem()]  # CPGT, estudar uma maneira de usar list compreension
+                        aba_act.cell(row=linha_plan, column=2).value = self.cpgt_main.cpgt_cabotagem() if \
+                            centro == 1401 or centro == 1211 else self.cpgt_main.cpgt_terrestre()  # CPGT
                         aba_act.cell(row=linha_plan, column=3).value = combust  # Produto
                         aba_act.cell(row=linha_plan, column=4).value = centro  # Centro
                         aba_act.cell(row=linha_plan, column=6).value = self.taxas1 + ' a.m.'  # Taxas
@@ -85,10 +86,11 @@ class Planriscosacado:
                     for combust in prod:
                         aba_act_cpgt.cell(row=linha_cpgt, column=1).value = self.info.marca()
                         aba_act_cpgt.cell(row=linha_cpgt, column=2).value = self.info.claros()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.cpgt_main.cpgt_terrestre()
+                        aba_act_cpgt.cell(row=linha_cpgt, column=3).value = self.cpgt_main.cpgt_cabotagem() if \
+                            centro == 1401 or centro == 1211 else self.cpgt_main.cpgt_terrestre()
                         aba_act_cpgt.cell(row=linha_cpgt, column=4).value = self.info.orgv()
                         aba_act_cpgt.cell(row=linha_cpgt,
-                                          column=7).value = self.carencia.carencia_cpgt_terrestre()
+                                          column=7).value = self.carencia.carencia_cpgt_terrestre() 
                         aba_act_cpgt.cell(row=linha_cpgt, column=8).value = centro
                         aba_act_cpgt.cell(row=linha_cpgt, column=9).value = combust
                         aba_act_cpgt.cell(row=linha_cpgt, column=10).value = fili
