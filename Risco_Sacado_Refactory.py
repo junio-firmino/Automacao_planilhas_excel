@@ -90,7 +90,8 @@ class Planriscosacado:
                             centro == 1401 or centro == 1211 else self.cpgt_main.cpgt_terrestre()
                         aba_act_cpgt.cell(row=linha_cpgt, column=4).value = self.info.orgv()
                         aba_act_cpgt.cell(row=linha_cpgt,
-                                          column=7).value = self.carencia.carencia_cpgt_terrestre() 
+                                          column=7).value = self.carencia.carencia_cpgt_terrestre_cabotagem()if\
+                            centro == 1401 or centro == 1211 else self.carencia.carencia_cpgt_terrestre()
                         aba_act_cpgt.cell(row=linha_cpgt, column=8).value = centro
                         aba_act_cpgt.cell(row=linha_cpgt, column=9).value = combust
                         aba_act_cpgt.cell(row=linha_cpgt, column=10).value = fili
