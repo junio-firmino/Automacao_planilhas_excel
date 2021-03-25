@@ -12,6 +12,7 @@ class Managerriscosacado:
     print('-------------------------------------------------------------------\n'
           'Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
 
+
     def __init__(self):
         self.plan_risco_sacado = None
         self.email = Email()
@@ -140,7 +141,7 @@ class Listdistribuidora:
         self.list.append(escolha)
         return self.list
 
-    def createlista(self):
+    def createlista(self):   # A partir deste ponto o contador deve trabalhar
         self.lista_distr(Answer().template())
         self.lista_distr(Answer().client())
         self.lista_distr(Answer().taxas())
@@ -198,7 +199,7 @@ class Carencia:
         resultado_cabotagem = int(valor_separado_cabotagem) - 4
         return resultado_cabotagem
 
-   
+
 class Distribuidoras:
     def __init__(self):
         self.distribuidoras = dict
