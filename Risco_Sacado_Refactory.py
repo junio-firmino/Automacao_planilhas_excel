@@ -19,7 +19,7 @@ class Managerriscosacado:
 
     def create_plan_risco_sacado(self):
         flag = True
-        while flag:
+        while flag:  # contador pode ficar depois daqui
             listy = Listdistribuidora()
             listy.createlista()
             listy0 = listy.list[0]  # template
@@ -34,9 +34,9 @@ class Managerriscosacado:
             alerta = input('-------------------------------------------------------------------\n'
                            'Prosseguir o cadastro ?\n'
                            '-------------------------------------------------------------------\n'
-                           '(Pressione "enter" para continuar com os cadastros.'
-                           ' Caso deseje finalizar pressione "f" em seguida "enter".)-->')
-            if alerta == 'f':
+                           '"enter" para continuar com os cadastros ou "f" + "enter" para finalizar.-->')
+
+            if alerta == 'f':  # tentar uma solução para a escolha dos templates para depois da pergunta acima por meio do IF
                 flag = False
         self.email.enviar_email()
 
