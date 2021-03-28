@@ -12,7 +12,6 @@ class Managerriscosacado:
     print('-------------------------------------------------------------------\n'
           'Vamos iniciar o cadastro das condições do Risco Sacado para o Mês.')
 
-
     def __init__(self):
         self.plan_risco_sacado = None
         self.email = Email()
@@ -245,7 +244,8 @@ class Distribuidoras:
                                            156: {1400: ['PB.6DH', 'PB.658']}},
                                'Total': {21973: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
                                          22176: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
-                                         21997: {1101: ['PB.620', 'PB.6DH', 'PB.658']}}}
+                                         21997: {1101: ['PB.620', 'PB.6DH', 'PB.658']}},
+                               'Rio grande':{}} # incluir as informações de rio grande
         return self.distribuidoras
 
 
@@ -304,11 +304,11 @@ class Answer:
         flag_template = True
         while flag_template:
             arquivo = input('-------------------------------------------------------------------\n'
-                            '1 - Risco Sacado - TMP(preço)\n'
-                            '2 - Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')\n'
-                            '3 - Escolha a data do arquivo\n'  
+                            '1 - NOVO ARQUIVO \n'
+                            '2 - Arquivo atual\n'
+                            '3 - Escolha somente o dia deste mês do arquivo\n'  
                             '-------------------------------------------------------------------\n'
-                            'Escolha das opções acima qual template utilizar ---> ')
+                            'Escolha das opções acima qual tipo de arquivo utilizar ---> ')
 
             arquivos = {'1': 'Risco Sacado - TMP(preço)', '2': 'Risco Sacado - TMP(preço)'
                                                                '(' + assists.data_cadastro() + ')'}
@@ -333,7 +333,8 @@ class Answer:
     def client(self):
         flag_cli = True
         while flag_cli:
-            cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen', 'Rejaile', 'Total']
+            cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen', 'Rejaile',
+                             'Total', 'Rio grande']
             self.ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
             if self.ask_cliente_distr in cliente_distr:
                 return self.ask_cliente_distr
