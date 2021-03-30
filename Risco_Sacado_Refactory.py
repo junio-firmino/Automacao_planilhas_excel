@@ -35,7 +35,7 @@ class Managerriscosacado:
             alerta = input('-------------------------------------------------------------------\n'
                            'Prosseguir o cadastro ?\n'
                            '-------------------------------------------------------------------\n'
-                           '"enter" para continuar com os cadastros ou "f" + "enter" para finalizar.-->')
+                           'Continuar --> "enter" \nFinalizar --> f + enter.-->')
 
             if alerta == 'f':  # tentar uma solução para a escolha dos templates para depois da pergunta acima por meio do IF
                 flag = False
@@ -336,7 +336,7 @@ class Answer:
         flag_cli = True
         while flag_cli:
             cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen', 'Rejaile',
-                             'Total', 'Rio grande']
+                             'Total', 'Rio Grande']
             self.ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
             if self.ask_cliente_distr in cliente_distr:
                 return self.ask_cliente_distr
