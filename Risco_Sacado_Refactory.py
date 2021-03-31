@@ -247,7 +247,7 @@ class Distribuidoras:
                                'Total': {21973: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
                                          22176: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
                                          21997: {1101: ['PB.620', 'PB.6DH', 'PB.658']}},
-                               'Rio grande':{}} # incluir as informações de rio grande
+                               'Rio Branco':{}} # incluir as informações de rio grande
         return self.distribuidoras
 
 
@@ -258,8 +258,7 @@ class Email:
         pergunta_envio = input('-------------------------------------------------------------------\n'
                                'Você deseja enviar o email agora?\n'
                                '-------------------------------------------------------------------\n'
-                               '(Pressione "enter" para enviar o email.'
-                               ' Caso deseje finalizar pressione "f" em seguida "enter".)-->')
+                               '"enter" para enviar ou "f" + "enter" para finalizar.--> ')
 
         if pergunta_envio == '':
             data_visivel = assists.data_email().title()
@@ -336,7 +335,7 @@ class Answer:
         flag_cli = True
         while flag_cli:
             cliente_distr = ['Alesat', 'Ciapetro', 'Ipp', 'Mime', 'Petrox', 'Rodoil', 'Raizen', 'Rejaile',
-                             'Total', 'Rio Grande']
+                             'Total', 'Rio Branco']
             self.ask_cliente_distr = input('Qual cliente você irá cadastrar? ').title()
             if self.ask_cliente_distr in cliente_distr:
                 return self.ask_cliente_distr
