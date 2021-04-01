@@ -15,12 +15,10 @@ class Managerriscosacado:
     def __init__(self):
         self.plan_risco_sacado = None
         self.email = Email()
-        self.contar = 0
 
     def create_plan_risco_sacado(self):
         flag = True
         while flag:  # contador pode ficar depois daqui
-            self.contar += 1
             listy = Listdistribuidora()
             listy.createlista()
             listy0 = listy.list[0]  # template
@@ -137,12 +135,14 @@ class Loadworkbook:
 class Listdistribuidora:
     def __init__(self):
         self.list = []
+        self.contar = 0
 
     def lista_distr(self, escolha):
         self.list.append(escolha)
         return self.list
 
     def createlista(self):   # A partir deste ponto o contador deve trabalhar
+        self.contar += 1
         self.lista_distr(Answer().template())
         self.lista_distr(Answer().client())
         self.lista_distr(Answer().taxas())
