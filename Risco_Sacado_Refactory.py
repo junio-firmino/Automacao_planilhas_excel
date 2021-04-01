@@ -214,7 +214,7 @@ class Distribuidoras:
                                           8429: {1101: ['PB.620', 'PB.6DH', 'PB.658']},  # 1101 - Ribeirão Preto
                                           # 1733: {1110: ['PB.620', 'PB.6DH', 'PB.658']},       # 1360 - Ipojuca
                                           # 1732: {1111: ['PB.620', 'PB.6DH', 'PB.658']},       # 1110 - Uberaba
-                                          1736: {1120: ['PB.620', 'PB.6DH', 'PB.658']},  # 1111 - Uberlândia
+                                          # 1736: {1120: ['PB.620', 'PB.6DH', 'PB.658']},  # 1111 - Uberlândia
                                           6833: {1130: ['PB.620', 'PB.6DH', 'PB.658']},  # 1120 - Senador Canedo
                                           6515: {1250: ['PB.620', 'PB.6DH', 'PB.658']}},  # 1130 - Brasília
                                'Ciapetro': {455: {1400: ['PB.620', 'PB.6DH', 'PB.658']},  # 1211 - Santos
@@ -247,7 +247,9 @@ class Distribuidoras:
                                'Total': {21973: {1250: ['PB.620', 'PB.6DH', 'PB.658']},
                                          22176: {1130: ['PB.620', 'PB.6DH', 'PB.658']},
                                          21997: {1101: ['PB.620', 'PB.6DH', 'PB.658']}},
-                               'Rio Branco':{}} # incluir as informações de rio grande
+                               'Rio Branco': {8235: {1100: ['PB.620', 'PB.6DH', 'PB.658']},
+                                              15456: {1101: ['PB.620', 'PB.6DH', 'PB.658']},
+                                              5218: {1250: ['PB.620', 'PB.6DH', 'PB.658']}}}
         return self.distribuidoras
 
 
