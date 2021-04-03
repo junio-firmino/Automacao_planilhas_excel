@@ -18,7 +18,7 @@ class Managerriscosacado:
 
     def create_plan_risco_sacado(self):
         flag = True
-        while flag:  # contador pode ficar depois daqui
+        while flag:  # outro contador pode ficar depois daqui
             listy = Listdistribuidora()
             listy.createlista()
             listy0 = listy.list[0]  # template
@@ -135,14 +135,13 @@ class Loadworkbook:
 class Listdistribuidora:
     def __init__(self):
         self.list = []
-        self.contar = 0
+
 
     def lista_distr(self, escolha):
         self.list.append(escolha)
         return self.list
 
     def createlista(self):   # A partir deste ponto o contador deve trabalhar
-        self.contar += 1
         self.lista_distr(Answer().template())
         self.lista_distr(Answer().client())
         self.lista_distr(Answer().taxas())
@@ -301,11 +300,15 @@ class Answer:
         self.taxas_1 = str
         self.banco_choice = str
         self.cpgt_1 = str
+        self.contar = 0
 
-    @staticmethod
-    def template():
+    def template(self):
         flag_template = True
         while flag_template:
+            self.contar += 1
+            print(self.contar)
+            if self.contar > 1:
+                return 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'
             arquivo = input('-------------------------------------------------------------------\n'
                             '1 - NOVO ARQUIVO \n'
                             '2 - Arquivo atual\n'
