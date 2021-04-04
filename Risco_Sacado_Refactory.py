@@ -135,6 +135,7 @@ class Loadworkbook:
 class Listdistribuidora:
     def __init__(self):
         self.list = []
+        self.contar = 0
 
 
     def lista_distr(self, escolha):
@@ -142,6 +143,10 @@ class Listdistribuidora:
         return self.list
 
     def createlista(self):   # A partir deste ponto o contador deve trabalhar
+        self.contar += 1
+        print(self.contar)
+        if self.contar > 1:
+            return self.lista_distr(Answer().template('Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'))
         self.lista_distr(Answer().template())
         self.lista_distr(Answer().client())
         self.lista_distr(Answer().taxas())
@@ -300,15 +305,10 @@ class Answer:
         self.taxas_1 = str
         self.banco_choice = str
         self.cpgt_1 = str
-        self.contar = 0
 
     def template(self):
         flag_template = True
         while flag_template:
-            self.contar += 1
-            print(self.contar)
-            if self.contar > 1:
-                return 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'
             arquivo = input('-------------------------------------------------------------------\n'
                             '1 - NOVO ARQUIVO \n'
                             '2 - Arquivo atual\n'
