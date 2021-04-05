@@ -146,8 +146,10 @@ class Listdistribuidora:
         self.contar += 1
         print(self.contar)
         if self.contar > 1:
-            return self.lista_distr(Answer().template('Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'))
-        self.lista_distr(Answer().template())
+            self.lista_distr(Answer().template('Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'))
+        else:
+            self.lista_distr(Answer().template())
+
         self.lista_distr(Answer().client())
         self.lista_distr(Answer().taxas())
         self.lista_distr(Answer().cpgt())
