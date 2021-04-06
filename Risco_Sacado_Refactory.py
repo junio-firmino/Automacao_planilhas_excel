@@ -146,7 +146,7 @@ class Listdistribuidora:
         self.contar += 1
         print(self.contar)
         if self.contar > 1:
-            self.lista_distr(Answer().template('Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'))
+            self.lista_distr(Answer().template_2())
         else:
             self.lista_distr(Answer().template())
 
@@ -337,6 +337,9 @@ class Answer:
 
             else:
                 return arquivo
+
+    def template_2(self):
+        return 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'
 
     def client(self):
         flag_cli = True
