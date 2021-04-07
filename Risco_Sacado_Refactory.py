@@ -17,10 +17,18 @@ class Managerriscosacado:
         self.email = Email()
 
     def create_plan_risco_sacado(self):
+        self.contar_1 = 0
         flag = True
         while flag:  # outro contador pode ficar depois daqui
+            self.contar_1 += 1
+            print(self.contar_1)
             listy = Listdistribuidora()
-            listy.createlista()
+            if self.contar_1 > 1:
+                listy.createlista_2()
+            else:
+                listy.createlista()
+
+
             listy0 = listy.list[0]  # template
             listy1 = listy.list[1]  # Cliente
             listy2 = listy.list[2]  # Taxas
@@ -135,25 +143,25 @@ class Loadworkbook:
 class Listdistribuidora:
     def __init__(self):
         self.list = []
-        self.contar = 0
-
 
     def lista_distr(self, escolha):
         self.list.append(escolha)
         return self.list
 
     def createlista(self):   # A partir deste ponto o contador deve trabalhar
-        self.contar += 1
-        print(self.contar)
-        if self.contar > 1:
-            self.lista_distr(Answer().template_2())
-        else:
-            self.lista_distr(Answer().template())
-
+        self.lista_distr(Answer().template())
         self.lista_distr(Answer().client())
         self.lista_distr(Answer().taxas())
         self.lista_distr(Answer().cpgt())
         self.lista_distr(Answer().banco())
+
+    def createlista_2(self):
+        self.lista_distr(Answer().template_2())
+        self.lista_distr(Answer().client())
+        self.lista_distr(Answer().taxas())
+        self.lista_distr(Answer().cpgt())
+        self.lista_distr(Answer().banco())
+
 
 
 class Cpgt:
