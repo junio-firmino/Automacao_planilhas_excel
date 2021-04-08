@@ -15,11 +15,11 @@ class Managerriscosacado:
     def __init__(self):
         self.plan_risco_sacado = None
         self.email = Email()
+        self.contar_1 = 0
 
     def create_plan_risco_sacado(self):
-        self.contar_1 = 0
         flag = True
-        while flag:  # outro contador pode ficar depois daqui
+        while flag:
             self.contar_1 += 1
             print(self.contar_1)
             listy = Listdistribuidora()
@@ -27,7 +27,6 @@ class Managerriscosacado:
                 listy.createlista_2()
             else:
                 listy.createlista()
-
 
             listy0 = listy.list[0]  # template
             listy1 = listy.list[1]  # Cliente
@@ -161,7 +160,6 @@ class Listdistribuidora:
         self.lista_distr(Answer().taxas())
         self.lista_distr(Answer().cpgt())
         self.lista_distr(Answer().banco())
-
 
 
 class Cpgt:
@@ -316,7 +314,8 @@ class Answer:
         self.banco_choice = str
         self.cpgt_1 = str
 
-    def template(self):
+    @staticmethod
+    def template():
         flag_template = True
         while flag_template:
             arquivo = input('-------------------------------------------------------------------\n'
@@ -346,7 +345,8 @@ class Answer:
             else:
                 return arquivo
 
-    def template_2(self):
+    @staticmethod
+    def template_2():
         return 'Risco Sacado - TMP(preço)(' + assists.data_cadastro() + ')'
 
     def client(self):
