@@ -42,7 +42,7 @@ class Managerriscosacado:
                            '-------------------------------------------------------------------\n'
                            'Continuar --> "enter" \nFinalizar --> f + enter.-->')
 
-            if alerta == 'f':  # tentar uma solução para a escolha dos templates para depois da pergunta acima por meio do IF
+            if alerta == 'f':  # tentar uma solução para a escolha dos templates depois da pergunta acima por meio do IF
                 flag = False
         self.email.enviar_email()
 
@@ -358,7 +358,7 @@ class Answer:
             if self.ask_cliente_distr in cliente_distr:
                 return self.ask_cliente_distr
             else:
-                print('Empresa não participante do Risco Sacado, tente outra empresa!.')
+                print('Empresa ainda não participante do Risco Sacado, tente outra empresa!.')
 
     def taxas(self):
         self.taxas_1 = input('Qual a taxa? ')
