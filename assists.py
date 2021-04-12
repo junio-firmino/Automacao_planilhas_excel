@@ -82,3 +82,24 @@ def data_email():
         return dt.datetime.now().strftime('%B')
     else:
         return data_mes_email.strftime('%B')
+
+def data_inicio_ant():
+    data_ini_ant = dt.datetime.now() + relativedelta(months=-1)
+    data_1_ini_ant = dt.datetime.now().strftime('01.%m.%Y')
+    data_1_transforma_date_ini_ant = dt.datetime.strptime(data_1_ini_ant, '%d.%m.%Y')
+    data_2_ini_ant = dt.datetime.now().strftime('21.%m.%Y')
+    data_2_transforma_date_ini_ant = dt.datetime.strptime(data_2_ini_ant, '%d.%m.%Y')
+    data_3_ini_ant = dt.datetime.now().strftime('%d.%m.%Y')
+    data_3_transforma_date_ini_ant = dt.datetime.strptime(data_3_ini_ant, '%d.%m.%Y')
+    data_1_day_ini_ant = data_1_transforma_date_ini_ant.day
+    data_2_day_ini_ant = data_2_transforma_date_ini_ant.day
+    data_3_day_ini_ant = data_3_transforma_date_ini_ant.day
+    # if data_3_day_ini_ant in range(0, (data_2_day_ini_ant - data_1_day_ini_ant)):
+    #     return data_cadastro()
+    # else:
+    return data_ini_ant.strftime('01.%m.%Y')
+
+
+
+x= data_inicio_ant()
+print(x)
