@@ -94,11 +94,10 @@ def data_inicio_ant():
     data_1_day_ini_ant = data_1_transforma_date_ini_ant.day
     data_2_day_ini_ant = data_2_transforma_date_ini_ant.day
     data_3_day_ini_ant = data_3_transforma_date_ini_ant.day
-    # if data_3_day_ini_ant in range(0, (data_2_day_ini_ant - data_1_day_ini_ant)):
-    #     return data_cadastro()
-    # else:
-    return data_ini_ant.strftime('01.%m.%Y')
-
+    if data_3_day_ini_ant in range(0, (data_2_day_ini_ant - data_1_day_ini_ant)):
+        return data_cadastro()
+    else:
+        return data_ini_ant.strftime('01.%m.%Y')
 
 
 x= data_inicio_ant()
