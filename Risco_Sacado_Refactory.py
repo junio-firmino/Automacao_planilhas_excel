@@ -106,7 +106,7 @@ class Planriscosacado:
                         aba_act_cpgt.cell(row=linha_cpgt, column=13).value = "BRL"
                         aba_act_cpgt.cell(row=linha_cpgt, column=14).value = 1
                         aba_act_cpgt.cell(row=linha_cpgt, column=15).value = "M20"
-                        aba_act_cpgt.cell(row=linha_cpgt, column=16).value = "01.08.2020"
+                        aba_act_cpgt.cell(row=linha_cpgt, column=16).value = assists.data_inicio_ant()
                         aba_act_cpgt.cell(row=linha_cpgt, column=17).value = "31.12.9999"
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.info.tab()
                         aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.client0
