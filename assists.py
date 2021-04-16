@@ -100,5 +100,3 @@ def data_inicio_ant():
         return data_ini_ant.strftime('01.%m.%Y')
 
 
-x= data_inicio_ant()
-print(x)
