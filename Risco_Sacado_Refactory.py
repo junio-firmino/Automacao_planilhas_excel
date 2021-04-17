@@ -21,7 +21,6 @@ class Managerriscosacado:
         flag = True
         while flag:
             self.contar_1 += 1
-            print(self.contar_1)
             listy = Listdistribuidora()
             if self.contar_1 > 1:
                 listy.createlista_2()
@@ -107,7 +106,7 @@ class Planriscosacado:
                         aba_act_cpgt.cell(row=linha_cpgt, column=14).value = 1
                         aba_act_cpgt.cell(row=linha_cpgt, column=15).value = "M20"
                         aba_act_cpgt.cell(row=linha_cpgt, column=16).value = assists.data_inicio_ant()
-                        aba_act_cpgt.cell(row=linha_cpgt, column=17).value = "31.12.9999"
+                        aba_act_cpgt.cell(row=linha_cpgt, column=17).value = assists.data_last_day_cpgt()
                         aba_act_cpgt.cell(row=linha_cpgt, column=18).value = self.info.tab()
                         aba_act_cpgt.cell(row=linha_cpgt, column=19).value = self.client0
                         linha_cpgt += 1
@@ -147,7 +146,7 @@ class Listdistribuidora:
         self.list.append(escolha)
         return self.list
 
-    def createlista(self):   # A partir deste ponto o contador deve trabalhar
+    def createlista(self):
         self.lista_distr(Answer().template())
         self.lista_distr(Answer().client())
         self.lista_distr(Answer().taxas())
