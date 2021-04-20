@@ -280,7 +280,7 @@ class Email:
             smtpobj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpobj.starttls()
             fro = Var_ambiente.email
-            to = ''
+            to = Var_ambiente.email_2
 
             smtpobj.login(fro, Var_ambiente.smtp)
             msg = EmailMessage()
