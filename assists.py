@@ -50,8 +50,8 @@ def data_save_arquivo():
 
 
 def data_last_day_cpgt():
-    data_last_cpgt = dt.datetime.now() + relativedelta(day=1, months=3)
-    data_last_1_cpgt = dt.datetime.now() + relativedelta(day=1, months=2)
+    data_last_cpgt = dt.datetime.now() + relativedelta(day=1, months=2)
+    data_last_1_cpgt = dt.datetime.now() + relativedelta(day=1, months=1)
     data_last_1_1_cpgt = dt.datetime.now().strftime('01.%m.%Y')
     data_last_1_1_cpgt_transforma_date = dt.datetime.strptime(data_last_1_1_cpgt, '%d.%m.%Y')
     data_last_2_cpgt = dt.datetime.now().strftime('21.%m.%Y')
